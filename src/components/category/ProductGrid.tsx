@@ -1,222 +1,130 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import Pagination from "./Pagination";
-import pantheonImage from "@/assets/pantheon.jpg";
-import eclipseImage from "@/assets/eclipse.jpg";
-import haloImage from "@/assets/halo.jpg";
-import obliqueImage from "@/assets/oblique.jpg";
-import lintelImage from "@/assets/lintel.jpg";
-import shadowlineImage from "@/assets/shadowline.jpg";
-import organicEarring from "@/assets/organic-earring.png";
-import linkBracelet from "@/assets/link-bracelet.png";
+import AnimatedSection from "../animations/AnimatedSection";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Product {
-  id: number;
+  id: string;
   name: string;
   category: string;
-  price: string;
-  image: string;
-  isNew?: boolean;
+  price: number;
+  image_url: string | null;
+  is_new?: boolean;
+  slug: string;
 }
 
-// Extended product list for category page
-const products: Product[] = [
-  {
-    id: 1,
-    name: "Pantheon",
-    category: "Earrings",
-    price: "€2,850",
-    image: pantheonImage,
-    isNew: true,
-  },
-  {
-    id: 2,
-    name: "Eclipse",
-    category: "Bracelets",
-    price: "€3,200",
-    image: eclipseImage,
-  },
-  {
-    id: 3,
-    name: "Halo",
-    category: "Earrings",
-    price: "€1,950",
-    image: haloImage,
-    isNew: true,
-  },
-  {
-    id: 4,
-    name: "Oblique",
-    category: "Earrings",
-    price: "€1,650",
-    image: obliqueImage,
-  },
-  {
-    id: 5,
-    name: "Lintel",
-    category: "Earrings",
-    price: "€2,250",
-    image: lintelImage,
-  },
-  {
-    id: 6,
-    name: "Shadowline",
-    category: "Bracelets",
-    price: "€3,950",
-    image: shadowlineImage,
-  },
-  {
-    id: 7,
-    name: "Meridian",
-    category: "Earrings",
-    price: "€2,450",
-    image: pantheonImage,
-  },
-  {
-    id: 8,
-    name: "Vertex",
-    category: "Bracelets",
-    price: "€2,800",
-    image: eclipseImage,
-  },
-  {
-    id: 9,
-    name: "Apex",
-    category: "Earrings",
-    price: "€1,550",
-    image: haloImage,
-  },
-  {
-    id: 10,
-    name: "Zenith",
-    category: "Earrings",
-    price: "€1,850",
-    image: obliqueImage,
-  },
-  {
-    id: 11,
-    name: "Prism",
-    category: "Earrings",
-    price: "€2,050",
-    image: lintelImage,
-  },
-  {
-    id: 12,
-    name: "Radiant",
-    category: "Bracelets",
-    price: "€3,650",
-    image: shadowlineImage,
-  },
-  {
-    id: 13,
-    name: "Stellar",
-    category: "Earrings",
-    price: "€2,150",
-    image: pantheonImage,
-  },
-  {
-    id: 14,
-    name: "Cosmos",
-    category: "Bracelets",
-    price: "€2,950",
-    image: eclipseImage,
-  },
-  {
-    id: 15,
-    name: "Aurora",
-    category: "Earrings",
-    price: "€1,750",
-    image: haloImage,
-  },
-  {
-    id: 16,
-    name: "Nebula",
-    category: "Earrings",
-    price: "€1,850",
-    image: obliqueImage,
-  },
-  {
-    id: 17,
-    name: "Orbit",
-    category: "Earrings",
-    price: "€2,350",
-    image: lintelImage,
-  },
-  {
-    id: 18,
-    name: "Galaxy",
-    category: "Bracelets",
-    price: "€3,450",
-    image: shadowlineImage,
-  },
-  {
-    id: 19,
-    name: "Lunar",
-    category: "Earrings",
-    price: "€2,050",
-    image: pantheonImage,
-  },
-  {
-    id: 20,
-    name: "Solar",
-    category: "Bracelets",
-    price: "€3,150",
-    image: eclipseImage,
-  },
-  {
-    id: 21,
-    name: "Astral",
-    category: "Earrings",
-    price: "€1,650",
-    image: haloImage,
-  },
-  {
-    id: 22,
-    name: "Cosmic",
-    category: "Earrings",
-    price: "€1,950",
-    image: obliqueImage,
-  },
-  {
-    id: 23,
-    name: "Celestial",
-    category: "Earrings",
-    price: "€2,250",
-    image: lintelImage,
-  },
-  {
-    id: 24,
-    name: "Ethereal",
-    category: "Bracelets",
-    price: "€3,750",
-    image: shadowlineImage,
-  },
-];
+interface ProductGridProps {
+  category?: string;
+}
 
-const ProductGrid = () => {
+// Products should be fetched from Supabase based on category filter
+const ProductGrid = ({ category }: ProductGridProps) => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        let query = supabase
+          .from('products')
+          .select('*, categories(name, slug)')
+          .eq('is_active', true)
+          .order('created_at', { ascending: false });
+
+        // If category is specified and not "shop" (All), filter by category
+        if (category && category !== 'shop') {
+          // Get category slug from the URL parameter
+          const categorySlug = category.toLowerCase().replace(/\s*\/\s*/g, '-').replace(/\s+/g, '-');
+          
+          // First, find the category by slug
+          const { data: categoryData } = await supabase
+            .from('categories')
+            .select('id')
+            .eq('slug', categorySlug)
+            .single();
+
+          if (categoryData) {
+            query = query.eq('category_id', categoryData.id);
+          }
+        }
+
+        const { data, error } = await query;
+
+        if (error) {
+          console.error('Error fetching products:', error);
+          setProducts([]);
+        } else {
+          // Transform the data to match our Product interface
+          const transformedProducts = (data || []).map((product: any) => ({
+            id: product.id,
+            name: product.name,
+            category: product.categories?.name || 'Uncategorized',
+            price: product.price,
+            image_url: product.image_url,
+            is_new: product.is_new || false,
+            slug: product.slug
+          }));
+          setProducts(transformedProducts);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [category]);
+
+  if (loading) {
+    return (
+      <section className="w-full px-6 mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          {[...Array(8)].map((_, i) => (
+            <div key={i} className="animate-pulse">
+              <div className="aspect-square bg-muted/20 mb-3"></div>
+              <div className="h-4 bg-muted/20 rounded mb-2"></div>
+              <div className="h-4 bg-muted/20 rounded w-2/3"></div>
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="w-full px-6 mb-16">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {products.map((product) => (
+        <AnimatedSection animation="fadeUp" stagger={0.02} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          {products.length === 0 ? (
+            <div className="col-span-full text-center py-12">
+              <p className="text-muted-foreground text-sm">No products found.</p>
+            </div>
+          ) : (
+            products.map((product) => (
             <Link key={product.id} to={`/product/${product.id}`}>
               <Card 
                 className="border-none shadow-none bg-transparent group cursor-pointer"
               >
                 <CardContent className="p-0">
                   <div className="aspect-square mb-3 overflow-hidden bg-muted/10 relative">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-full object-cover transition-all duration-300 group-hover:opacity-0"
-                    />
-                    <img
-                      src={product.category === "Earrings" ? organicEarring : linkBracelet}
-                      alt={`${product.name} lifestyle`}
-                      className="absolute inset-0 w-full h-full object-cover transition-all duration-300 opacity-0 group-hover:opacity-100"
-                    />
-                    <div className="absolute inset-0 bg-black/[0.03]"></div>
-                    {product.isNew && (
-                      <div className="absolute top-2 left-2 px-2 py-1 text-xs font-medium text-black">
+                    {product.image_url ? (
+                      <img
+                        src={product.image_url}
+                        alt={product.name}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-muted/20 flex items-center justify-center">
+                        <p className="text-muted-foreground text-xs">No Image</p>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-primary/5"></div>
+                    {product.is_new && (
+                      <div className="absolute top-2 left-2 px-2 py-1 bg-primary/5 text-xs font-medium text-primary">
                         NEW
                       </div>
                     )}
@@ -230,15 +138,16 @@ const ProductGrid = () => {
                         {product.name}
                       </h3>
                       <p className="text-sm font-light text-foreground">
-                        {product.price}
+                        AED {product.price.toFixed(2)}
                       </p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
             </Link>
-          ))}
-        </div>
+            ))
+          )}
+        </AnimatedSection>
       
       <Pagination />
     </section>

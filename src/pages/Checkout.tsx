@@ -7,8 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
-import pantheonImage from "@/assets/pantheon.jpg";
-import eclipseImage from "@/assets/eclipse.jpg";
 
 const Checkout = () => {
   const [showDiscountInput, setShowDiscountInput] = useState(false);
@@ -46,24 +44,15 @@ const Checkout = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentComplete, setPaymentComplete] = useState(false);
   
-  // Mock cart data - in a real app this would come from state management
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Pantheon Ring",
-      price: "€2,450",
-      quantity: 1,
-      image: pantheonImage,
-      size: "54 EU / 7 US"
-    },
-    {
-      id: 2,
-      name: "Eclipse Earrings", 
-      price: "€1,850",
-      quantity: 1,
-      image: eclipseImage
-    }
-  ]);
+  // Cart data should come from state management or Supabase
+  const [cartItems, setCartItems] = useState<Array<{
+    id: number;
+    name: string;
+    price: string;
+    quantity: number;
+    image: string;
+    size?: string;
+  }>>([]);
 
   const updateQuantity = (id: number, newQuantity: number) => {
     if (newQuantity <= 0) {

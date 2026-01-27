@@ -3,11 +3,8 @@ import { useEffect, useState } from "react";
 const StatusBar = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   
-  const usps = [
-    "Free shipping over €50",
-    "365 days warranty",
-    "+100,000 happy customers"
-  ];
+  // USPs should be fetched from CMS or configuration
+  const [usps, setUsps] = useState<string[]>([]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -16,6 +13,10 @@ const StatusBar = () => {
 
     return () => clearInterval(interval);
   }, [usps.length]);
+
+  if (usps.length === 0) {
+    return null;
+  }
 
   return (
     <div className="bg-status-bar text-status-bar-foreground py-2">

@@ -2,48 +2,93 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Ensure Lenis smooth scroll works properly */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Performance optimizations */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* GPU acceleration for animations */
+[data-animate],
+.animate-section {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
 /* Linea E-commerce Design System - Minimalist & Modern */
 
 @layer base {
   :root {
-    /* Core neutral palette */
+    /* Core neutral palette - White and Lavender */
     --background: 0 0% 100%;
-    --foreground: 0 0% 9%;
+    --foreground: 270 30% 25%; /* Lavender dark */
     
     /* Status bar */
-    --status-bar: 0 0% 0%;
+    --status-bar: 270 40% 50%; /* Lavender */
     --status-bar-foreground: 0 0% 100%;
     
     /* Navigation */
     --nav-background: 0 0% 100%;
-    --nav-foreground: 0 0% 20%;
-    --nav-hover: 0 0% 5%;
+    --nav-foreground: 270 25% 30%; /* Lavender medium */
+    --nav-hover: 270 40% 45%; /* Lavender hover */
     
     /* Interactive elements */
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --primary-hover: 0 0% 15%;
+    --primary: 270 40% 50%; /* Lavender */
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 270 45% 45%; /* Darker lavender */
     
     /* Subtle elements */
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 20%;
+    --secondary: 270 20% 96%; /* Very light lavender */
+    --secondary-foreground: 270 30% 30%;
     
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 270 15% 96%; /* Light lavender tint */
+    --muted-foreground: 270 20% 50%; /* Medium lavender */
     
-    --accent: 0 0% 96%;
-    --accent-foreground: 0 0% 9%;
+    --accent: 270 30% 95%; /* Light lavender */
+    --accent-foreground: 270 40% 45%; /* Lavender */
     
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 0 0% 9%;
+    --border: 270 20% 88%; /* Lavender border */
+    --input: 270 15% 92%; /* Lavender input */
+    --ring: 270 40% 50%; /* Lavender ring */
     
     /* Cards and surfaces */
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 9%;
+    --card-foreground: 270 30% 25%; /* Lavender dark */
     
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 9%;
+    --popover-foreground: 270 30% 25%; /* Lavender dark */
     
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
@@ -54,21 +99,21 @@
     --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
-    --sidebar-background: 0 0% 98%;
+    --sidebar-background: 270 15% 98%; /* Very light lavender */
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-foreground: 270 30% 30%; /* Lavender */
 
-    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary: 270 40% 45%; /* Lavender */
 
     --sidebar-primary-foreground: 0 0% 98%;
 
-    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent: 270 20% 95%; /* Light lavender */
 
-    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-accent-foreground: 270 40% 45%; /* Lavender */
 
-    --sidebar-border: 220 13% 91%;
+    --sidebar-border: 270 20% 88%; /* Lavender border */
 
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 270 40% 50%; /* Lavender */
   }
 
   .dark {

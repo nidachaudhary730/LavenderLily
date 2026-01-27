@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -5,14 +6,7 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import pantheonImage from "@/assets/pantheon.jpg";
-import eclipseImage from "@/assets/eclipse.jpg";
-import haloImage from "@/assets/halo.jpg";
-import obliqueImage from "@/assets/oblique.jpg";
-import lintelImage from "@/assets/lintel.jpg";
-import shadowlineImage from "@/assets/shadowline.jpg";
-import organicEarring from "@/assets/organic-earring.png";
-import linkBracelet from "@/assets/link-bracelet.png";
+import AnimatedText from "../animations/AnimatedText";
 
 interface Product {
   id: number;
@@ -20,56 +14,17 @@ interface Product {
   category: string;
   price: string;
   image: string;
+  isNew?: boolean;
 }
 
-const products: Product[] = [
-  {
-    id: 1,
-    name: "Pantheon",
-    category: "Earrings",
-    price: "€2,850",
-    image: pantheonImage,
-  },
-  {
-    id: 2,
-    name: "Eclipse",
-    category: "Bracelets",
-    price: "€3,200",
-    image: eclipseImage,
-  },
-  {
-    id: 3,
-    name: "Halo",
-    category: "Earrings",
-    price: "€1,950",
-    image: haloImage,
-  },
-  {
-    id: 4,
-    name: "Oblique",
-    category: "Earrings",
-    price: "€1,650",
-    image: obliqueImage,
-  },
-  {
-    id: 5,
-    name: "Lintel",
-    category: "Earrings",
-    price: "€2,250",
-    image: lintelImage,
-  },
-  {
-    id: 6,
-    name: "Shadowline",
-    category: "Bracelets",
-    price: "€3,950",
-    image: shadowlineImage,
-  },
-];
-
 const ProductCarousel = () => {
+  // Products should be fetched from Supabase
+  const [products, setProducts] = useState<Product[]>([]);
   return (
     <section className="w-full mb-16 px-6">
+      <AnimatedText animation="fadeUp" delay={0}>
+        <h2 className="text-sm font-light text-foreground mb-4 px-2">Featured Products</h2>
+      </AnimatedText>
       <Carousel
           opts={{
             align: "start",
@@ -78,10 +33,18 @@ const ProductCarousel = () => {
           className="w-full"
         >
           <CarouselContent className="">
-            {products.map((product) => (
+            {products.length === 0 ? (
+              <CarouselItem className="basis-full">
+                <div className="text-center py-12">
+                  <p className="text-muted-foreground text-sm">No products available.</p>
+                </div>
+              </CarouselItem>
+            ) : (
+              products.map((product, index) => (
                <CarouselItem
                  key={product.id}
                  className="basis-1/2 md:basis-1/3 lg:basis-1/4 pr-2 md:pr-4"
+                 data-animate-delay={index * 0.1}
                >
                  <Link to={`/product/${product.id}`}>
                   <Card className="border-none shadow-none bg-transparent group">
@@ -90,16 +53,11 @@ const ProductCarousel = () => {
                         <img
                           src={product.image}
                           alt={product.name}
-                          className="w-full h-full object-cover transition-all duration-300 group-hover:opacity-0"
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                         />
-                        <img
-                          src={product.category === "Earrings" ? organicEarring : linkBracelet}
-                          alt={`${product.name} lifestyle`}
-                          className="absolute inset-0 w-full h-full object-cover transition-all duration-300 opacity-0 group-hover:opacity-100"
-                        />
-                        <div className="absolute inset-0 bg-black/[0.03]"></div>
-                        {(product.id === 1 || product.id === 3) && (
-                          <div className="absolute top-2 left-2 px-2 py-1 text-xs font-medium text-black">
+                        <div className="absolute inset-0 bg-primary/5"></div>
+                        {product.isNew && (
+                          <div className="absolute top-2 left-2 px-2 py-1 text-xs font-medium text-primary">
                             NEW
                           </div>
                         )}
@@ -121,7 +79,8 @@ const ProductCarousel = () => {
                  </Card>
                  </Link>
               </CarouselItem>
-            ))}
+            ))
+            )}
           </CarouselContent>
         </Carousel>
     </section>

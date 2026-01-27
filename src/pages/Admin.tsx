@@ -5,6 +5,9 @@ import { useAdmin } from '@/hooks/useAdmin';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ProductsManager from '@/components/admin/ProductsManager';
 import CategoriesManager from '@/components/admin/CategoriesManager';
+import Analytics from '@/components/admin/Analytics';
+import OrdersManager from '@/components/admin/OrdersManager';
+import UsersManager from '@/components/admin/UsersManager';
 import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -52,11 +55,26 @@ const Admin = () => {
       </div>
 
       <div className="p-6">
-        <Tabs defaultValue="products" className="w-full">
+        <Tabs defaultValue="analytics" className="w-full">
           <TabsList className="mb-6 rounded-none">
+            <TabsTrigger value="analytics" className="rounded-none">Analytics</TabsTrigger>
+            <TabsTrigger value="orders" className="rounded-none">Orders</TabsTrigger>
+            <TabsTrigger value="users" className="rounded-none">Users</TabsTrigger>
             <TabsTrigger value="products" className="rounded-none">Products</TabsTrigger>
             <TabsTrigger value="categories" className="rounded-none">Categories</TabsTrigger>
           </TabsList>
+          
+          <TabsContent value="analytics">
+            <Analytics />
+          </TabsContent>
+          
+          <TabsContent value="orders">
+            <OrdersManager />
+          </TabsContent>
+          
+          <TabsContent value="users">
+            <UsersManager />
+          </TabsContent>
           
           <TabsContent value="products">
             <ProductsManager />

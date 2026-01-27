@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import PageHeader from "../../components/about/PageHeader";
@@ -7,29 +8,24 @@ import { Button } from "../../components/ui/button";
 import AboutSidebar from "../../components/about/AboutSidebar";
 
 const StoreLocator = () => {
-  const stores = [
+  // Stores should be fetched from Supabase or CMS
+  const [stores, setStores] = useState<Array<{
+    name: string;
+    address: string;
+    phone: string;
+    hours: string;
+    services: string[];
+    mapUrl?: string;
+  }>>([
     {
-      name: "LINEA Madison Avenue",
-      address: "789 Madison Avenue, New York, NY 10065",
-      phone: "+1 (212) 555-0123",
-      hours: "Mon-Sat: 10AM-8PM, Sun: 12PM-6PM",
-      services: ["Personal Shopping", "Custom Design", "Repairs", "Appraisals"]
-    },
-    {
-      name: "LINEA Beverly Hills",
-      address: "456 Rodeo Drive, Beverly Hills, CA 90210",
-      phone: "+1 (310) 555-0456",
-      hours: "Mon-Sat: 10AM-8PM, Sun: 12PM-6PM",
-      services: ["Personal Shopping", "Custom Design", "VIP Suites", "Repairs"]
-    },
-    {
-      name: "LINEA SoHo",
-      address: "123 Spring Street, New York, NY 10012",
-      phone: "+1 (212) 555-0789",
-      hours: "Mon-Sat: 11AM-8PM, Sun: 12PM-7PM",
-      services: ["Browse & Buy", "Repairs", "Gift Wrapping"]
+      name: "LavenderLily Dubai",
+      address: "Al Nasr Square, Block B, Shop No 11, Oud Maitha, Dubai",
+      phone: "+971 58 836 6059",
+      hours: "Mon-Sat: 10:00 AM - 9:00 PM",
+      services: ["Personal Shopping", "Custom Design", "Expert Services", "Returns & Exchanges"],
+      mapUrl: "https://share.google/P63kc5rS6Cc7HtroZ"
     }
-  ];
+  ]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -52,7 +48,12 @@ const StoreLocator = () => {
 
         <ContentSection title="Our Locations">
           <div className="grid gap-8">
-            {stores.map((store, index) => (
+            {stores.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground text-sm">No store locations available.</p>
+              </div>
+            ) : (
+              stores.map((store, index) => (
               <div key={index} className="bg-background rounded-lg p-8 border border-border">
                 <div className="grid md:grid-cols-2 gap-8">
                   <div className="space-y-4">
@@ -64,9 +65,15 @@ const StoreLocator = () => {
                     </div>
                     
                     <div className="flex flex-col sm:flex-row gap-3 pt-4">
-                      <Button variant="outline" className="rounded-none">
-                        Get Directions
-                      </Button>
+                      {store.mapUrl && (
+                        <Button 
+                          variant="outline" 
+                          className="rounded-none"
+                          onClick={() => window.open(store.mapUrl, '_blank', 'noopener,noreferrer')}
+                        >
+                          Get Directions
+                        </Button>
+                      )}
                       <Button className="rounded-none">
                         Book Appointment
                       </Button>
@@ -86,7 +93,8 @@ const StoreLocator = () => {
                   </div>
                 </div>
               </div>
-            ))}
+            ))
+            )}
           </div>
         </ContentSection>
 

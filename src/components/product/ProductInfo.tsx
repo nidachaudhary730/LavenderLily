@@ -13,9 +13,29 @@ import { Minus, Plus } from "lucide-react";
 
 const ProductInfo = () => {
   const [quantity, setQuantity] = useState(1);
+  // Product data should be fetched from Supabase based on productId from route params
+  const [product, setProduct] = useState<{
+    name: string;
+    category: string;
+    price: string;
+    material?: string;
+    dimensions?: string;
+    weight?: string;
+    description?: string;
+  } | null>(null);
 
   const incrementQuantity = () => setQuantity(prev => prev + 1);
   const decrementQuantity = () => setQuantity(prev => Math.max(1, prev - 1));
+
+  if (!product) {
+    return (
+      <div className="space-y-6">
+        <div className="text-center py-12">
+          <p className="text-muted-foreground text-sm">Loading product information...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -31,12 +51,12 @@ const ProductInfo = () => {
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link to="/category/earrings">Earrings</Link>
+                <Link to={`/category/${product.category.toLowerCase()}`}>{product.category}</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Pantheon</BreadcrumbPage>
+              <BreadcrumbPage>{product.name}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -46,37 +66,47 @@ const ProductInfo = () => {
       <div className="space-y-2">
         <div className="flex justify-between items-start">
           <div>
-            <p className="text-sm font-light text-muted-foreground mb-1">Earrings</p>
-            <h1 className="text-2xl md:text-3xl font-light text-foreground">Pantheon</h1>
+            <p className="text-sm font-light text-muted-foreground mb-1">{product.category}</p>
+            <h1 className="text-2xl md:text-3xl font-light text-foreground">{product.name}</h1>
           </div>
           <div className="text-right">
-            <p className="text-xl font-light text-foreground">€2,850</p>
+            <p className="text-xl font-light text-foreground">{product.price}</p>
           </div>
         </div>
       </div>
 
       {/* Product details */}
-      <div className="space-y-4 py-4 border-b border-border">
-        <div className="space-y-2">
-          <h3 className="text-sm font-light text-foreground">Material</h3>
-          <p className="text-sm font-light text-muted-foreground">18k Gold Plated Sterling Silver</p>
+      {product.material || product.dimensions || product.weight || product.description ? (
+        <div className="space-y-4 py-4 border-b border-border">
+          {product.material && (
+            <div className="space-y-2">
+              <h3 className="text-sm font-light text-foreground">Material</h3>
+              <p className="text-sm font-light text-muted-foreground">{product.material}</p>
+            </div>
+          )}
+          
+          {product.dimensions && (
+            <div className="space-y-2">
+              <h3 className="text-sm font-light text-foreground">Dimensions</h3>
+              <p className="text-sm font-light text-muted-foreground">{product.dimensions}</p>
+            </div>
+          )}
+          
+          {product.weight && (
+            <div className="space-y-2">
+              <h3 className="text-sm font-light text-foreground">Weight</h3>
+              <p className="text-sm font-light text-muted-foreground">{product.weight}</p>
+            </div>
+          )}
+          
+          {product.description && (
+            <div className="space-y-2">
+              <h3 className="text-sm font-light text-foreground">Description</h3>
+              <p className="text-sm font-light text-muted-foreground">{product.description}</p>
+            </div>
+          )}
         </div>
-        
-        <div className="space-y-2">
-          <h3 className="text-sm font-light text-foreground">Dimensions</h3>
-          <p className="text-sm font-light text-muted-foreground">2.5cm x 1.2cm</p>
-        </div>
-        
-        <div className="space-y-2">
-          <h3 className="text-sm font-light text-foreground">Weight</h3>
-          <p className="text-sm font-light text-muted-foreground">4.2g per earring</p>
-        </div>
-        
-        <div className="space-y-2">
-          <h3 className="text-sm font-light text-foreground">Editor's notes</h3>
-          <p className="text-sm font-light text-muted-foreground italic">"A modern interpretation of classical architecture, these earrings bridge timeless elegance with contemporary minimalism."</p>
-        </div>
-      </div>
+      ) : null}
 
       {/* Quantity and Add to Cart */}
       <div className="space-y-4">
@@ -106,7 +136,7 @@ const ProductInfo = () => {
         </div>
 
         <Button 
-          className="w-full h-12 bg-foreground text-background hover:bg-foreground/90 font-light rounded-none"
+          className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary-hover font-light rounded-none"
         >
           Add to Bag
         </Button>

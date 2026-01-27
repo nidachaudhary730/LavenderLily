@@ -28,20 +28,22 @@ const CustomerCare = () => {
           <div className="grid md:grid-cols-3 gap-8">
             <div className="space-y-4">
               <h3 className="text-lg font-light text-foreground">Phone</h3>
-              <p className="text-muted-foreground">+1 (555) 123-4567</p>
-              <p className="text-sm text-muted-foreground">Mon-Fri: 9AM-6PM EST<br />Sat: 10AM-4PM EST</p>
+              <p className="text-muted-foreground">+971 58 836 6059</p>
+              <p className="text-sm text-muted-foreground">Mon-Sat: 10:00 AM - 9:00 PM<br />UAE Time</p>
             </div>
             <div className="space-y-4">
               <h3 className="text-lg font-light text-foreground">Email</h3>
-              <p className="text-muted-foreground">care@lineajewelry.com</p>
+              <p className="text-muted-foreground">hello@lavenderlily.com</p>
               <p className="text-sm text-muted-foreground">Response within 24 hours</p>
             </div>
             <div className="space-y-4">
-              <h3 className="text-lg font-light text-foreground">Live Chat</h3>
-              <Button variant="outline" className="rounded-none">
-                Start Chat
-              </Button>
-              <p className="text-sm text-muted-foreground">Available during business hours</p>
+              <h3 className="text-lg font-light text-foreground">Store Location</h3>
+              <p className="text-muted-foreground">Al Nasr Square, Block B<br />Shop No 11, Oud Maitha<br />Dubai, UAE</p>
+              <a href="https://share.google/P63kc5rS6Cc7HtroZ" target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" className="rounded-none mt-2">
+                  Get Directions
+                </Button>
+              </a>
             </div>
           </div>
         </ContentSection>

@@ -4,6 +4,7 @@ import PageHeader from "../../components/about/PageHeader";
 import ContentSection from "../../components/about/ContentSection";
 import ImageTextBlock from "../../components/about/ImageTextBlock";
 import AboutSidebar from "../../components/about/AboutSidebar";
+import AnimatedText from "../../components/animations/AnimatedText";
 
 const OurStory = () => {
   return (
@@ -24,9 +25,9 @@ const OurStory = () => {
           <ContentSection>
             <ImageTextBlock
               image="/founders.png"
-              imageAlt="Company founders"
+              imageAlt="Nida Mohammed Chaudhari - Founder of LavenderLily"
               title="Founded on Passion"
-              content="LINEA Jewelry was born from a shared vision of creating timeless pieces that transcend fleeting trends. Our founders, united by their passion for exceptional craftsmanship and sustainable practices, established the brand with a commitment to creating jewelry that tells a story - your story."
+              content="LavenderLily was born from the vision of our founder, Nida Mohammed Chaudhari, who believed in creating beautiful, elegant clothing for girls that celebrates femininity and style. With a passion for timeless design and contemporary fashion, Nida established LavenderLily with a commitment to creating clothing that makes every girl feel confident and beautiful. Every piece tells a story - your story."
               imagePosition="left"
             />
           </ContentSection>
@@ -34,16 +35,24 @@ const OurStory = () => {
           <ContentSection title="Our Heritage">
             <div className="grid md:grid-cols-2 gap-12">
               <div className="space-y-6">
-                <h3 className="text-xl font-light text-foreground">Traditional Craftsmanship</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Every piece in our collection is meticulously handcrafted by skilled artisans who have honed their craft over generations. We honor traditional techniques while embracing modern innovation, ensuring each piece meets our exacting standards for quality and beauty.
-                </p>
+                <AnimatedText animation="fadeUp" delay={0}>
+                  <h3 className="text-xl font-light text-foreground">Quality Craftsmanship</h3>
+                </AnimatedText>
+                <AnimatedText animation="fadeUp" delay={0}>
+                  <p className="text-muted-foreground leading-relaxed">
+                    Every piece in our collection is carefully selected and designed with attention to detail. We work with skilled manufacturers who share our commitment to quality, ensuring each garment meets our exacting standards for fit, fabric, and finish. From elegant dresses to comfortable everyday wear, every item reflects our dedication to excellence.
+                  </p>
+                </AnimatedText>
               </div>
               <div className="space-y-6">
-                <h3 className="text-xl font-light text-foreground">Sustainable Future</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  We believe luxury and sustainability can coexist beautifully. Our commitment to ethical sourcing, recycled materials, and responsible manufacturing practices ensures that every piece you wear contributes to a more sustainable future.
-                </p>
+                <AnimatedText animation="fadeUp" delay={0}>
+                  <h3 className="text-xl font-light text-foreground">Our Mission</h3>
+                </AnimatedText>
+                <AnimatedText animation="fadeUp" delay={0}>
+                  <p className="text-muted-foreground leading-relaxed">
+                    Founded by Nida Mohammed Chaudhari, LavenderLily is dedicated to providing beautiful, stylish clothing that empowers girls to express their unique personalities. We believe that fashion should be accessible, comfortable, and make every girl feel confident and beautiful, whether she's dressing for a special occasion or everyday life.
+                  </p>
+                </AnimatedText>
               </div>
             </div>
           </ContentSection>
@@ -51,22 +60,34 @@ const OurStory = () => {
           <ContentSection title="Our Values">
             <div className="grid md:grid-cols-3 gap-8">
               <div className="space-y-4">
-                <h3 className="text-lg font-light text-foreground">Excellence</h3>
-                <p className="text-muted-foreground">
-                  We pursue perfection in every detail, from the initial design concept to the final polish.
-                </p>
+                <AnimatedText animation="fadeUp" delay={0}>
+                  <h3 className="text-lg font-light text-foreground">Excellence</h3>
+                </AnimatedText>
+                <AnimatedText animation="fadeUp" delay={0}>
+                  <p className="text-muted-foreground">
+                    We pursue perfection in every detail, from the initial design concept to the final polish.
+                  </p>
+                </AnimatedText>
               </div>
               <div className="space-y-4">
-                <h3 className="text-lg font-light text-foreground">Authenticity</h3>
-                <p className="text-muted-foreground">
-                  Each piece reflects genuine craftsmanship and tells an authentic story of artistry and care.
-                </p>
+                <AnimatedText animation="fadeUp" delay={0}>
+                  <h3 className="text-lg font-light text-foreground">Authenticity</h3>
+                </AnimatedText>
+                <AnimatedText animation="fadeUp" delay={0}>
+                  <p className="text-muted-foreground">
+                    Each piece reflects genuine craftsmanship and tells an authentic story of artistry and care.
+                  </p>
+                </AnimatedText>
               </div>
               <div className="space-y-4">
-                <h3 className="text-lg font-light text-foreground">Innovation</h3>
-                <p className="text-muted-foreground">
-                  We continuously evolve our designs and techniques while honoring timeless aesthetic principles.
-                </p>
+                <AnimatedText animation="fadeUp" delay={0}>
+                  <h3 className="text-lg font-light text-foreground">Innovation</h3>
+                </AnimatedText>
+                <AnimatedText animation="fadeUp" delay={0}>
+                  <p className="text-muted-foreground">
+                    We continuously evolve our designs and techniques while honoring timeless aesthetic principles.
+                  </p>
+                </AnimatedText>
               </div>
             </div>
           </ContentSection>

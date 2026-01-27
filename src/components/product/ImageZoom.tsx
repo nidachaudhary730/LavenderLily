@@ -55,7 +55,7 @@ const ImageZoom = ({ images, initialIndex, isOpen, onClose }: ImageZoomProps) =>
         variant="ghost"
         size="sm"
         onClick={onClose}
-        className="absolute top-6 right-6 z-10 hover:bg-transparent text-black border-none p-2"
+        className="absolute top-6 right-6 z-10 hover:bg-transparent text-white border-none p-2"
       >
         <X className="h-8 w-8" />
       </Button>

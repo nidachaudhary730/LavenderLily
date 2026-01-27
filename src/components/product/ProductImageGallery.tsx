@@ -1,20 +1,9 @@
 import { useState, useRef } from "react";
 import ImageZoom from "./ImageZoom";
-import pantheonImage from "@/assets/pantheon.jpg";
-import eclipseImage from "@/assets/eclipse.jpg";
-import haloImage from "@/assets/halo.jpg";
-import organicEarring from "@/assets/organic-earring.png";
-import linkBracelet from "@/assets/link-bracelet.png";
-
-const productImages = [
-  pantheonImage,
-  organicEarring,
-  eclipseImage,
-  linkBracelet,
-  haloImage,
-];
 
 const ProductImageGallery = () => {
+  // Product images should be fetched from Supabase based on productId from route params
+  const [productImages, setProductImages] = useState<string[]>([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isZoomOpen, setIsZoomOpen] = useState(false);
   const [zoomInitialIndex, setZoomInitialIndex] = useState(0);
@@ -61,6 +50,14 @@ const ProductImageGallery = () => {
     touchStartX.current = null;
     touchEndX.current = null;
   };
+
+  if (productImages.length === 0) {
+    return (
+      <div className="w-full aspect-square bg-muted/10 flex items-center justify-center">
+        <p className="text-muted-foreground text-sm">No images available.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">

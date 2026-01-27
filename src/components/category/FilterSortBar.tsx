@@ -27,10 +27,11 @@ interface FilterSortBarProps {
 
 const FilterSortBar = ({ filtersOpen, setFiltersOpen, itemCount }: FilterSortBarProps) => {
   const [sortBy, setSortBy] = useState("featured");
-
-  const categories = ["Earrings", "Bracelets", "Rings", "Necklaces"];
-  const priceRanges = ["Under €1,000", "€1,000 - €2,000", "€2,000 - €3,000", "Over €3,000"];
-  const materials = ["Gold", "Silver", "Rose Gold", "Platinum"];
+  
+  // Filter options should be fetched from Supabase or derived from products
+  const [categories, setCategories] = useState<string[]>([]);
+  const [priceRanges, setPriceRanges] = useState<string[]>([]);
+  const [materials, setMaterials] = useState<string[]>([]);
 
   return (
     <>
@@ -60,8 +61,11 @@ const FilterSortBar = ({ filtersOpen, setFiltersOpen, itemCount }: FilterSortBar
                   {/* Category Filter */}
                   <div>
                     <h3 className="text-sm font-light mb-4 text-foreground">Category</h3>
-                    <div className="space-y-3">
-                      {categories.map((category) => (
+                    {categories.length === 0 ? (
+                      <p className="text-xs text-muted-foreground">No categories available.</p>
+                    ) : (
+                      <div className="space-y-3">
+                        {categories.map((category) => (
                         <div key={category} className="flex items-center space-x-3">
                           <Checkbox id={category} className="border-border data-[state=checked]:bg-foreground data-[state=checked]:border-foreground" />
                           <Label htmlFor={category} className="text-sm font-light text-foreground cursor-pointer">
@@ -69,7 +73,8 @@ const FilterSortBar = ({ filtersOpen, setFiltersOpen, itemCount }: FilterSortBar
                           </Label>
                         </div>
                       ))}
-                    </div>
+                      </div>
+                    )}
                   </div>
 
                   <Separator className="border-border" />
@@ -77,8 +82,11 @@ const FilterSortBar = ({ filtersOpen, setFiltersOpen, itemCount }: FilterSortBar
                   {/* Price Filter */}
                   <div>
                     <h3 className="text-sm font-light mb-4 text-foreground">Price</h3>
-                    <div className="space-y-3">
-                      {priceRanges.map((range) => (
+                    {priceRanges.length === 0 ? (
+                      <p className="text-xs text-muted-foreground">No price ranges available.</p>
+                    ) : (
+                      <div className="space-y-3">
+                        {priceRanges.map((range) => (
                         <div key={range} className="flex items-center space-x-3">
                           <Checkbox id={range} className="border-border data-[state=checked]:bg-foreground data-[state=checked]:border-foreground" />
                           <Label htmlFor={range} className="text-sm font-light text-foreground cursor-pointer">
@@ -86,7 +94,8 @@ const FilterSortBar = ({ filtersOpen, setFiltersOpen, itemCount }: FilterSortBar
                           </Label>
                         </div>
                       ))}
-                    </div>
+                      </div>
+                    )}
                   </div>
 
                   <Separator className="border-border" />
@@ -94,8 +103,11 @@ const FilterSortBar = ({ filtersOpen, setFiltersOpen, itemCount }: FilterSortBar
                   {/* Material Filter */}
                   <div>
                     <h3 className="text-sm font-light mb-4 text-foreground">Material</h3>
-                    <div className="space-y-3">
-                      {materials.map((material) => (
+                    {materials.length === 0 ? (
+                      <p className="text-xs text-muted-foreground">No materials available.</p>
+                    ) : (
+                      <div className="space-y-3">
+                        {materials.map((material) => (
                         <div key={material} className="flex items-center space-x-3">
                           <Checkbox id={material} className="border-border data-[state=checked]:bg-foreground data-[state=checked]:border-foreground" />
                           <Label htmlFor={material} className="text-sm font-light text-foreground cursor-pointer">
@@ -103,7 +115,8 @@ const FilterSortBar = ({ filtersOpen, setFiltersOpen, itemCount }: FilterSortBar
                           </Label>
                         </div>
                       ))}
-                    </div>
+                      </div>
+                    )}
                   </div>
 
                   <Separator className="border-border" />
