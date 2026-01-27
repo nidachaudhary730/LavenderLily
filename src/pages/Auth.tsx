@@ -119,8 +119,8 @@ const Auth = () => {
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
             {isLogin 
-              ? 'Welcome back to LINEA' 
-              : 'Join LINEA for an exclusive experience'}
+              ? 'Welcome back to LavenderLily' 
+              : 'Join LavenderLily for an exclusive experience'}
           </p>
         </div>
 
