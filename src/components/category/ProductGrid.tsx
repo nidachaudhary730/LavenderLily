@@ -11,6 +11,8 @@ interface Product {
   category: string;
   price: number;
   image_url: string | null;
+  second_image_url?: string | null;
+  images?: string[];
   is_new?: boolean;
   slug: string;
 }
@@ -64,6 +66,8 @@ const ProductGrid = ({ category }: ProductGridProps) => {
             category: product.categories?.name || 'Uncategorized',
             price: product.price,
             image_url: product.image_url,
+            second_image_url: product.second_image_url || null,
+            images: product.images || (product.image_url ? [product.image_url] : []),
             is_new: product.is_new || false,
             slug: product.slug
           }));
@@ -112,19 +116,28 @@ const ProductGrid = ({ category }: ProductGridProps) => {
                 <CardContent className="p-0">
                   <div className="aspect-square mb-3 overflow-hidden bg-muted/10 relative">
                     {product.image_url ? (
-                      <img
-                        src={product.image_url}
-                        alt={product.name}
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
+                      <>
+                        {/* Primary image */}
+                        <img
+                          src={product.image_url}
+                          alt={product.name}
+                          className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0 absolute inset-0"
+                        />
+                        {/* Secondary image on hover - always show, use second image if available, otherwise use same image */}
+                        <img
+                          src={product.second_image_url || product.images?.[1] || product.image_url}
+                          alt={`${product.name} - alternate view`}
+                          className="w-full h-full object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
+                        />
+                      </>
                     ) : (
                       <div className="w-full h-full bg-muted/20 flex items-center justify-center">
                         <p className="text-muted-foreground text-xs">No Image</p>
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-primary/5"></div>
+                    <div className="absolute inset-0 bg-primary/5 pointer-events-none"></div>
                     {product.is_new && (
-                      <div className="absolute top-2 left-2 px-2 py-1 bg-primary/5 text-xs font-medium text-primary">
+                      <div className="absolute top-2 left-2 px-2 py-1 bg-primary/5 text-xs font-medium text-primary z-10 pointer-events-none">
                         NEW
                       </div>
                     )}

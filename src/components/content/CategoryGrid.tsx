@@ -1,43 +1,48 @@
 import { Link } from "react-router-dom";
 import AnimatedSection from "../animations/AnimatedSection";
 import AnimatedText from "../animations/AnimatedText";
-import AnimatedImage from "../animations/AnimatedImage";
 
 const categories = [
   {
     name: "Dresses",
     slug: "dresses",
     image: "/Lavender-Lily( Images )/IMG_3823.PNG",
+    hoverImage: "/Lavender-Lily( Images )/IMG_3926.PNG",
     description: "Elegant dresses for every occasion"
   },
   {
     name: "Tops / Shirts",
     slug: "tops-shirts",
     image: "/Lavender-Lily( Images )/IMG_3826.PNG",
+    hoverImage: "/Lavender-Lily( Images )/IMG_3927.PNG",
     description: "Stylish tops and shirts"
   },
   {
     name: "Pants",
     slug: "pants",
     image: "/Lavender-Lily( Images )/IMG_3827.PNG",
+    hoverImage: "/Lavender-Lily( Images )/IMG_4159.PNG",
     description: "Comfortable and stylish"
   },
   {
     name: "Skirts",
     slug: "skirts",
     image: "/Lavender-Lily( Images )/IMG_3829.PNG",
+    hoverImage: "/Lavender-Lily( Images )/IMG_4162.PNG",
     description: "Feminine and versatile"
   },
   {
     name: "Co-ord Set",
     slug: "co-ord-set",
     image: "/Lavender-Lily( Images )/IMG_3830.PNG",
+    hoverImage: "/Lavender-Lily( Images )/IMG_4161.PNG",
     description: "Perfectly matched sets"
   },
   {
     name: "Ethnic",
     slug: "ethnic",
     image: "/Lavender-Lily( Images )/IMG_3832.PNG",
+    hoverImage: "/Lavender-Lily( Images )/IMG_4164.PNG",
     description: "Traditional elegance"
   }
 ];
@@ -51,13 +56,18 @@ const CategoryGrid = () => {
       <AnimatedSection animation="fadeUp" stagger={0.03} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
         {categories.map((category) => (
           <Link key={category.slug} to={`/category/${category.slug}`} className="group">
-            <div className="w-full aspect-square mb-3 overflow-hidden">
-              <AnimatedImage
+            <div className="w-full aspect-square mb-3 overflow-hidden relative">
+              {/* Primary image */}
+              <img
                 src={category.image}
                 alt={category.name}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                animation="fadeIn"
-                delay={0}
+                className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0 absolute inset-0"
+              />
+              {/* Secondary image on hover */}
+              <img
+                src={category.hoverImage}
+                alt={`${category.name} - alternate view`}
+                className="w-full h-full object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
               />
             </div>
             <div className="">
