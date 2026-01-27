@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { useAdmin } from '@/hooks/useAdmin';
 import { User } from 'lucide-react';
 import {
   DropdownMenu,
@@ -12,6 +13,7 @@ import { toast } from '@/hooks/use-toast';
 
 const UserMenu = () => {
   const { user, signOut } = useAuth();
+  const { isAdmin } = useAdmin();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -45,6 +47,17 @@ const UserMenu = () => {
           {user.email}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
+        {isAdmin && (
+          <>
+            <DropdownMenuItem 
+              onClick={() => navigate('/admin')}
+              className="text-sm font-light cursor-pointer"
+            >
+              Admin Dashboard
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+          </>
+        )}
         <DropdownMenuItem 
           onClick={handleSignOut}
           className="text-sm font-light cursor-pointer"

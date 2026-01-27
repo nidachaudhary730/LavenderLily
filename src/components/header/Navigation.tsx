@@ -97,30 +97,30 @@ const Navigation = () => {
       name: "Shop", 
       href: "/category/shop",
       submenuItems: [
-        "Rings",
-        "Necklaces", 
-        "Earrings",
-        "Bracelets",
-        "Watches"
+        "Dresses",
+        "Tops", 
+        "Bottoms",
+        "Outerwear",
+        "Accessories"
       ],
       images: [
-        { src: "/rings-collection.png", alt: "Rings Collection", label: "Rings" },
-        { src: "/earrings-collection.png", alt: "Earrings Collection", label: "Earrings" }
+        { src: "/rings-collection.png", alt: "Dresses Collection", label: "Dresses" },
+        { src: "/earrings-collection.png", alt: "Tops Collection", label: "Tops" }
       ]
     },
     { 
-      name: "New in", 
+      name: "New In", 
       href: "/category/new-in",
       submenuItems: [
         "This Week's Arrivals",
         "Spring Collection",
-        "Featured Designers",
+        "Featured Styles",
         "Limited Edition",
         "Pre-Orders"
       ],
       images: [
-        { src: "/arcus-bracelet.png", alt: "Arcus Bracelet", label: "Arcus Bracelet" },
-        { src: "/span-bracelet.png", alt: "Span Bracelet", label: "Span Bracelet" }
+        { src: "/arcus-bracelet.png", alt: "New Arrivals", label: "New Arrivals" },
+        { src: "/span-bracelet.png", alt: "Spring Collection", label: "Spring" }
       ]
     },
     { 
@@ -134,7 +134,7 @@ const Navigation = () => {
         "Store Locator"
       ],
       images: [
-        { src: "/founders.png", alt: "Company Founders", label: "Read our story" }
+        { src: "/founders.png", alt: "Our Story", label: "Read our story" }
       ]
     }
   ];
@@ -188,12 +188,8 @@ const Navigation = () => {
 
         {/* Center logo */}
         <div className="absolute left-1/2 transform -translate-x-1/2">
-          <Link to="/" className="block">
-            <img 
-              src="/LINEA-1.svg" 
-              alt="LINEA" 
-              className="h-6 w-auto"
-            />
+          <Link to="/" className="block text-xl font-light tracking-widest text-foreground">
+            LavenderLily
           </Link>
         </div>
 
