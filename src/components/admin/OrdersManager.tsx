@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -11,44 +13,44 @@ import {
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Eye, RefreshCw } from 'lucide-react';
+import { Eye, RefreshCw, Truck } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
 
 interface OrderItem {
   id: string;
   product_name: string;
-  product_price: number;
+  product_image: string | null;
   quantity: number;
   size: string | null;
   color: string | null;
-  image_url: string | null;
+  unit_price: number;
+  total_price: number;
 }
 
 interface Order {
   id: string;
+  user_id: string;
   order_number: string;
   status: string;
   total_amount: number;
   subtotal: number;
   shipping_cost: number;
-  discount_amount: number;
-  customer_email: string;
-  customer_first_name: string;
-  customer_last_name: string;
-  customer_phone: string | null;
-  shipping_address: string;
-  shipping_city: string;
-  shipping_postal_code: string;
-  shipping_country: string;
-  billing_address: string | null;
-  billing_city: string | null;
-  billing_postal_code: string | null;
-  billing_country: string | null;
-  shipping_option: string;
-  payment_status: string;
+  tax: number;
+  shipping_address: any;
+  billing_address: any;
   payment_method: string | null;
+  payment_status: string | null;
+  tracking_number: string | null;
+  estimated_delivery: string | null;
+  delivered_at: string | null;
+  notes: string | null;
   created_at: string;
   updated_at: string;
   items?: OrderItem[];
+  user_profile?: {
+    email: string;
+    full_name: string | null;
+  };
 }
 
 const OrdersManager = () => {
@@ -56,6 +58,8 @@ const OrdersManager = () => {
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [trackingNumber, setTrackingNumber] = useState('');
+  const [estimatedDelivery, setEstimatedDelivery] = useState('');
 
   useEffect(() => {
     fetchOrders();
@@ -77,20 +81,31 @@ const OrdersManager = () => {
 
       if (error) throw error;
 
-      // Fetch order items for each order
+      // Fetch order items and user profiles for each order
       if (data) {
-        const ordersWithItems = await Promise.all(
+        const ordersWithDetails = await Promise.all(
           data.map(async (order) => {
-            const { data: items } = await supabase
-              .from('order_items')
-              .select('*')
-              .eq('order_id', order.id);
+            const [itemsResult, profileResult] = await Promise.all([
+              supabase
+                .from('order_items')
+                .select('*')
+                .eq('order_id', order.id),
+              supabase
+                .from('user_profiles')
+                .select('email, full_name')
+                .eq('id', order.user_id)
+                .single()
+            ]);
 
-            return { ...order, items: items || [] };
+            return {
+              ...order,
+              items: itemsResult.data || [],
+              user_profile: profileResult.data || undefined,
+            };
           })
         );
 
-        setOrders(ordersWithItems);
+        setOrders(ordersWithDetails);
       }
     } catch (error) {
       console.error('Error fetching orders:', error);
@@ -101,47 +116,72 @@ const OrdersManager = () => {
 
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     try {
+      const updateData: any = { status: newStatus };
+      
+      if (newStatus === 'delivered') {
+        updateData.delivered_at = new Date().toISOString();
+      }
+
       const { error } = await supabase
         .from('orders')
-        .update({ status: newStatus })
+        .update(updateData)
         .eq('id', orderId);
 
       if (error) throw error;
 
-      // Refresh orders
+      toast({ title: 'Success', description: 'Order status updated' });
       fetchOrders();
     } catch (error) {
       console.error('Error updating order status:', error);
+      toast({ title: 'Error', description: 'Failed to update status', variant: 'destructive' });
     }
   };
 
-  const getStatusBadgeVariant = (status: string) => {
+  const updateTrackingInfo = async (orderId: string) => {
+    try {
+      const updateData: any = {};
+      
+      if (trackingNumber) {
+        updateData.tracking_number = trackingNumber;
+      }
+      if (estimatedDelivery) {
+        updateData.estimated_delivery = estimatedDelivery;
+      }
+
+      if (Object.keys(updateData).length === 0) {
+        toast({ title: 'Error', description: 'Please provide tracking information', variant: 'destructive' });
+        return;
+      }
+
+      const { error } = await supabase
+        .from('orders')
+        .update(updateData)
+        .eq('id', orderId);
+
+      if (error) throw error;
+
+      toast({ title: 'Success', description: 'Tracking information updated' });
+      setTrackingNumber('');
+      setEstimatedDelivery('');
+      fetchOrders();
+    } catch (error) {
+      console.error('Error updating tracking:', error);
+      toast({ title: 'Error', description: 'Failed to update tracking', variant: 'destructive' });
+    }
+  };
+
+  const getStatusBadgeVariant = (status: string): "default" | "secondary" | "outline" | "destructive" => {
     switch (status) {
       case 'pending':
-        return 'default';
-      case 'processing':
         return 'secondary';
+      case 'processing':
+        return 'default';
       case 'shipped':
         return 'outline';
       case 'delivered':
         return 'default';
       case 'cancelled':
         return 'destructive';
-      default:
-        return 'default';
-    }
-  };
-
-  const getPaymentStatusBadgeVariant = (status: string) => {
-    switch (status) {
-      case 'paid':
-        return 'default';
-      case 'pending':
-        return 'secondary';
-      case 'failed':
-        return 'destructive';
-      case 'refunded':
-        return 'outline';
       default:
         return 'default';
     }
@@ -224,12 +264,14 @@ const OrdersManager = () => {
                       <Badge variant={getStatusBadgeVariant(order.status)} className="rounded-none">
                         {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                       </Badge>
-                      <Badge variant={getPaymentStatusBadgeVariant(order.payment_status)} className="rounded-none">
-                        {order.payment_status.charAt(0).toUpperCase() + order.payment_status.slice(1)}
-                      </Badge>
+                      {order.payment_status && (
+                        <Badge variant="outline" className="rounded-none">
+                          Payment: {order.payment_status}
+                        </Badge>
+                      )}
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      {order.customer_first_name} {order.customer_last_name} • {order.customer_email}
+                      {order.user_profile?.full_name || 'Unknown'} • {order.user_profile?.email || 'No email'}
                     </p>
                     <p className="text-sm text-muted-foreground">
                       {formatDate(order.created_at)}
@@ -291,10 +333,9 @@ const OrdersManager = () => {
                                     </Badge>
                                   </div>
                                   <div>
-                                    <p className="text-muted-foreground">Payment Status</p>
-                                    <Badge variant={getPaymentStatusBadgeVariant(selectedOrder.payment_status)} className="rounded-none">
-                                      {selectedOrder.payment_status}
-                                    </Badge>
+                                    <p className="text-muted-foreground">Customer</p>
+                                    <p className="font-medium">{selectedOrder.user_profile?.full_name || 'N/A'}</p>
+                                    <p className="text-xs text-muted-foreground">{selectedOrder.user_profile?.email}</p>
                                   </div>
                                 </div>
                               </div>
@@ -305,9 +346,9 @@ const OrdersManager = () => {
                                 <div className="space-y-3">
                                   {selectedOrder.items?.map((item) => (
                                     <div key={item.id} className="flex items-center gap-4 border-b border-border pb-3">
-                                      {item.image_url && (
+                                      {item.product_image && (
                                         <img
-                                          src={item.image_url}
+                                          src={item.product_image}
                                           alt={item.product_name}
                                           className="w-16 h-16 object-cover"
                                         />
@@ -319,61 +360,78 @@ const OrdersManager = () => {
                                         <p className="text-sm text-muted-foreground">Quantity: {item.quantity}</p>
                                       </div>
                                       <div className="text-right">
-                                        <p className="font-medium">{formatCurrency(item.product_price * item.quantity)}</p>
-                                        <p className="text-sm text-muted-foreground">{formatCurrency(item.product_price)} each</p>
+                                        <p className="font-medium">{formatCurrency(item.total_price)}</p>
+                                        <p className="text-sm text-muted-foreground">{formatCurrency(item.unit_price)} each</p>
                                       </div>
                                     </div>
                                   ))}
                                 </div>
                               </div>
 
-                              {/* Customer Information */}
-                              <div className="space-y-4">
-                                <h3 className="text-sm font-medium text-foreground">Customer Information</h3>
-                                <div className="grid grid-cols-2 gap-4 text-sm">
-                                  <div>
-                                    <p className="text-muted-foreground">Name</p>
-                                    <p className="font-medium">{selectedOrder.customer_first_name} {selectedOrder.customer_last_name}</p>
-                                  </div>
-                                  <div>
-                                    <p className="text-muted-foreground">Email</p>
-                                    <p className="font-medium">{selectedOrder.customer_email}</p>
-                                  </div>
-                                  {selectedOrder.customer_phone && (
-                                    <div>
-                                      <p className="text-muted-foreground">Phone</p>
-                                      <p className="font-medium">{selectedOrder.customer_phone}</p>
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-
                               {/* Shipping Address */}
-                              <div className="space-y-4">
-                                <h3 className="text-sm font-medium text-foreground">Shipping Address</h3>
-                                <div className="text-sm">
-                                  <p className="font-medium">{selectedOrder.shipping_address}</p>
-                                  <p className="text-muted-foreground">
-                                    {selectedOrder.shipping_city}, {selectedOrder.shipping_postal_code}
-                                  </p>
-                                  <p className="text-muted-foreground">{selectedOrder.shipping_country}</p>
-                                  <p className="text-muted-foreground mt-2">Shipping: {selectedOrder.shipping_option}</p>
-                                </div>
-                              </div>
-
-                              {/* Billing Address */}
-                              {selectedOrder.billing_address && (
+                              {selectedOrder.shipping_address && (
                                 <div className="space-y-4">
-                                  <h3 className="text-sm font-medium text-foreground">Billing Address</h3>
+                                  <h3 className="text-sm font-medium text-foreground">Shipping Address</h3>
                                   <div className="text-sm">
-                                    <p className="font-medium">{selectedOrder.billing_address}</p>
+                                    <p className="font-medium">{selectedOrder.shipping_address.address}</p>
                                     <p className="text-muted-foreground">
-                                      {selectedOrder.billing_city}, {selectedOrder.billing_postal_code}
+                                      {selectedOrder.shipping_address.city}, {selectedOrder.shipping_address.postalCode}
                                     </p>
-                                    <p className="text-muted-foreground">{selectedOrder.billing_country}</p>
+                                    <p className="text-muted-foreground">{selectedOrder.shipping_address.country}</p>
                                   </div>
                                 </div>
                               )}
+
+                              {/* Tracking Info */}
+                              <div className="space-y-4 border-t border-border pt-4">
+                                <h3 className="text-sm font-medium text-foreground flex items-center gap-2">
+                                  <Truck className="h-4 w-4" />
+                                  Tracking Information
+                                </h3>
+                                {selectedOrder.tracking_number ? (
+                                  <div className="text-sm">
+                                    <p>
+                                      <span className="text-muted-foreground">Tracking Number: </span>
+                                      <span className="font-medium">{selectedOrder.tracking_number}</span>
+                                    </p>
+                                    {selectedOrder.estimated_delivery && (
+                                      <p className="text-muted-foreground mt-1">
+                                        Estimated Delivery: {new Date(selectedOrder.estimated_delivery).toLocaleDateString()}
+                                      </p>
+                                    )}
+                                  </div>
+                                ) : (
+                                  <div className="space-y-3">
+                                    <div className="grid grid-cols-2 gap-3">
+                                      <div>
+                                        <Label className="text-xs">Tracking Number</Label>
+                                        <Input
+                                          value={trackingNumber}
+                                          onChange={(e) => setTrackingNumber(e.target.value)}
+                                          placeholder="Enter tracking number"
+                                          className="rounded-none mt-1"
+                                        />
+                                      </div>
+                                      <div>
+                                        <Label className="text-xs">Estimated Delivery</Label>
+                                        <Input
+                                          type="date"
+                                          value={estimatedDelivery}
+                                          onChange={(e) => setEstimatedDelivery(e.target.value)}
+                                          className="rounded-none mt-1"
+                                        />
+                                      </div>
+                                    </div>
+                                    <Button
+                                      size="sm"
+                                      onClick={() => updateTrackingInfo(selectedOrder.id)}
+                                      className="rounded-none"
+                                    >
+                                      Add Tracking
+                                    </Button>
+                                  </div>
+                                )}
+                              </div>
 
                               {/* Order Totals */}
                               <div className="space-y-2 border-t border-border pt-4">
@@ -385,10 +443,10 @@ const OrdersManager = () => {
                                   <span className="text-muted-foreground">Shipping</span>
                                   <span className="font-medium">{formatCurrency(selectedOrder.shipping_cost)}</span>
                                 </div>
-                                {selectedOrder.discount_amount > 0 && (
+                                {selectedOrder.tax > 0 && (
                                   <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">Discount</span>
-                                    <span className="font-medium text-green-600">-{formatCurrency(selectedOrder.discount_amount)}</span>
+                                    <span className="text-muted-foreground">Tax</span>
+                                    <span className="font-medium">{formatCurrency(selectedOrder.tax)}</span>
                                   </div>
                                 )}
                                 <div className="flex justify-between text-lg font-medium border-t border-border pt-2">
@@ -405,8 +463,25 @@ const OrdersManager = () => {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-sm text-muted-foreground">
-                  {order.items?.length || 0} item(s) • {order.shipping_city}, {order.shipping_country}
+                <div className="flex gap-2 overflow-x-auto pb-2">
+                  {order.items?.slice(0, 4).map((item) => (
+                    <div key={item.id} className="w-12 h-12 bg-muted/10 border border-border flex-shrink-0">
+                      {item.product_image ? (
+                        <img
+                          src={item.product_image}
+                          alt={item.product_name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-muted" />
+                      )}
+                    </div>
+                  ))}
+                  {(order.items?.length || 0) > 4 && (
+                    <div className="w-12 h-12 bg-muted/10 border border-border flex-shrink-0 flex items-center justify-center text-xs text-muted-foreground">
+                      +{(order.items?.length || 0) - 4}
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>

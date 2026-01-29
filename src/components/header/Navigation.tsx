@@ -399,8 +399,6 @@ const Navigation = () => {
       <ShoppingBag 
         isOpen={isShoppingBagOpen}
         onClose={() => setIsShoppingBagOpen(false)}
-        cartItems={cartItems}
-        updateQuantity={updateQuantity}
         onViewFavorites={() => {
           setIsShoppingBagOpen(false);
           setOffCanvasType('favorites');

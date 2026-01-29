@@ -10,32 +10,54 @@ import {
   BreadcrumbSeparator 
 } from "@/components/ui/breadcrumb";
 import { Minus, Plus } from "lucide-react";
+import { useCart } from "@/hooks/useCart";
 
-const ProductInfo = () => {
-  const [quantity, setQuantity] = useState(1);
-  // Product data should be fetched from Supabase based on productId from route params
-  const [product, setProduct] = useState<{
+interface Product {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  price: number;
+  category_id: string | null;
+  image_url: string | null;
+  images: string[];
+  sizes: string[];
+  colors: string[];
+  is_new: boolean;
+  is_active: boolean;
+  stock_quantity: number;
+  categories?: {
+    id: string;
     name: string;
-    category: string;
-    price: string;
-    material?: string;
-    dimensions?: string;
-    weight?: string;
-    description?: string;
-  } | null>(null);
+    slug: string;
+  } | null;
+}
+
+interface ProductInfoProps {
+  product: Product;
+}
+
+const ProductInfo = ({ product }: ProductInfoProps) => {
+  const [quantity, setQuantity] = useState(1);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const { addToCart } = useCart();
 
   const incrementQuantity = () => setQuantity(prev => prev + 1);
   const decrementQuantity = () => setQuantity(prev => Math.max(1, prev - 1));
 
-  if (!product) {
-    return (
-      <div className="space-y-6">
-        <div className="text-center py-12">
-          <p className="text-muted-foreground text-sm">Loading product information...</p>
-        </div>
-      </div>
-    );
-  }
+  const handleAddToCart = async () => {
+    await addToCart(product.id, quantity, selectedSize || undefined, selectedColor || undefined);
+    // Reset quantity after adding
+    setQuantity(1);
+  };
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-EU', {
+      style: 'currency',
+      currency: 'EUR',
+    }).format(amount);
+  };
 
   return (
     <div className="space-y-6">
@@ -49,12 +71,18 @@ const ProductInfo = () => {
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link to={`/category/${product.category.toLowerCase()}`}>{product.category}</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
+            {product.categories && (
+              <>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link to={`/category/${product.categories.slug}`}>
+                      {product.categories.name}
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+              </>
+            )}
             <BreadcrumbItem>
               <BreadcrumbPage>{product.name}</BreadcrumbPage>
             </BreadcrumbItem>
@@ -66,50 +94,78 @@ const ProductInfo = () => {
       <div className="space-y-2">
         <div className="flex justify-between items-start">
           <div>
-            <p className="text-sm font-light text-muted-foreground mb-1">{product.category}</p>
+            {product.categories && (
+              <p className="text-sm font-light text-muted-foreground mb-1">
+                {product.categories.name}
+              </p>
+            )}
             <h1 className="text-2xl md:text-3xl font-light text-foreground">{product.name}</h1>
+            {product.is_new && (
+              <span className="inline-block mt-2 text-xs bg-primary text-primary-foreground px-2 py-1">
+                NEW
+              </span>
+            )}
           </div>
           <div className="text-right">
-            <p className="text-xl font-light text-foreground">{product.price}</p>
+            <p className="text-xl font-light text-foreground">{formatCurrency(product.price)}</p>
+            {product.stock_quantity <= 5 && product.stock_quantity > 0 && (
+              <p className="text-sm text-muted-foreground mt-1">
+                Only {product.stock_quantity} left
+              </p>
+            )}
+            {product.stock_quantity === 0 && (
+              <p className="text-sm text-destructive mt-1">Out of stock</p>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Product details */}
-      {product.material || product.dimensions || product.weight || product.description ? (
-        <div className="space-y-4 py-4 border-b border-border">
-          {product.material && (
-            <div className="space-y-2">
-              <h3 className="text-sm font-light text-foreground">Material</h3>
-              <p className="text-sm font-light text-muted-foreground">{product.material}</p>
-            </div>
-          )}
-          
-          {product.dimensions && (
-            <div className="space-y-2">
-              <h3 className="text-sm font-light text-foreground">Dimensions</h3>
-              <p className="text-sm font-light text-muted-foreground">{product.dimensions}</p>
-            </div>
-          )}
-          
-          {product.weight && (
-            <div className="space-y-2">
-              <h3 className="text-sm font-light text-foreground">Weight</h3>
-              <p className="text-sm font-light text-muted-foreground">{product.weight}</p>
-            </div>
-          )}
-          
-          {product.description && (
-            <div className="space-y-2">
-              <h3 className="text-sm font-light text-foreground">Description</h3>
-              <p className="text-sm font-light text-muted-foreground">{product.description}</p>
-            </div>
-          )}
+      {/* Size Selection */}
+      {product.sizes && product.sizes.length > 0 && (
+        <div className="space-y-3 py-4 border-t border-border">
+          <h3 className="text-sm font-light text-foreground">Size</h3>
+          <div className="flex flex-wrap gap-2">
+            {product.sizes.map((size) => (
+              <button
+                key={size}
+                onClick={() => setSelectedSize(size)}
+                className={`px-4 py-2 border text-sm font-light transition-colors ${
+                  selectedSize === size
+                    ? 'border-foreground bg-foreground text-background'
+                    : 'border-border hover:border-foreground'
+                }`}
+              >
+                {size}
+              </button>
+            ))}
+          </div>
         </div>
-      ) : null}
+      )}
+
+      {/* Color Selection */}
+      {product.colors && product.colors.length > 0 && (
+        <div className="space-y-3 py-4 border-t border-border">
+          <h3 className="text-sm font-light text-foreground">Color</h3>
+          <div className="flex flex-wrap gap-2">
+            {product.colors.map((color) => (
+              <button
+                key={color}
+                onClick={() => setSelectedColor(color)}
+                className={`px-4 py-2 border text-sm font-light transition-colors ${
+                  selectedColor === color
+                    ? 'border-foreground bg-foreground text-background'
+                    : 'border-border hover:border-foreground'
+                }`}
+              >
+                {color}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Quantity and Add to Cart */}
-      <div className="space-y-4">
+      <div className="space-y-4 py-4 border-t border-border">
         <div className="flex items-center gap-4">
           <span className="text-sm font-light text-foreground">Quantity</span>
           <div className="flex items-center border border-border">
@@ -137,8 +193,10 @@ const ProductInfo = () => {
 
         <Button 
           className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary-hover font-light rounded-none"
+          onClick={handleAddToCart}
+          disabled={product.stock_quantity === 0}
         >
-          Add to Bag
+          {product.stock_quantity === 0 ? 'Out of Stock' : 'Add to Bag'}
         </Button>
       </div>
     </div>
