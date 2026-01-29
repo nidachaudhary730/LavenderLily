@@ -1,31 +1,29 @@
-import { X, Minus, Plus } from "lucide-react";
+import { X, Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-
-interface CartItem {
-  id: number;
-  name: string;
-  price: string;
-  image: string;
-  quantity: number;
-  category: string;
-}
+import { useCart } from "@/hooks/useCart";
+import { useAuth } from "@/hooks/useAuth";
 
 interface ShoppingBagProps {
   isOpen: boolean;
   onClose: () => void;
-  cartItems: CartItem[];
-  updateQuantity: (id: number, newQuantity: number) => void;
   onViewFavorites?: () => void;
 }
 
-const ShoppingBag = ({ isOpen, onClose, cartItems, updateQuantity, onViewFavorites }: ShoppingBagProps) => {
+const ShoppingBag = ({ isOpen, onClose, onViewFavorites }: ShoppingBagProps) => {
+  const { user } = useAuth();
+  const { cartItems, updateQuantity, removeFromCart, getCartTotal, loading } = useCart();
+
   if (!isOpen) return null;
 
-  const subtotal = cartItems.reduce((sum, item) => {
-    const price = parseFloat(item.price.replace('€', '').replace(',', ''));
-    return sum + (price * item.quantity);
-  }, 0);
+  const subtotal = getCartTotal();
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-EU', {
+      style: 'currency',
+      currency: 'EUR',
+    }).format(amount);
+  };
 
   return (
     <div className="fixed inset-0 z-50 h-screen">
@@ -66,7 +64,20 @@ const ShoppingBag = ({ isOpen, onClose, cartItems, updateQuantity, onViewFavorit
             </div>
           )}
           
-          {cartItems.length === 0 ? (
+          {!user ? (
+            <div className="flex-1 flex flex-col items-center justify-center">
+              <p className="text-muted-foreground text-sm text-center mb-4">
+                Please sign in to view your cart.
+              </p>
+              <Button asChild className="rounded-none">
+                <Link to="/auth" onClick={onClose}>Sign In</Link>
+              </Button>
+            </div>
+          ) : loading ? (
+            <div className="flex-1 flex items-center justify-center">
+              <p className="text-muted-foreground text-sm">Loading cart...</p>
+            </div>
+          ) : cartItems.length === 0 ? (
             <div className="flex-1 flex items-center justify-center">
               <p className="text-muted-foreground text-sm text-center">
                 Your shopping bag is empty.<br />
@@ -79,41 +90,61 @@ const ShoppingBag = ({ isOpen, onClose, cartItems, updateQuantity, onViewFavorit
               <div className="flex-1 overflow-y-auto space-y-6 mb-6">
                 {cartItems.map((item) => (
                   <div key={item.id} className="flex gap-4">
-                    <div className="w-20 h-20 bg-muted/10 rounded-lg overflow-hidden">
+                    <div className="w-20 h-20 bg-muted/10 rounded-none overflow-hidden">
                       <img 
-                        src={item.image} 
-                        alt={item.name}
+                        src={item.product.image_url || item.product.images?.[0] || '/placeholder.svg'} 
+                        alt={item.product.name}
                         className="w-full h-full object-cover"
                       />
                     </div>
                     <div className="flex-1">
-                      <div className="flex justify-between items-start mb-2">
+                      <div className="flex justify-between items-start mb-1">
                         <div>
-                          <p className="text-sm font-light text-muted-foreground">{item.category}</p>
-                          <h3 className="text-sm font-medium text-foreground">{item.name}</h3>
+                          <Link 
+                            to={`/product/${item.product.slug}`}
+                            onClick={onClose}
+                            className="text-sm font-medium text-foreground hover:underline"
+                          >
+                            {item.product.name}
+                          </Link>
+                          {item.size && (
+                            <p className="text-xs text-muted-foreground">Size: {item.size}</p>
+                          )}
+                          {item.color && (
+                            <p className="text-xs text-muted-foreground">Color: {item.color}</p>
+                          )}
                         </div>
-                        <p className="text-sm font-light text-foreground">{item.price}</p>
+                        <p className="text-sm font-light text-foreground">
+                          {formatCurrency(item.product.price * item.quantity)}
+                        </p>
                       </div>
-                      <div className="flex items-center gap-2 mt-3">
+                      <div className="flex items-center justify-between mt-2">
                         <div className="flex items-center border border-border">
                           <button 
                             onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                            className="p-2 hover:bg-muted/50 transition-colors"
+                            className="p-1.5 hover:bg-muted/50 transition-colors"
                             aria-label="Decrease quantity"
                           >
-                            <Minus size={14} />
+                            <Minus size={12} />
                           </button>
-                          <span className="px-3 py-2 text-sm font-light min-w-[40px] text-center">
+                          <span className="px-2 py-1 text-xs font-light min-w-[30px] text-center">
                             {item.quantity}
                           </span>
                           <button 
                             onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                            className="p-2 hover:bg-muted/50 transition-colors"
+                            className="p-1.5 hover:bg-muted/50 transition-colors"
                             aria-label="Increase quantity"
                           >
-                            <Plus size={14} />
+                            <Plus size={12} />
                           </button>
                         </div>
+                        <button
+                          onClick={() => removeFromCart(item.id)}
+                          className="text-muted-foreground hover:text-destructive transition-colors"
+                          aria-label="Remove item"
+                        >
+                          <Trash2 size={14} />
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -124,7 +155,7 @@ const ShoppingBag = ({ isOpen, onClose, cartItems, updateQuantity, onViewFavorit
               <div className="border-t border-border pt-6 space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-light text-foreground">Subtotal</span>
-                  <span className="text-sm font-medium text-foreground">€{subtotal.toLocaleString('en-EU', { minimumFractionDigits: 2 })}</span>
+                  <span className="text-sm font-medium text-foreground">{formatCurrency(subtotal)}</span>
                 </div>
                 
                 <p className="text-xs text-muted-foreground">
@@ -135,9 +166,8 @@ const ShoppingBag = ({ isOpen, onClose, cartItems, updateQuantity, onViewFavorit
                   asChild 
                   className="w-full rounded-none" 
                   size="lg"
-                  onClick={onClose}
                 >
-                  <Link to="/checkout">
+                  <Link to="/checkout" onClick={onClose}>
                     Proceed to Checkout
                   </Link>
                 </Button>
@@ -149,7 +179,7 @@ const ShoppingBag = ({ isOpen, onClose, cartItems, updateQuantity, onViewFavorit
                   onClick={onClose}
                   asChild
                 >
-                  <Link to="/category/shop">
+                  <Link to="/">
                     Continue Shopping
                   </Link>
                 </Button>

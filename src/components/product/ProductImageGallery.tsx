@@ -1,9 +1,12 @@
 import { useState, useRef } from "react";
 import ImageZoom from "./ImageZoom";
 
-const ProductImageGallery = () => {
-  // Product images should be fetched from Supabase based on productId from route params
-  const [productImages, setProductImages] = useState<string[]>([]);
+interface ProductImageGalleryProps {
+  images: string[];
+  productName: string;
+}
+
+const ProductImageGallery = ({ images, productName }: ProductImageGalleryProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isZoomOpen, setIsZoomOpen] = useState(false);
   const [zoomInitialIndex, setZoomInitialIndex] = useState(0);
@@ -11,11 +14,11 @@ const ProductImageGallery = () => {
   const touchEndX = useRef<number | null>(null);
 
   const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % productImages.length);
+    setCurrentImageIndex((prev) => (prev + 1) % images.length);
   };
 
   const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + productImages.length) % productImages.length);
+    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
   };
 
   const handleImageClick = (index: number) => {
@@ -39,10 +42,8 @@ const ProductImageGallery = () => {
 
     if (Math.abs(difference) > minSwipeDistance) {
       if (difference > 0) {
-        // Swipe left - next image
         nextImage();
       } else {
-        // Swipe right - previous image
         prevImage();
       }
     }
@@ -51,7 +52,7 @@ const ProductImageGallery = () => {
     touchEndX.current = null;
   };
 
-  if (productImages.length === 0) {
+  if (images.length === 0) {
     return (
       <div className="w-full aspect-square bg-muted/10 flex items-center justify-center">
         <p className="text-muted-foreground text-sm">No images available.</p>
@@ -64,7 +65,7 @@ const ProductImageGallery = () => {
       {/* Desktop: Vertical scrolling gallery (1024px and above) */}
       <div className="hidden lg:block">
         <div className="space-y-4">
-          {productImages.map((image, index) => (
+          {images.map((image, index) => (
             <div 
               key={index} 
               className="w-full aspect-square overflow-hidden cursor-pointer group"
@@ -72,7 +73,7 @@ const ProductImageGallery = () => {
             >
               <img
                 src={image}
-                alt={`Product view ${index + 1}`}
+                alt={`${productName} view ${index + 1}`}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
             </div>
@@ -91,30 +92,32 @@ const ProductImageGallery = () => {
             onTouchEnd={handleTouchEnd}
           >
             <img
-              src={productImages[currentImageIndex]}
-              alt={`Product view ${currentImageIndex + 1}`}
+              src={images[currentImageIndex]}
+              alt={`${productName} view ${currentImageIndex + 1}`}
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 select-none"
             />
           </div>
           
           {/* Dots indicator */}
-          <div className="flex justify-center mt-4 gap-2">
-            {productImages.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentImageIndex(index)}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  index === currentImageIndex ? 'bg-foreground' : 'bg-muted'
-                }`}
-              />
-            ))}
-          </div>
+          {images.length > 1 && (
+            <div className="flex justify-center mt-4 gap-2">
+              {images.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`w-2 h-2 rounded-full transition-colors ${
+                    index === currentImageIndex ? 'bg-foreground' : 'bg-muted'
+                  }`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
       {/* Image Zoom Modal */}
       <ImageZoom
-        images={productImages}
+        images={images}
         initialIndex={zoomInitialIndex}
         isOpen={isZoomOpen}
         onClose={() => setIsZoomOpen(false)}

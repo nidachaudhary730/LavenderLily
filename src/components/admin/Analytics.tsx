@@ -57,7 +57,7 @@ const Analytics = () => {
       // Calculate metrics
       const totalRevenue = orders?.reduce((sum, order) => {
         if (order.status !== 'cancelled') {
-          return sum + parseFloat(order.total_amount.toString());
+          return sum + parseFloat(order.total_amount?.toString() || '0');
         }
         return sum;
       }, 0) || 0;
