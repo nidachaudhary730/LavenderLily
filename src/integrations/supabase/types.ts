@@ -52,10 +52,12 @@ export type Database = {
           description: string | null
           id: string
           image_url: string | null
+          images: string[] | null
           is_active: boolean | null
           is_new: boolean | null
           name: string
           price: number
+          second_image_url: string | null
           sizes: string[] | null
           slug: string
           stock_quantity: number | null
@@ -68,10 +70,12 @@ export type Database = {
           description?: string | null
           id?: string
           image_url?: string | null
+          images?: string[] | null
           is_active?: boolean | null
           is_new?: boolean | null
           name: string
           price: number
+          second_image_url?: string | null
           sizes?: string[] | null
           slug: string
           stock_quantity?: number | null
@@ -84,10 +88,12 @@ export type Database = {
           description?: string | null
           id?: string
           image_url?: string | null
+          images?: string[] | null
           is_active?: boolean | null
           is_new?: boolean | null
           name?: string
           price?: number
+          second_image_url?: string | null
           sizes?: string[] | null
           slug?: string
           stock_quantity?: number | null
