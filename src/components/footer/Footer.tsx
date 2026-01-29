@@ -75,7 +75,7 @@ const Footer = () => {
               © 2026 LavenderLily. All rights reserved.
             </p>
             <p className="text-xs font-light text-white/60">
-              Designed and developed by Mohd Jarir Khan
+              Designed and developed by  <a href="https://www.linkedin.com/in/mohdjarirnoorkhan/" target="_blank" rel="noopener noreferrer" className="text-sm font-light text-white/80 hover:text-white transition-colors">Mohd Jarir Khan</a>
             </p>
           </div>
           <div className="flex space-x-6">

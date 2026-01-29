@@ -10,24 +10,24 @@ const OurStory = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <div className="flex">
         <div className="hidden lg:block">
           <AboutSidebar />
         </div>
-        
+
         <main className="w-full lg:w-[70vw] lg:ml-auto px-6">
-          <PageHeader 
-            title="Our Story" 
+          <PageHeader
+            title="Our Story"
             subtitle="A journey of passion, craftsmanship, and timeless elegance"
           />
-          
+
           <ContentSection>
             <ImageTextBlock
               image="/founders.png"
-              imageAlt="Nida Mohammed Chaudhari - Founder of LavenderLily"
+              imageAlt="Nida Chaudhary- Founder of LavenderLily"
               title="Founded on Passion"
-              content="LavenderLily was born from the vision of our founder, Nida Mohammed Chaudhari, who believed in creating beautiful, elegant clothing for girls that celebrates femininity and style. With a passion for timeless design and contemporary fashion, Nida established LavenderLily with a commitment to creating clothing that makes every girl feel confident and beautiful. Every piece tells a story - your story."
+              content="LavenderLily was born from the vision of our founder, Nida Chaudhary, who believed in creating beautiful, elegant clothing for girls that celebrates femininity and style. With a passion for timeless design and contemporary fashion, Nida established LavenderLily with a commitment to creating clothing that makes every girl feel confident and beautiful. Every piece tells a story - your story."
               imagePosition="left"
             />
           </ContentSection>
@@ -50,7 +50,7 @@ const OurStory = () => {
                 </AnimatedText>
                 <AnimatedText animation="fadeUp" delay={0}>
                   <p className="text-muted-foreground leading-relaxed">
-                    Founded by Nida Mohammed Chaudhari, LavenderLily is dedicated to providing beautiful, stylish clothing that empowers girls to express their unique personalities. We believe that fashion should be accessible, comfortable, and make every girl feel confident and beautiful, whether she's dressing for a special occasion or everyday life.
+                    Founded by Nida Chaudhary, LavenderLily is dedicated to providing beautiful, stylish clothing that empowers girls to express their unique personalities. We believe that fashion should be accessible, comfortable, and make every girl feel confident and beautiful, whether she's dressing for a special occasion or everyday life.
                   </p>
                 </AnimatedText>
               </div>
@@ -93,7 +93,7 @@ const OurStory = () => {
           </ContentSection>
         </main>
       </div>
-      
+
       <Footer />
     </div>
   );
