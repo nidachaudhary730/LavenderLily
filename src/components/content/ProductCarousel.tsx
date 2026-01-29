@@ -71,33 +71,33 @@ const ProductCarousel = () => {
         <h2 className="text-sm font-light text-foreground mb-4 px-2">Featured Products</h2>
       </AnimatedText>
       <Carousel
-          opts={{
-            align: "start",
-            loop: false,
-          }}
-          className="w-full"
-        >
-          <CarouselContent className="">
-            {loading ? (
-              <CarouselItem className="basis-full">
-                <div className="text-center py-12">
-                  <p className="text-muted-foreground text-sm">Loading products...</p>
-                </div>
-              </CarouselItem>
-            ) : products.length === 0 ? (
-              <CarouselItem className="basis-full">
-                <div className="text-center py-12">
-                  <p className="text-muted-foreground text-sm">No products available.</p>
-                </div>
-              </CarouselItem>
-            ) : (
-              products.map((product, index) => (
-               <CarouselItem
-                 key={product.id}
-                 className="basis-1/2 md:basis-1/3 lg:basis-1/4 pr-2 md:pr-4"
-                 data-animate-delay={index * 0.1}
-               >
-                 <Link to={`/product/${product.id}`}>
+        opts={{
+          align: "start",
+          loop: false,
+        }}
+        className="w-full"
+      >
+        <CarouselContent className="">
+          {loading ? (
+            <CarouselItem className="basis-full">
+              <div className="text-center py-12">
+                <p className="text-muted-foreground text-sm">Loading products...</p>
+              </div>
+            </CarouselItem>
+          ) : products.length === 0 ? (
+            <CarouselItem className="basis-full">
+              <div className="text-center py-12">
+                <p className="text-muted-foreground text-sm">No products available.</p>
+              </div>
+            </CarouselItem>
+          ) : (
+            products.map((product, index) => (
+              <CarouselItem
+                key={product.id}
+                className="basis-1/2 md:basis-1/3 lg:basis-1/4 pr-2 md:pr-4"
+                data-animate-delay={index * 0.1}
+              >
+                <Link to={`/product/${product.slug}`}>
                   <Card className="border-none shadow-none bg-transparent group">
                     <CardContent className="p-0">
                       <div className="aspect-square mb-3 overflow-hidden bg-muted/10 relative">
@@ -128,27 +128,27 @@ const ProductCarousel = () => {
                           </div>
                         )}
                       </div>
-                     <div className="space-y-1">
-                       <p className="text-sm font-light text-foreground">
-                         {product.category}
-                       </p>
-                       <div className="flex justify-between items-center">
-                         <h3 className="text-sm font-medium text-foreground">
-                           {product.name}
-                         </h3>
-                         <p className="text-sm font-light text-foreground">
-                           AED {product.price.toFixed(2)}
-                         </p>
-                       </div>
-                     </div>
-                   </CardContent>
-                 </Card>
-                 </Link>
+                      <div className="space-y-1">
+                        <p className="text-sm font-light text-foreground">
+                          {product.category}
+                        </p>
+                        <div className="flex justify-between items-center">
+                          <h3 className="text-sm font-medium text-foreground">
+                            {product.name}
+                          </h3>
+                          <p className="text-sm font-light text-foreground">
+                            AED {product.price.toFixed(2)}
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
               </CarouselItem>
             ))
-            )}
-          </CarouselContent>
-        </Carousel>
+          )}
+        </CarouselContent>
+      </Carousel>
     </section>
   );
 };

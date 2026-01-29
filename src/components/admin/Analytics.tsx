@@ -63,12 +63,12 @@ const Analytics = () => {
       }, 0) || 0;
 
       const completedOrders = orders?.filter(o => o.status === 'delivered').length || 0;
-      const pendingOrders = orders?.filter(o => 
+      const pendingOrders = orders?.filter(o =>
         ['pending', 'processing'].includes(o.status)
       ).length || 0;
 
-      const averageOrderValue = orderCount && orderCount > 0 
-        ? totalRevenue / orderCount 
+      const averageOrderValue = orderCount && orderCount > 0
+        ? totalRevenue / orderCount
         : 0;
 
       setAnalytics({
@@ -94,13 +94,16 @@ const Analytics = () => {
       </div>
     );
   }
-
+  /*
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-EU', {
+    return new Intl.NumberFormat('en-AE', {
       style: 'currency',
-      currency: 'EUR',
+      currency: 'AED',
     }).format(amount);
   };
+  */
+  // Simplified for now
+  const formatCurrency = (amount: number) => `AED ${amount.toFixed(2)}`;
 
   const stats = [
     {

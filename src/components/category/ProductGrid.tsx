@@ -17,12 +17,17 @@ interface Product {
   slug: string;
 }
 
+import { FilterState } from "./FilterSortBar";
+
 interface ProductGridProps {
   category?: string;
+  sortBy?: string;
+  onCountChange?: (count: number) => void;
+  filters?: FilterState;
 }
 
 // Products should be fetched from Supabase based on category filter
-const ProductGrid = ({ category }: ProductGridProps) => {
+const ProductGrid = ({ category, sortBy = "featured", onCountChange, filters }: ProductGridProps) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -32,24 +37,50 @@ const ProductGrid = ({ category }: ProductGridProps) => {
       try {
         let query = supabase
           .from('products')
-          .select('*, categories(name, slug)')
-          .eq('is_active', true)
-          .order('created_at', { ascending: false });
+          .select('*, categories(name, slug)');
+
+        // Apply sorting
+        switch (sortBy) {
+          case 'price-low':
+            query = query.order('price', { ascending: true });
+            break;
+          case 'price-high':
+            query = query.order('price', { ascending: false });
+            break;
+          case 'newest':
+            query = query.order('created_at', { ascending: false });
+            break;
+          case 'name':
+            query = query.order('name', { ascending: true });
+            break;
+          default: // featured
+            query = query.order('created_at', { ascending: false });
+        }
 
         // If category is specified and not "shop" (All), filter by category
         if (category && category !== 'shop') {
           // Get category slug from the URL parameter
           const categorySlug = category.toLowerCase().replace(/\s*\/\s*/g, '-').replace(/\s+/g, '-');
-          
+
           // First, find the category by slug
-          const { data: categoryData } = await supabase
+          const { data: categoryData, error: categoryError } = await supabase
             .from('categories')
             .select('id')
             .eq('slug', categorySlug)
-            .single();
+            .maybeSingle();
+
+          if (categoryError) {
+            console.log("Error checking category", categoryError);
+          }
 
           if (categoryData) {
             query = query.eq('category_id', categoryData.id);
+          } else {
+            console.log(`Category '${category}' with slug '${categorySlug}' not found in DB.`);
+            setProducts([]);
+            if (onCountChange) onCountChange(0);
+            setLoading(false);
+            return;
           }
         }
 
@@ -58,9 +89,10 @@ const ProductGrid = ({ category }: ProductGridProps) => {
         if (error) {
           console.error('Error fetching products:', error);
           setProducts([]);
+          if (onCountChange) onCountChange(0);
         } else {
           // Transform the data to match our Product interface
-          const transformedProducts = (data || []).map((product: any) => ({
+          let transformedProducts = (data || []).map((product: any) => ({
             id: product.id,
             name: product.name,
             category: product.categories?.name || 'Uncategorized',
@@ -71,18 +103,47 @@ const ProductGrid = ({ category }: ProductGridProps) => {
             is_new: product.is_new || false,
             slug: product.slug
           }));
+
+          // Apply Client-Side Filtering based on activeFilters
+          if (filters) {
+            // Filter by Category
+            if (filters.categories.length > 0) {
+              transformedProducts = transformedProducts.filter(p =>
+                filters.categories.includes(p.category)
+              );
+            }
+
+            // Filter by Price
+            if (filters.priceRanges.length > 0) {
+              transformedProducts = transformedProducts.filter(p => {
+                return filters.priceRanges.some(range => {
+                  if (range === "Under AED 100") return p.price < 100;
+                  if (range === "AED 100 - AED 200") return p.price >= 100 && p.price <= 200;
+                  if (range === "AED 200 - AED 500") return p.price >= 200 && p.price <= 500;
+                  if (range === "AED 500+") return p.price > 500;
+                  return false;
+                });
+              });
+            }
+
+            // Filter by Material (if applicable in future)
+            // if (filters.materials.length > 0) { ... }
+          }
+
           setProducts(transformedProducts);
+          if (onCountChange) onCountChange(transformedProducts.length);
         }
       } catch (error) {
         console.error('Error fetching products:', error);
         setProducts([]);
+        if (onCountChange) onCountChange(0);
       } finally {
         setLoading(false);
       }
     };
 
     fetchProducts();
-  }, [category]);
+  }, [category, sortBy, filters]);
 
   if (loading) {
     return (
@@ -102,15 +163,15 @@ const ProductGrid = ({ category }: ProductGridProps) => {
 
   return (
     <section className="w-full px-6 mb-16">
-        <AnimatedSection animation="fadeUp" stagger={0.02} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {products.length === 0 ? (
-            <div className="col-span-full text-center py-12">
-              <p className="text-muted-foreground text-sm">No products found.</p>
-            </div>
-          ) : (
-            products.map((product) => (
-            <Link key={product.id} to={`/product/${product.id}`}>
-              <Card 
+      <AnimatedSection animation="fadeUp" stagger={0.02} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        {products.length === 0 ? (
+          <div className="col-span-full text-center py-12">
+            <p className="text-muted-foreground text-sm">No products found.</p>
+          </div>
+        ) : (
+          products.map((product) => (
+            <Link key={product.id} to={`/product/${product.slug}`}>
+              <Card
                 className="border-none shadow-none bg-transparent group cursor-pointer"
               >
                 <CardContent className="p-0">
@@ -158,10 +219,10 @@ const ProductGrid = ({ category }: ProductGridProps) => {
                 </CardContent>
               </Card>
             </Link>
-            ))
-          )}
-        </AnimatedSection>
-      
+          ))
+        )}
+      </AnimatedSection>
+
       <Pagination />
     </section>
   );

@@ -19,20 +19,20 @@ const ShoppingBag = ({ isOpen, onClose, onViewFavorites }: ShoppingBagProps) => 
   const subtotal = getCartTotal();
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-EU', {
+    return new Intl.NumberFormat('en-AE', {
       style: 'currency',
-      currency: 'EUR',
+      currency: 'AED',
     }).format(amount);
   };
 
   return (
     <div className="fixed inset-0 z-50 h-screen">
       {/* Backdrop */}
-      <div 
+      <div
         className="absolute inset-0 bg-black/50 h-screen"
         onClick={onClose}
       />
-      
+
       {/* Off-canvas panel */}
       <div className="absolute right-0 top-0 h-screen w-96 bg-background border-l border-border animate-slide-in-right flex flex-col">
         {/* Header */}
@@ -46,7 +46,7 @@ const ShoppingBag = ({ isOpen, onClose, onViewFavorites }: ShoppingBagProps) => 
             <X size={20} />
           </button>
         </div>
-        
+
         {/* Content */}
         <div className="flex-1 flex flex-col p-6">
           {/* Mobile favorites toggle - only show on mobile */}
@@ -63,7 +63,7 @@ const ShoppingBag = ({ isOpen, onClose, onViewFavorites }: ShoppingBagProps) => 
               </button>
             </div>
           )}
-          
+
           {!user ? (
             <div className="flex-1 flex flex-col items-center justify-center">
               <p className="text-muted-foreground text-sm text-center mb-4">
@@ -91,8 +91,8 @@ const ShoppingBag = ({ isOpen, onClose, onViewFavorites }: ShoppingBagProps) => 
                 {cartItems.map((item) => (
                   <div key={item.id} className="flex gap-4">
                     <div className="w-20 h-20 bg-muted/10 rounded-none overflow-hidden">
-                      <img 
-                        src={item.product.image_url || item.product.images?.[0] || '/placeholder.svg'} 
+                      <img
+                        src={item.product.image_url || item.product.images?.[0] || '/placeholder.svg'}
                         alt={item.product.name}
                         className="w-full h-full object-cover"
                       />
@@ -100,7 +100,7 @@ const ShoppingBag = ({ isOpen, onClose, onViewFavorites }: ShoppingBagProps) => 
                     <div className="flex-1">
                       <div className="flex justify-between items-start mb-1">
                         <div>
-                          <Link 
+                          <Link
                             to={`/product/${item.product.slug}`}
                             onClick={onClose}
                             className="text-sm font-medium text-foreground hover:underline"
@@ -120,7 +120,7 @@ const ShoppingBag = ({ isOpen, onClose, onViewFavorites }: ShoppingBagProps) => 
                       </div>
                       <div className="flex items-center justify-between mt-2">
                         <div className="flex items-center border border-border">
-                          <button 
+                          <button
                             onClick={() => updateQuantity(item.id, item.quantity - 1)}
                             className="p-1.5 hover:bg-muted/50 transition-colors"
                             aria-label="Decrease quantity"
@@ -130,7 +130,7 @@ const ShoppingBag = ({ isOpen, onClose, onViewFavorites }: ShoppingBagProps) => 
                           <span className="px-2 py-1 text-xs font-light min-w-[30px] text-center">
                             {item.quantity}
                           </span>
-                          <button 
+                          <button
                             onClick={() => updateQuantity(item.id, item.quantity + 1)}
                             className="p-1.5 hover:bg-muted/50 transition-colors"
                             aria-label="Increase quantity"
@@ -150,31 +150,31 @@ const ShoppingBag = ({ isOpen, onClose, onViewFavorites }: ShoppingBagProps) => 
                   </div>
                 ))}
               </div>
-              
+
               {/* Subtotal and checkout */}
               <div className="border-t border-border pt-6 space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-light text-foreground">Subtotal</span>
                   <span className="text-sm font-medium text-foreground">{formatCurrency(subtotal)}</span>
                 </div>
-                
+
                 <p className="text-xs text-muted-foreground">
                   Shipping and taxes calculated at checkout
                 </p>
-                
-                <Button 
-                  asChild 
-                  className="w-full rounded-none" 
+
+                <Button
+                  asChild
+                  className="w-full rounded-none"
                   size="lg"
                 >
                   <Link to="/checkout" onClick={onClose}>
                     Proceed to Checkout
                   </Link>
                 </Button>
-                
-                <Button 
-                  variant="outline" 
-                  className="w-full rounded-none" 
+
+                <Button
+                  variant="outline"
+                  className="w-full rounded-none"
                   size="lg"
                   onClick={onClose}
                   asChild

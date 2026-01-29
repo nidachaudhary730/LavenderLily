@@ -17,7 +17,7 @@ const Checkout = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { cartItems, getCartTotal, clearCart, updateQuantity } = useCart();
-  
+
   const [showDiscountInput, setShowDiscountInput] = useState(false);
   const [discountCode, setDiscountCode] = useState("");
   const [customerDetails, setCustomerDetails] = useState({
@@ -65,14 +65,14 @@ const Checkout = () => {
         return 0;
     }
   };
-  
+
   const shipping = getShippingCost();
   const total = subtotal + shipping;
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-EU', {
+    return new Intl.NumberFormat('en-AE', {
       style: 'currency',
-      currency: 'EUR',
+      currency: 'AED',
     }).format(amount);
   };
 
@@ -181,7 +181,7 @@ const Checkout = () => {
       await clearCart();
 
       setPaymentComplete(true);
-      
+
       toast({
         title: 'Order placed!',
         description: `Your order ${order.order_number} has been confirmed.`,
@@ -210,7 +210,7 @@ const Checkout = () => {
         <CheckoutHeader />
         <main className="pt-24 pb-12 px-6">
           <div className="max-w-lg mx-auto text-center">
-          <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
               <Check className="h-8 w-8 text-green-600 dark:text-green-400" />
             </div>
             <h1 className="text-2xl font-light text-foreground mb-4">Order Confirmed!</h1>
@@ -230,22 +230,22 @@ const Checkout = () => {
   return (
     <div className="min-h-screen bg-background">
       <CheckoutHeader />
-      
+
       <main className="pt-6 pb-12">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
+
             {/* Order Summary - First on mobile, last on desktop */}
             <div className="lg:col-span-1 lg:order-2">
               <div className="bg-muted/20 p-8 rounded-none sticky top-6">
                 <h2 className="text-lg font-light text-foreground mb-6">Order Summary</h2>
-                
+
                 <div className="space-y-6">
                   {cartItems.map((item) => (
                     <div key={item.id} className="flex gap-4">
                       <div className="w-20 h-20 bg-muted rounded-none overflow-hidden">
-                        <img 
-                          src={item.product.image_url || item.product.images?.[0] || '/placeholder.svg'} 
+                        <img
+                          src={item.product.image_url || item.product.images?.[0] || '/placeholder.svg'}
                           alt={item.product.name}
                           className="w-full h-full object-cover"
                         />
@@ -258,7 +258,7 @@ const Checkout = () => {
                         {item.color && (
                           <p className="text-sm text-muted-foreground">Color: {item.color}</p>
                         )}
-                        
+
                         {/* Quantity controls */}
                         <div className="flex items-center gap-2 mt-2">
                           <Button
@@ -298,7 +298,7 @@ const Checkout = () => {
                 {/* Discount Code Section */}
                 <div className="mt-8 pt-6 border-t border-muted-foreground/20">
                   {!showDiscountInput ? (
-                    <button 
+                    <button
                       onClick={() => setShowDiscountInput(true)}
                       className="text-sm text-foreground underline hover:no-underline transition-all"
                     >
@@ -314,7 +314,7 @@ const Checkout = () => {
                           placeholder="Enter discount code"
                           className="flex-1 rounded-none"
                         />
-                        <button 
+                        <button
                           onClick={handleDiscountSubmit}
                           className="text-sm text-foreground underline hover:no-underline transition-all px-2"
                         >
@@ -348,7 +348,7 @@ const Checkout = () => {
               {/* Customer Details Form */}
               <div className="bg-muted/20 p-8 rounded-none">
                 <h2 className="text-lg font-light text-foreground mb-6">Customer Details</h2>
-                
+
                 <div className="space-y-6">
                   <div>
                     <Label htmlFor="email" className="text-sm font-light text-foreground">
@@ -410,7 +410,7 @@ const Checkout = () => {
                   {/* Shipping Address */}
                   <div className="border-t border-muted-foreground/20 pt-6 mt-8">
                     <h3 className="text-base font-light text-foreground mb-4">Shipping Address</h3>
-                    
+
                     <div className="space-y-4">
                       <div>
                         <Label htmlFor="shippingAddress" className="text-sm font-light text-foreground">
@@ -479,8 +479,8 @@ const Checkout = () => {
                         checked={hasSeparateBilling}
                         onCheckedChange={(checked) => setHasSeparateBilling(checked === true)}
                       />
-                      <Label 
-                        htmlFor="separateBilling" 
+                      <Label
+                        htmlFor="separateBilling"
                         className="text-sm font-light text-foreground cursor-pointer"
                       >
                         Other billing address
@@ -492,7 +492,7 @@ const Checkout = () => {
                   {hasSeparateBilling && (
                     <div className="space-y-4 pt-4">
                       <h3 className="text-base font-light text-foreground">Billing Address</h3>
-                      
+
                       <div>
                         <Label className="text-sm font-light text-foreground">Address *</Label>
                         <Input
@@ -545,7 +545,7 @@ const Checkout = () => {
               {/* Shipping Options */}
               <div className="bg-muted/20 p-8 rounded-none">
                 <h2 className="text-lg font-light text-foreground mb-6">Shipping Method</h2>
-                
+
                 <RadioGroup value={shippingOption} onValueChange={setShippingOption}>
                   <div className="space-y-4">
                     <div className="flex items-center space-x-3 border border-border p-4">
@@ -560,7 +560,7 @@ const Checkout = () => {
                         </div>
                       </Label>
                     </div>
-                    
+
                     <div className="flex items-center space-x-3 border border-border p-4">
                       <RadioGroupItem value="express" id="express" />
                       <Label htmlFor="express" className="flex-1 cursor-pointer">
@@ -573,7 +573,7 @@ const Checkout = () => {
                         </div>
                       </Label>
                     </div>
-                    
+
                     <div className="flex items-center space-x-3 border border-border p-4">
                       <RadioGroupItem value="overnight" id="overnight" />
                       <Label htmlFor="overnight" className="flex-1 cursor-pointer">
@@ -593,7 +593,7 @@ const Checkout = () => {
               {/* Payment */}
               <div className="bg-muted/20 p-8 rounded-none">
                 <h2 className="text-lg font-light text-foreground mb-6">Payment</h2>
-                
+
                 <div className="space-y-4">
                   <div>
                     <Label className="text-sm font-light text-foreground">Card Number</Label>
@@ -605,7 +605,7 @@ const Checkout = () => {
                       placeholder="1234 5678 9012 3456"
                     />
                   </div>
-                  
+
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <Label className="text-sm font-light text-foreground">Expiry Date</Label>
@@ -628,7 +628,7 @@ const Checkout = () => {
                       />
                     </div>
                   </div>
-                  
+
                   <div>
                     <Label className="text-sm font-light text-foreground">Cardholder Name</Label>
                     <Input
@@ -661,7 +661,7 @@ const Checkout = () => {
           </div>
         </div>
       </main>
-      
+
       <Footer />
     </div>
   );

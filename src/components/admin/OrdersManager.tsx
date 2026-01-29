@@ -117,7 +117,7 @@ const OrdersManager = () => {
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     try {
       const updateData: any = { status: newStatus };
-      
+
       if (newStatus === 'delivered') {
         updateData.delivered_at = new Date().toISOString();
       }
@@ -140,7 +140,7 @@ const OrdersManager = () => {
   const updateTrackingInfo = async (orderId: string) => {
     try {
       const updateData: any = {};
-      
+
       if (trackingNumber) {
         updateData.tracking_number = trackingNumber;
       }
@@ -187,15 +187,19 @@ const OrdersManager = () => {
     }
   };
 
+  /*
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-EU', {
+    return new Intl.NumberFormat('en-AE', {
       style: 'currency',
-      currency: 'EUR',
+      currency: 'AED',
     }).format(amount);
   };
+  */
+  // Simplified for now
+  const formatCurrency = (amount: number) => `AED ${amount.toFixed(2)}`;
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-EU', {
+    return new Date(dateString).toLocaleDateString('en-AE', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',

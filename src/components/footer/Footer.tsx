@@ -11,7 +11,7 @@ const Footer = () => {
             <p className="text-sm font-light text-white/80 leading-relaxed max-w-md mb-6">
               Beautiful girls clothing for every occasion
             </p>
-            
+
             {/* Contact Information */}
             <div className="space-y-2 text-sm font-light text-white/80">
               <div>
@@ -23,7 +23,7 @@ const Footer = () => {
               <div>
                 <p className="font-normal text-white mb-1 mt-3">Contact</p>
                 <p>+971 58 836 6059</p>
-                <p>hello@lavenderlily.com</p>
+                <p>lavenderlilyuae@gmail.com</p>
               </div>
             </div>
           </div>

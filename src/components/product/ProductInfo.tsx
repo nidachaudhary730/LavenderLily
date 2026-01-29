@@ -1,13 +1,15 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { 
-  Breadcrumb, 
-  BreadcrumbItem, 
-  BreadcrumbLink, 
-  BreadcrumbList, 
-  BreadcrumbPage, 
-  BreadcrumbSeparator 
+import { toast } from "sonner";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 import { Minus, Plus } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
@@ -47,15 +49,20 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
   const decrementQuantity = () => setQuantity(prev => Math.max(1, prev - 1));
 
   const handleAddToCart = async () => {
+    if (product.sizes && product.sizes.length > 0 && !selectedSize) {
+      toast.error("Please select a size");
+      return;
+    }
+
     await addToCart(product.id, quantity, selectedSize || undefined, selectedColor || undefined);
     // Reset quantity after adding
     setQuantity(1);
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-EU', {
+    return new Intl.NumberFormat('en-AE', {
       style: 'currency',
-      currency: 'EUR',
+      currency: 'AED',
     }).format(amount);
   };
 
@@ -129,11 +136,10 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
               <button
                 key={size}
                 onClick={() => setSelectedSize(size)}
-                className={`px-4 py-2 border text-sm font-light transition-colors ${
-                  selectedSize === size
+                className={`px-4 py-2 border text-sm font-light transition-colors ${selectedSize === size
                     ? 'border-foreground bg-foreground text-background'
                     : 'border-border hover:border-foreground'
-                }`}
+                  }`}
               >
                 {size}
               </button>
@@ -151,11 +157,10 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
               <button
                 key={color}
                 onClick={() => setSelectedColor(color)}
-                className={`px-4 py-2 border text-sm font-light transition-colors ${
-                  selectedColor === color
+                className={`px-4 py-2 border text-sm font-light transition-colors ${selectedColor === color
                     ? 'border-foreground bg-foreground text-background'
                     : 'border-border hover:border-foreground'
-                }`}
+                  }`}
               >
                 {color}
               </button>
@@ -191,7 +196,7 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
           </div>
         </div>
 
-        <Button 
+        <Button
           className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary-hover font-light rounded-none"
           onClick={handleAddToCart}
           disabled={product.stock_quantity === 0}

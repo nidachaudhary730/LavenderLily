@@ -121,9 +121,9 @@ const Orders = () => {
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-EU', {
+    return new Intl.NumberFormat('en-AE', {
       style: 'currency',
-      currency: 'EUR',
+      currency: 'AED',
     }).format(amount);
   };
 
@@ -154,7 +154,7 @@ const Orders = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main className="pt-24 pb-12 px-6">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-2xl font-light text-foreground mb-8">My Orders</h1>
@@ -184,8 +184,8 @@ const Orders = () => {
                         </p>
                       </div>
                       <div className="flex items-center gap-3">
-                        <Badge 
-                          variant={getStatusBadgeVariant(order.status)} 
+                        <Badge
+                          variant={getStatusBadgeVariant(order.status)}
                           className="rounded-none flex items-center gap-1"
                         >
                           {getStatusIcon(order.status)}
@@ -260,13 +260,13 @@ const Orders = () => {
                             Order {order.order_number}
                           </DialogTitle>
                         </DialogHeader>
-                        
+
                         {selectedOrder && (
                           <div className="space-y-6">
                             {/* Status */}
                             <div className="flex items-center gap-3">
-                              <Badge 
-                                variant={getStatusBadgeVariant(selectedOrder.status)} 
+                              <Badge
+                                variant={getStatusBadgeVariant(selectedOrder.status)}
                                 className="rounded-none flex items-center gap-1"
                               >
                                 {getStatusIcon(selectedOrder.status)}
@@ -379,7 +379,7 @@ const Orders = () => {
           )}
         </div>
       </main>
-      
+
       <Footer />
     </div>
   );

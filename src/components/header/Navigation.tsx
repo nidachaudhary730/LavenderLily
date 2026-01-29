@@ -21,34 +21,34 @@ const Navigation = () => {
   const [offCanvasType, setOffCanvasType] = useState<'favorites' | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isShoppingBagOpen, setIsShoppingBagOpen] = useState(false);
-  
+
   // Shopping bag state - should be populated from cart state management or Supabase
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-  
+
   const updateQuantity = (id: number, newQuantity: number) => {
     if (newQuantity <= 0) {
       setCartItems(items => items.filter(item => item.id !== id));
     } else {
-      setCartItems(items => 
-        items.map(item => 
+      setCartItems(items =>
+        items.map(item =>
           item.id === id ? { ...item, quantity: newQuantity } : item
         )
       );
     }
   };
-  
+
   // Preload dropdown images for faster display
   useEffect(() => {
     const imagesToPreload = [
-      "/rings-collection.png",
-      "/earrings-collection.png", 
-      "/arcus-bracelet.png",
-      "/span-bracelet.png",
-      "/founders.png"
+      "/dropdown-images/IMG_3823.PNG",
+      "/dropdown-images/IMG_3826.PNG",
+      "/dropdown-images/IMG_3827.PNG",
+      "/dropdown-images/IMG_3829.PNG",
+      "/dropdown-images/IMG_3830.PNG"
     ];
-    
+
     imagesToPreload.forEach(src => {
       const img = new Image();
       img.src = src;
@@ -57,10 +57,10 @@ const Navigation = () => {
 
   // Popular searches should be fetched from analytics or search history
   const popularSearches: string[] = [];
-  
+
   const navItems = [
-    { 
-      name: "Shop", 
+    {
+      name: "Shop",
       href: "/category/shop",
       submenuItems: [
         "Tops / Shirts",
@@ -71,12 +71,12 @@ const Navigation = () => {
         "Ethnic"
       ],
       images: [
-        { src: "/rings-collection.png", alt: "Dresses Collection", label: "Dresses" },
-        { src: "/earrings-collection.png", alt: "Tops Collection", label: "Tops" }
+        { src: "/dropdown-images/IMG_3823.PNG", alt: "Dresses Collection", label: "Dresses" },
+        { src: "/dropdown-images/IMG_3826.PNG", alt: "Tops Collection", label: "Tops" }
       ]
     },
-    { 
-      name: "New In", 
+    {
+      name: "New In",
       href: "/category/new-in",
       submenuItems: [
         "This Week's Arrivals",
@@ -86,12 +86,12 @@ const Navigation = () => {
         "Pre-Orders"
       ],
       images: [
-        { src: "/arcus-bracelet.png", alt: "New Arrivals", label: "New Arrivals" },
-        { src: "/span-bracelet.png", alt: "Spring Collection", label: "Spring" }
+        { src: "/dropdown-images/IMG_3827.PNG", alt: "New Arrivals", label: "New Arrivals" },
+        { src: "/dropdown-images/IMG_3829.PNG", alt: "Spring Collection", label: "Spring" }
       ]
     },
-    { 
-      name: "About", 
+    {
+      name: "About",
       href: "/about/our-story",
       submenuItems: [
         "Our Story",
@@ -101,14 +101,14 @@ const Navigation = () => {
         "Store Locator"
       ],
       images: [
-        { src: "/founders.png", alt: "Our Story", label: "Read our story" }
+        { src: "/dropdown-images/IMG_3830.PNG", alt: "Our Story", label: "Read our story" }
       ]
     }
   ];
 
   return (
-    <nav 
-      className="relative" 
+    <nav
+      className="relative"
       style={{
         backgroundColor: 'rgba(255, 255, 255, 0.9)',
         backdropFilter: 'blur(10px)'
@@ -122,15 +122,12 @@ const Navigation = () => {
           aria-label="Toggle menu"
         >
           <div className="w-5 h-5 relative">
-            <span className={`absolute block w-5 h-px bg-current transform transition-all duration-300 ${
-              isMobileMenuOpen ? 'rotate-45 top-2.5' : 'top-1.5'
-            }`}></span>
-            <span className={`absolute block w-5 h-px bg-current transform transition-all duration-300 top-2.5 ${
-              isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
-            }`}></span>
-            <span className={`absolute block w-5 h-px bg-current transform transition-all duration-300 ${
-              isMobileMenuOpen ? '-rotate-45 top-2.5' : 'top-3.5'
-            }`}></span>
+            <span className={`absolute block w-5 h-px bg-current transform transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 top-2.5' : 'top-1.5'
+              }`}></span>
+            <span className={`absolute block w-5 h-px bg-current transform transition-all duration-300 top-2.5 ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
+              }`}></span>
+            <span className={`absolute block w-5 h-px bg-current transform transition-all duration-300 ${isMobileMenuOpen ? '-rotate-45 top-2.5' : 'top-3.5'
+              }`}></span>
           </div>
         </button>
 
@@ -155,14 +152,14 @@ const Navigation = () => {
 
         {/* Center logo */}
         <div className="absolute left-1/2 transform -translate-x-1/2">
-          <Link to="/" className="block text-xl font-light tracking-widest text-foreground">
+          <Link to="/" className="block text-2xl font-cinzel tracking-widest text-foreground">
             LavenderLily
           </Link>
         </div>
 
         {/* Right icons - Hidden on mobile, shown on desktop */}
         <div className="hidden lg:flex items-center space-x-2">
-          <button 
+          <button
             className="p-2 text-nav-foreground hover:text-nav-hover transition-colors duration-200"
             aria-label="Search"
             onClick={() => setIsSearchOpen(!isSearchOpen)}
@@ -171,7 +168,7 @@ const Navigation = () => {
               <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
             </svg>
           </button>
-          <button 
+          <button
             className="p-2 text-nav-foreground hover:text-nav-hover transition-colors duration-200"
             aria-label="Favorites"
             onClick={() => setOffCanvasType('favorites')}
@@ -183,7 +180,7 @@ const Navigation = () => {
           <div className="p-2 text-nav-foreground">
             <UserMenu />
           </div>
-          <button 
+          <button
             className="p-2 text-nav-foreground hover:text-nav-hover transition-colors duration-200 relative"
             aria-label="Shopping bag"
             onClick={() => setIsShoppingBagOpen(true)}
@@ -201,7 +198,7 @@ const Navigation = () => {
 
         {/* Mobile: Shopping bag only */}
         <div className="lg:hidden flex items-center">
-          <button 
+          <button
             className="p-2 text-nav-foreground hover:text-nav-hover transition-colors duration-200 relative"
             aria-label="Shopping bag"
             onClick={() => setIsShoppingBagOpen(true)}
@@ -220,7 +217,7 @@ const Navigation = () => {
 
       {/* Full width dropdown */}
       {activeDropdown && (
-        <div 
+        <div
           className="absolute top-full left-0 right-0 bg-nav border-b border-border z-50"
           onMouseEnter={() => setActiveDropdown(activeDropdown)}
           onMouseLeave={() => setActiveDropdown(null)}
@@ -230,20 +227,20 @@ const Navigation = () => {
               {/* Left side - Menu items */}
               <div className="flex-1">
                 <ul className="space-y-2">
-                   {navItems
-                     .find(item => item.name === activeDropdown)
-                     ?.submenuItems.map((subItem, index) => (
+                  {navItems
+                    .find(item => item.name === activeDropdown)
+                    ?.submenuItems.map((subItem, index) => (
                       <li key={index}>
-                        <Link 
-                          to={activeDropdown === "About" 
-                            ? `/about/${subItem.toLowerCase().replace(/\s+/g, '-')}` 
+                        <Link
+                          to={activeDropdown === "About"
+                            ? `/about/${subItem.toLowerCase().replace(/\s+/g, '-')}`
                             : `/category/${subItem.toLowerCase().replace(/\s*\/\s*/g, '-').replace(/\s+/g, '-')}`}
                           className="text-nav-foreground hover:text-nav-hover transition-colors duration-200 text-sm font-light block py-2"
                         >
                           {subItem}
                         </Link>
                       </li>
-                   ))}
+                    ))}
                 </ul>
               </div>
 
@@ -263,10 +260,10 @@ const Navigation = () => {
                     } else if (activeDropdown === "About") {
                       linkTo = "/about/our-story";
                     }
-                    
+
                     return (
                       <Link key={index} to={linkTo} className="w-[400px] h-[280px] cursor-pointer group relative overflow-hidden block">
-                        <img 
+                        <img
                           src={image.src}
                           alt={image.alt}
                           className="w-full h-full object-cover transition-opacity duration-200 group-hover:opacity-90"
@@ -288,7 +285,7 @@ const Navigation = () => {
 
       {/* Search overlay */}
       {isSearchOpen && (
-        <div 
+        <div
           className="absolute top-full left-0 right-0 bg-nav border-b border-border z-50"
         >
           <div className="px-6 py-8">
@@ -374,29 +371,29 @@ const Navigation = () => {
                   >
                     {item.name}
                   </Link>
-                   <div className="mt-3 pl-4 space-y-2">
-                     {item.submenuItems.map((subItem, subIndex) => (
-                       <Link
-                         key={subIndex}
-                         to={item.name === "About" 
-                           ? `/about/${subItem.toLowerCase().replace(/\s+/g, '-')}` 
-                           : `/category/${subItem.toLowerCase().replace(/\s*\/\s*/g, '-').replace(/\s+/g, '-')}`}
-                         className="text-nav-foreground/70 hover:text-nav-hover text-sm font-light block py-1"
-                         onClick={() => setIsMobileMenuOpen(false)}
-                       >
-                         {subItem}
-                       </Link>
-                     ))}
-                   </div>
+                  <div className="mt-3 pl-4 space-y-2">
+                    {item.submenuItems.map((subItem, subIndex) => (
+                      <Link
+                        key={subIndex}
+                        to={item.name === "About"
+                          ? `/about/${subItem.toLowerCase().replace(/\s+/g, '-')}`
+                          : `/category/${subItem.toLowerCase().replace(/\s*\/\s*/g, '-').replace(/\s+/g, '-')}`}
+                        className="text-nav-foreground/70 hover:text-nav-hover text-sm font-light block py-1"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {subItem}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
       )}
-      
+
       {/* Shopping Bag Component */}
-      <ShoppingBag 
+      <ShoppingBag
         isOpen={isShoppingBagOpen}
         onClose={() => setIsShoppingBagOpen(false)}
         onViewFavorites={() => {
@@ -404,16 +401,16 @@ const Navigation = () => {
           setOffCanvasType('favorites');
         }}
       />
-      
+
       {/* Favorites Off-canvas overlay */}
       {offCanvasType === 'favorites' && (
         <div className="fixed inset-0 z-50 h-screen">
           {/* Backdrop */}
-          <div 
+          <div
             className="absolute inset-0 bg-black/50 h-screen"
             onClick={() => setOffCanvasType(null)}
           />
-          
+
           {/* Off-canvas panel */}
           <div className="absolute right-0 top-0 h-screen w-96 bg-background border-l border-border animate-slide-in-right flex flex-col">
             {/* Header */}
@@ -427,7 +424,7 @@ const Navigation = () => {
                 <X size={20} />
               </button>
             </div>
-            
+
             {/* Content */}
             <div className="p-6">
               <p className="text-muted-foreground text-sm mb-6">
