@@ -13,6 +13,8 @@ import Category from "./pages/Category";
 import ProductDetail from "./pages/ProductDetail";
 import Checkout from "./pages/Checkout";
 import Orders from "./pages/Orders";
+import Profile from "./pages/Profile";
+import Favorites from "./pages/Favorites";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
@@ -41,6 +43,8 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/orders" element={<Orders />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/favorites" element={<Favorites />} />
               <Route path="/category/:category" element={<Category />} />
               <Route path="/product/:productId" element={<ProductDetail />} />
               <Route path="/checkout" element={<Checkout />} />

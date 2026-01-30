@@ -14,6 +14,8 @@ interface Product {
   second_image_url?: string | null;
   images?: string[];
   is_new?: boolean;
+  is_pre_order?: boolean;
+  is_limited_edition?: boolean;
   slug: string;
 }
 
@@ -57,9 +59,15 @@ const ProductGrid = ({ category, sortBy = "featured", onCountChange, filters }: 
             query = query.order('created_at', { ascending: false });
         }
 
-        // If category is specified and not "shop" (All), filter by category
-        if (category && category !== 'shop') {
-          // Get category slug from the URL parameter
+        // Handle special "New In" filters
+        if (category === 'new-arrivals' || category === 'new-in') {
+          query = query.eq('is_new', true);
+        } else if (category === 'pre-orders') {
+          query = query.eq('is_pre_order', true);
+        } else if (category === 'limited-edition') {
+          query = query.eq('is_limited_edition', true);
+        } else if (category && category !== 'shop') {
+          // Regular category filter - If category is specified and not "shop" (All)
           const categorySlug = category.toLowerCase().replace(/\s*\/\s*/g, '-').replace(/\s+/g, '-');
 
           // First, find the category by slug
@@ -101,6 +109,8 @@ const ProductGrid = ({ category, sortBy = "featured", onCountChange, filters }: 
             second_image_url: product.second_image_url || null,
             images: product.images || (product.image_url ? [product.image_url] : []),
             is_new: product.is_new || false,
+            is_pre_order: product.is_pre_order || false,
+            is_limited_edition: product.is_limited_edition || false,
             slug: product.slug
           }));
 
@@ -198,8 +208,18 @@ const ProductGrid = ({ category, sortBy = "featured", onCountChange, filters }: 
                     )}
                     <div className="absolute inset-0 bg-primary/5 pointer-events-none"></div>
                     {product.is_new && (
-                      <div className="absolute top-2 left-2 px-2 py-1 bg-primary/5 text-xs font-medium text-primary z-10 pointer-events-none">
+                      <div className="absolute top-2 left-2 px-2 py-1 bg-primary/10 text-xs font-medium text-primary z-10 pointer-events-none">
                         NEW
+                      </div>
+                    )}
+                    {product.is_pre_order && (
+                      <div className="absolute top-2 left-2 px-2 py-1 bg-accent text-xs font-medium text-accent-foreground z-10 pointer-events-none">
+                        PRE-ORDER
+                      </div>
+                    )}
+                    {product.is_limited_edition && (
+                      <div className="absolute top-2 left-2 px-2 py-1 bg-destructive/10 text-xs font-medium text-destructive z-10 pointer-events-none">
+                        LIMITED
                       </div>
                     )}
                   </div>

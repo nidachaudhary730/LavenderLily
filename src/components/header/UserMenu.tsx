@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useAdmin } from '@/hooks/useAdmin';
-import { User } from 'lucide-react';
+import { User, Package, Heart, Settings, LogOut } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,26 +42,54 @@ const UserMenu = () => {
       <DropdownMenuTrigger className="hover:opacity-70 transition-opacity focus:outline-none">
         <User className="h-5 w-5" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48 rounded-none">
-        <DropdownMenuItem className="text-sm font-light text-muted-foreground cursor-default">
-          {user.email}
+      <DropdownMenuContent align="end" className="w-56 rounded-lg shadow-lg">
+        <div className="px-3 py-2 border-b border-border">
+          <p className="text-sm font-medium text-foreground">My Account</p>
+          <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+        </div>
+        
+        <DropdownMenuItem 
+          onClick={() => navigate('/orders')}
+          className="text-sm font-light cursor-pointer gap-2"
+        >
+          <Package className="h-4 w-4" />
+          My Orders
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
+        
+        <DropdownMenuItem 
+          onClick={() => navigate('/favorites')}
+          className="text-sm font-light cursor-pointer gap-2"
+        >
+          <Heart className="h-4 w-4" />
+          Wishlist
+        </DropdownMenuItem>
+        
+        <DropdownMenuItem 
+          onClick={() => navigate('/profile')}
+          className="text-sm font-light cursor-pointer gap-2"
+        >
+          <Settings className="h-4 w-4" />
+          Profile Settings
+        </DropdownMenuItem>
+        
         {isAdmin && (
           <>
+            <DropdownMenuSeparator />
             <DropdownMenuItem 
               onClick={() => navigate('/admin')}
-              className="text-sm font-light cursor-pointer"
+              className="text-sm font-light cursor-pointer text-primary"
             >
               Admin Dashboard
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
           </>
         )}
+        
+        <DropdownMenuSeparator />
         <DropdownMenuItem 
           onClick={handleSignOut}
-          className="text-sm font-light cursor-pointer"
+          className="text-sm font-light cursor-pointer gap-2 text-destructive"
         >
+          <LogOut className="h-4 w-4" />
           Sign out
         </DropdownMenuItem>
       </DropdownMenuContent>
