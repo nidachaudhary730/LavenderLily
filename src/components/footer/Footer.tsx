@@ -1,6 +1,20 @@
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const Footer = () => {
+  const { data: categories = [] } = useQuery({
+    queryKey: ['footer-categories'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('categories')
+        .select('id, name, slug')
+        .order('name')
+        .limit(5);
+      if (error) throw error;
+      return data || [];
+    }
+  });
   return (
     <footer className="w-full bg-primary text-white pt-8 pb-2 px-6 border-t border-primary/20 mt-48">
       <div className="">
@@ -30,15 +44,18 @@ const Footer = () => {
 
           {/* Link lists - Right side */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Shop */}
+            {/* Shop - Dynamic Categories */}
             <div>
               <h4 className="text-sm font-normal mb-4 text-white">Shop</h4>
               <ul className="space-y-2">
-                <li><Link to="/category/new-in" className="text-sm font-light text-white/80 hover:text-white transition-colors">New In</Link></li>
-                <li><Link to="/category/dresses" className="text-sm font-light text-white/80 hover:text-white transition-colors">Dresses</Link></li>
-                <li><Link to="/category/tops" className="text-sm font-light text-white/80 hover:text-white transition-colors">Tops</Link></li>
-                <li><Link to="/category/bottoms" className="text-sm font-light text-white/80 hover:text-white transition-colors">Bottoms</Link></li>
-                <li><Link to="/category/outerwear" className="text-sm font-light text-white/80 hover:text-white transition-colors">Outerwear</Link></li>
+                <li><Link to="/category/new-arrivals" className="text-sm font-light text-white/80 hover:text-white transition-colors">New Arrivals</Link></li>
+                {categories.map((cat) => (
+                  <li key={cat.id}>
+                    <Link to={`/category/${cat.slug}`} className="text-sm font-light text-white/80 hover:text-white transition-colors">
+                      {cat.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
 

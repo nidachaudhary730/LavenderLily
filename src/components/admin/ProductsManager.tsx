@@ -30,6 +30,9 @@ interface Product {
   colors: string[];
   is_new: boolean;
   is_active: boolean;
+  is_pre_order: boolean;
+  is_limited_edition: boolean;
+  collection: string | null;
   stock_quantity: number;
   categories?: Category | null;
 }
@@ -54,6 +57,9 @@ const ProductsManager = () => {
     colors: '',
     is_new: false,
     is_active: true,
+    is_pre_order: false,
+    is_limited_edition: false,
+    collection: '',
     stock_quantity: '0',
   });
 
@@ -97,6 +103,9 @@ const ProductsManager = () => {
       colors: '',
       is_new: false,
       is_active: true,
+      is_pre_order: false,
+      is_limited_edition: false,
+      collection: '',
       stock_quantity: '0',
     });
     setProductImages([]);
@@ -116,6 +125,9 @@ const ProductsManager = () => {
         colors: product.colors?.join(', ') || '',
         is_new: product.is_new,
         is_active: product.is_active,
+        is_pre_order: product.is_pre_order || false,
+        is_limited_edition: product.is_limited_edition || false,
+        collection: product.collection || '',
         stock_quantity: product.stock_quantity.toString(),
       });
       // Set images array, fallback to image_url if images array doesn't exist
@@ -244,6 +256,9 @@ const ProductsManager = () => {
       colors: formData.colors.split(',').map(c => c.trim()).filter(Boolean),
       is_new: formData.is_new,
       is_active: formData.is_active,
+      is_pre_order: formData.is_pre_order,
+      is_limited_edition: formData.is_limited_edition,
+      collection: formData.collection || null,
       stock_quantity: parseInt(formData.stock_quantity) || 0,
     };
     
@@ -470,7 +485,7 @@ const ProductsManager = () => {
                     className="rounded-none"
                   />
                 </div>
-                <div className="flex items-center gap-6 pt-6">
+                <div className="grid grid-cols-2 gap-4">
                   <div className="flex items-center gap-2">
                     <Switch
                       checked={formData.is_new}
@@ -485,7 +500,31 @@ const ProductsManager = () => {
                     />
                     <Label>Active</Label>
                   </div>
+                  <div className="flex items-center gap-2">
+                    <Switch
+                      checked={formData.is_pre_order}
+                      onCheckedChange={(checked) => setFormData({ ...formData, is_pre_order: checked })}
+                    />
+                    <Label>Pre-Order</Label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Switch
+                      checked={formData.is_limited_edition}
+                      onCheckedChange={(checked) => setFormData({ ...formData, is_limited_edition: checked })}
+                    />
+                    <Label>Limited Edition</Label>
+                  </div>
                 </div>
+              </div>
+              
+              <div className="space-y-2">
+                <Label>Collection (optional)</Label>
+                <Input
+                  value={formData.collection}
+                  onChange={(e) => setFormData({ ...formData, collection: e.target.value })}
+                  placeholder="e.g., Spring 2026, Summer Collection"
+                  className="rounded-none"
+                />
               </div>
               
               <Button type="submit" className="w-full rounded-none">
@@ -514,6 +553,8 @@ const ProductsManager = () => {
                 <div className="flex items-center gap-2">
                   <span className="font-medium">{product.name}</span>
                   {product.is_new && <Badge variant="secondary">NEW</Badge>}
+                  {product.is_pre_order && <Badge variant="outline" className="border-primary text-primary">PRE-ORDER</Badge>}
+                  {product.is_limited_edition && <Badge variant="outline" className="border-destructive text-destructive">LIMITED</Badge>}
                 </div>
               </TableCell>
               <TableCell className="text-muted-foreground">

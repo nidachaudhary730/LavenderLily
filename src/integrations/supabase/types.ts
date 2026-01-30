@@ -208,6 +208,7 @@ export type Database = {
       products: {
         Row: {
           category_id: string | null
+          collection: string | null
           colors: string[] | null
           created_at: string
           description: string | null
@@ -215,7 +216,9 @@ export type Database = {
           image_url: string | null
           images: string[] | null
           is_active: boolean | null
+          is_limited_edition: boolean | null
           is_new: boolean | null
+          is_pre_order: boolean | null
           name: string
           price: number
           second_image_url: string | null
@@ -226,6 +229,7 @@ export type Database = {
         }
         Insert: {
           category_id?: string | null
+          collection?: string | null
           colors?: string[] | null
           created_at?: string
           description?: string | null
@@ -233,7 +237,9 @@ export type Database = {
           image_url?: string | null
           images?: string[] | null
           is_active?: boolean | null
+          is_limited_edition?: boolean | null
           is_new?: boolean | null
+          is_pre_order?: boolean | null
           name: string
           price: number
           second_image_url?: string | null
@@ -244,6 +250,7 @@ export type Database = {
         }
         Update: {
           category_id?: string | null
+          collection?: string | null
           colors?: string[] | null
           created_at?: string
           description?: string | null
@@ -251,7 +258,9 @@ export type Database = {
           image_url?: string | null
           images?: string[] | null
           is_active?: boolean | null
+          is_limited_edition?: boolean | null
           is_new?: boolean | null
+          is_pre_order?: boolean | null
           name?: string
           price?: number
           second_image_url?: string | null

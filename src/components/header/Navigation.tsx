@@ -1,18 +1,17 @@
 import { ArrowRight, X, Minus, Plus } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import ShoppingBag from "./ShoppingBag";
 import UserMenu from "./UserMenu";
 
-interface CartItem {
-  id: number;
+interface Category {
+  id: string;
   name: string;
-  price: string;
-  image: string;
-  quantity: number;
-  category: string;
+  slug: string;
 }
 
 const Navigation = () => {
@@ -22,22 +21,18 @@ const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isShoppingBagOpen, setIsShoppingBagOpen] = useState(false);
 
-  // Shopping bag state - should be populated from cart state management or Supabase
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-
-  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-
-  const updateQuantity = (id: number, newQuantity: number) => {
-    if (newQuantity <= 0) {
-      setCartItems(items => items.filter(item => item.id !== id));
-    } else {
-      setCartItems(items =>
-        items.map(item =>
-          item.id === id ? { ...item, quantity: newQuantity } : item
-        )
-      );
+  // Fetch categories from database
+  const { data: categories = [] } = useQuery({
+    queryKey: ['nav-categories'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('categories')
+        .select('id, name, slug')
+        .order('name');
+      if (error) throw error;
+      return data || [];
     }
-  };
+  });
 
   // Preload dropdown images for faster display
   useEffect(() => {
@@ -55,56 +50,63 @@ const Navigation = () => {
     });
   }, []);
 
-  // Popular searches should be fetched from analytics or search history
-  const popularSearches: string[] = [];
-
   const navItems = [
     {
       name: "Shop",
       href: "/category/shop",
-      submenuItems: [
-        "Tops / Shirts",
-        "Dresses",
-        "Pants",
-        "Skirts",
-        "Co-ord set",
-        "Ethnic"
-      ],
+      submenuItems: categories.map(cat => cat.name),
       images: [
-        { src: "/dropdown-images/IMG_3823.PNG", alt: "Dresses Collection", label: "Dresses" },
-        { src: "/dropdown-images/IMG_3826.PNG", alt: "Tops Collection", label: "Tops" }
+        { src: "/dropdown-images/IMG_3823.PNG", alt: "Dresses Collection", label: "Dresses", href: "/category/dresses" },
+        { src: "/dropdown-images/IMG_3826.PNG", alt: "Tops Collection", label: "Tops", href: "/category/tops" }
       ]
     },
     {
       name: "New In",
       href: "/category/new-in",
       submenuItems: [
-        "This Week's Arrivals",
-        "Spring Collection",
-        "Featured Styles",
-        "Limited Edition",
-        "Pre-Orders"
+        { name: "New Arrivals", slug: "new-arrivals", filter: "is_new" },
+        { name: "Pre-Orders", slug: "pre-orders", filter: "is_pre_order" },
+        { name: "Limited Edition", slug: "limited-edition", filter: "is_limited_edition" }
       ],
       images: [
-        { src: "/dropdown-images/IMG_3827.PNG", alt: "New Arrivals", label: "New Arrivals" },
-        { src: "/dropdown-images/IMG_3829.PNG", alt: "Spring Collection", label: "Spring" }
+        { src: "/dropdown-images/IMG_3827.PNG", alt: "New Arrivals", label: "New Arrivals", href: "/category/new-arrivals" },
+        { src: "/dropdown-images/IMG_3829.PNG", alt: "Limited Edition", label: "Limited", href: "/category/limited-edition" }
       ]
     },
     {
       name: "About",
       href: "/about/our-story",
       submenuItems: [
-        "Our Story",
-        "Sustainability",
-        "Size Guide",
-        "Customer Care",
-        "Store Locator"
+        { name: "Our Story", slug: "our-story" },
+        { name: "Sustainability", slug: "sustainability" },
+        { name: "Size Guide", slug: "size-guide" },
+        { name: "Customer Care", slug: "customer-care" },
+        { name: "Store Locator", slug: "store-locator" }
       ],
       images: [
-        { src: "/dropdown-images/IMG_3830.PNG", alt: "Our Story", label: "Read our story" }
+        { src: "/dropdown-images/IMG_3830.PNG", alt: "Our Story", label: "Read our story", href: "/about/our-story" }
       ]
     }
   ];
+
+  const getSubmenuLink = (activeDropdownName: string, subItem: string | { name: string; slug: string; filter?: string }) => {
+    if (activeDropdownName === "About") {
+      const slug = typeof subItem === 'object' ? subItem.slug : subItem.toLowerCase().replace(/\s+/g, '-');
+      return `/about/${slug}`;
+    } else if (activeDropdownName === "New In") {
+      const slug = typeof subItem === 'object' ? subItem.slug : subItem.toLowerCase().replace(/\s+/g, '-');
+      return `/category/${slug}`;
+    } else {
+      // Shop - find matching category
+      const itemName = typeof subItem === 'object' ? subItem.name : subItem;
+      const category = categories.find(cat => cat.name === itemName);
+      return category ? `/category/${category.slug}` : `/category/${itemName.toLowerCase().replace(/\s*\/\s*/g, '-').replace(/\s+/g, '-')}`;
+    }
+  };
+
+  const getSubmenuItemName = (subItem: string | { name: string; slug: string; filter?: string }) => {
+    return typeof subItem === 'object' ? subItem.name : subItem;
+  };
 
   return (
     <nav
@@ -188,11 +190,6 @@ const Navigation = () => {
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
             </svg>
-            {totalItems > 0 && (
-              <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[30%] text-[0.5rem] font-semibold text-primary pointer-events-none">
-                {totalItems}
-              </span>
-            )}
           </button>
         </div>
 
@@ -206,11 +203,6 @@ const Navigation = () => {
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
             </svg>
-            {totalItems > 0 && (
-              <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[30%] text-[0.5rem] font-semibold text-primary pointer-events-none">
-                {totalItems}
-              </span>
-            )}
           </button>
         </div>
       </div>
@@ -232,12 +224,10 @@ const Navigation = () => {
                     ?.submenuItems.map((subItem, index) => (
                       <li key={index}>
                         <Link
-                          to={activeDropdown === "About"
-                            ? `/about/${subItem.toLowerCase().replace(/\s+/g, '-')}`
-                            : `/category/${subItem.toLowerCase().replace(/\s*\/\s*/g, '-').replace(/\s+/g, '-')}`}
+                          to={getSubmenuLink(activeDropdown, subItem)}
                           className="text-nav-foreground hover:text-nav-hover transition-colors duration-200 text-sm font-light block py-2"
                         >
-                          {subItem}
+                          {getSubmenuItemName(subItem)}
                         </Link>
                       </li>
                     ))}
@@ -248,35 +238,19 @@ const Navigation = () => {
               <div className="flex space-x-6">
                 {navItems
                   .find(item => item.name === activeDropdown)
-                  ?.images.map((image, index) => {
-                    // Determine the link destination based on dropdown and image
-                    let linkTo = "/";
-                    if (activeDropdown === "Shop") {
-                      if (image.label === "Rings") linkTo = "/category/rings";
-                      else if (image.label === "Earrings") linkTo = "/category/earrings";
-                    } else if (activeDropdown === "New in") {
-                      if (image.label === "Arcus Bracelet") linkTo = "/product/arcus-bracelet";
-                      else if (image.label === "Span Bracelet") linkTo = "/product/span-bracelet";
-                    } else if (activeDropdown === "About") {
-                      linkTo = "/about/our-story";
-                    }
-
-                    return (
-                      <Link key={index} to={linkTo} className="w-[400px] h-[280px] cursor-pointer group relative overflow-hidden block">
-                        <img
-                          src={image.src}
-                          alt={image.alt}
-                          className="w-full h-full object-cover transition-opacity duration-200 group-hover:opacity-90"
-                        />
-                        {(activeDropdown === "Shop" || activeDropdown === "New in" || activeDropdown === "About") && (
-                          <div className="absolute bottom-2 left-2 text-white text-xs font-light flex items-center gap-1">
-                            <span>{image.label}</span>
-                            <ArrowRight size={12} />
-                          </div>
-                        )}
-                      </Link>
-                    );
-                  })}
+                  ?.images.map((image, index) => (
+                    <Link key={index} to={image.href} className="w-[400px] h-[280px] cursor-pointer group relative overflow-hidden block">
+                      <img
+                        src={image.src}
+                        alt={image.alt}
+                        className="w-full h-full object-cover transition-opacity duration-200 group-hover:opacity-90"
+                      />
+                      <div className="absolute bottom-2 left-2 text-white text-xs font-light flex items-center gap-1">
+                        <span>{image.label}</span>
+                        <ArrowRight size={12} />
+                      </div>
+                    </Link>
+                  ))}
               </div>
             </div>
           </div>
@@ -305,18 +279,31 @@ const Navigation = () => {
                 </div>
               </div>
 
-              {/* Popular searches */}
+              {/* Quick links */}
               <div>
-                <h3 className="text-nav-foreground text-sm font-light mb-4">Popular Searches</h3>
+                <h3 className="text-nav-foreground text-sm font-light mb-4">Quick Links</h3>
                 <div className="flex flex-wrap gap-3">
-                  {popularSearches.map((search, index) => (
-                    <button
-                      key={index}
-                      className="text-nav-foreground hover:text-nav-hover text-sm font-light py-2 px-4 border border-border rounded-full transition-colors duration-200 hover:border-nav-hover"
-                    >
-                      {search}
-                    </button>
-                  ))}
+                  <Link
+                    to="/category/new-arrivals"
+                    onClick={() => setIsSearchOpen(false)}
+                    className="text-nav-foreground hover:text-nav-hover text-sm font-light py-2 px-4 border border-border rounded-full transition-colors duration-200 hover:border-nav-hover"
+                  >
+                    New Arrivals
+                  </Link>
+                  <Link
+                    to="/category/limited-edition"
+                    onClick={() => setIsSearchOpen(false)}
+                    className="text-nav-foreground hover:text-nav-hover text-sm font-light py-2 px-4 border border-border rounded-full transition-colors duration-200 hover:border-nav-hover"
+                  >
+                    Limited Edition
+                  </Link>
+                  <Link
+                    to="/category/pre-orders"
+                    onClick={() => setIsSearchOpen(false)}
+                    className="text-nav-foreground hover:text-nav-hover text-sm font-light py-2 px-4 border border-border rounded-full transition-colors duration-200 hover:border-nav-hover"
+                  >
+                    Pre-Orders
+                  </Link>
                 </div>
               </div>
             </div>
@@ -375,13 +362,11 @@ const Navigation = () => {
                     {item.submenuItems.map((subItem, subIndex) => (
                       <Link
                         key={subIndex}
-                        to={item.name === "About"
-                          ? `/about/${subItem.toLowerCase().replace(/\s+/g, '-')}`
-                          : `/category/${subItem.toLowerCase().replace(/\s*\/\s*/g, '-').replace(/\s+/g, '-')}`}
+                        to={getSubmenuLink(item.name, subItem)}
                         className="text-nav-foreground/70 hover:text-nav-hover text-sm font-light block py-1"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
-                        {subItem}
+                        {getSubmenuItemName(subItem)}
                       </Link>
                     ))}
                   </div>
@@ -409,27 +394,34 @@ const Navigation = () => {
           <div
             className="absolute inset-0 bg-black/50 h-screen"
             onClick={() => setOffCanvasType(null)}
-          />
+          ></div>
 
           {/* Off-canvas panel */}
-          <div className="absolute right-0 top-0 h-screen w-96 bg-background border-l border-border animate-slide-in-right flex flex-col">
-            {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-border">
-              <h2 className="text-lg font-light text-foreground">Your Favorites</h2>
-              <button
-                onClick={() => setOffCanvasType(null)}
-                className="p-2 text-foreground hover:text-muted-foreground transition-colors"
-                aria-label="Close"
-              >
-                <X size={20} />
-              </button>
-            </div>
+          <div className="absolute right-0 top-0 h-full w-full max-w-md bg-background shadow-xl">
+            <div className="h-full flex flex-col">
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 border-b border-border">
+                <h2 className="text-lg font-light">Favorites</h2>
+                <button
+                  onClick={() => setOffCanvasType(null)}
+                  className="text-nav-foreground hover:text-nav-hover transition-colors"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
 
-            {/* Content */}
-            <div className="p-6">
-              <p className="text-muted-foreground text-sm mb-6">
-                You haven't added any favorites yet. Browse our collection and click the heart icon to save items you love.
-              </p>
+              {/* Content */}
+              <div className="flex-1 flex items-center justify-center p-6">
+                <div className="text-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-16 h-16 mx-auto text-muted-foreground mb-4">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                  </svg>
+                  <p className="text-muted-foreground text-sm">No favorites yet</p>
+                  <p className="text-muted-foreground text-xs mt-1">
+                    Items you love will appear here
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
