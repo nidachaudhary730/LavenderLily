@@ -27,8 +27,8 @@ const UserMenu = () => {
 
   if (!user) {
     return (
-      <Link 
-        to="/auth" 
+      <Link
+        to="/auth"
         className="hover:opacity-70 transition-opacity"
         aria-label="Sign in"
       >
@@ -42,40 +42,41 @@ const UserMenu = () => {
       <DropdownMenuTrigger className="hover:opacity-70 transition-opacity focus:outline-none">
         <User className="h-5 w-5" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56 rounded-lg shadow-lg">
+      <DropdownMenuContent align="end" className="w-56 rounded-xl p-2 shadow-lg">
         <div className="px-3 py-2 border-b border-border">
           <p className="text-sm font-medium text-foreground">My Account</p>
           <p className="text-xs text-muted-foreground truncate">{user.email}</p>
         </div>
-        
-        <DropdownMenuItem 
+
+        <DropdownMenuItem
           onClick={() => navigate('/orders')}
           className="text-sm font-light cursor-pointer gap-2"
         >
           <Package className="h-4 w-4" />
           My Orders
         </DropdownMenuItem>
-        
-        <DropdownMenuItem 
+
+        <DropdownMenuItem
           onClick={() => navigate('/favorites')}
           className="text-sm font-light cursor-pointer gap-2"
         >
           <Heart className="h-4 w-4" />
           Wishlist
         </DropdownMenuItem>
-        
-        <DropdownMenuItem 
+
+        <DropdownMenuItem
           onClick={() => navigate('/profile')}
           className="text-sm font-light cursor-pointer gap-2"
         >
           <Settings className="h-4 w-4" />
           Profile Settings
         </DropdownMenuItem>
-        
+
         {isAdmin && (
           <>
             <DropdownMenuSeparator />
-            <DropdownMenuItem 
+            <DropdownMenuItem
+
               onClick={() => navigate('/admin')}
               className="text-sm font-light cursor-pointer text-primary"
             >
@@ -83,9 +84,9 @@ const UserMenu = () => {
             </DropdownMenuItem>
           </>
         )}
-        
         <DropdownMenuSeparator />
-        <DropdownMenuItem 
+        <DropdownMenuItem
+
           onClick={handleSignOut}
           className="text-sm font-light cursor-pointer gap-2 text-destructive"
         >

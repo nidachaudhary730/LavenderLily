@@ -153,9 +153,21 @@ const Navigation = () => {
         </div>
 
         {/* Center logo */}
-        <div className="absolute left-1/2 transform -translate-x-1/2">
-          <Link to="/" className="block text-2xl font-cinzel tracking-widest text-foreground">
-            LavenderLily
+        <div className="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+          <Link to="/" className="flex items-center gap-4 group">
+            <img
+              src="/favicon.ico"
+              alt="Lavender Lily Logo"
+              className="w-10 h-10 transition-transform duration-500 group-hover:rotate-[10deg]"
+            />
+            <div className="flex flex-col items-center md:items-start text-center md:text-left">
+              <h1 className="text-xl md:text-2xl font-cinzel tracking-[0.3em] text-foreground leading-none">
+                Lavender Lily
+              </h1>
+              <p className="text-[0.5rem] md:text-[0.6rem] font-light tracking-[0.15em] text-muted-foreground mt-1 uppercase opacity-80">
+                A Blossom of elegance in every thread
+              </p>
+            </div>
           </Link>
         </div>
 

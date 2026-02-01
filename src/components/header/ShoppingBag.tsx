@@ -69,7 +69,7 @@ const ShoppingBag = ({ isOpen, onClose, onViewFavorites }: ShoppingBagProps) => 
               <p className="text-muted-foreground text-sm text-center mb-4">
                 Please sign in to view your cart.
               </p>
-              <Button asChild className="rounded-none">
+              <Button asChild className="rounded-2xl">
                 <Link to="/auth" onClick={onClose}>Sign In</Link>
               </Button>
             </div>
@@ -90,7 +90,7 @@ const ShoppingBag = ({ isOpen, onClose, onViewFavorites }: ShoppingBagProps) => 
               <div className="flex-1 overflow-y-auto space-y-6 mb-6">
                 {cartItems.map((item) => (
                   <div key={item.id} className="flex gap-4">
-                    <div className="w-20 h-20 bg-muted/10 rounded-none overflow-hidden">
+                    <div className="w-20 h-20 bg-muted/10 rounded-xl overflow-hidden">
                       <img
                         src={item.product.image_url || item.product.images?.[0] || '/placeholder.svg'}
                         alt={item.product.name}
@@ -119,7 +119,7 @@ const ShoppingBag = ({ isOpen, onClose, onViewFavorites }: ShoppingBagProps) => 
                         </p>
                       </div>
                       <div className="flex items-center justify-between mt-2">
-                        <div className="flex items-center border border-border">
+                        <div className="flex items-center border border-border rounded-lg overflow-hidden">
                           <button
                             onClick={() => updateQuantity(item.id, item.quantity - 1)}
                             className="p-1.5 hover:bg-muted/50 transition-colors"
@@ -164,7 +164,7 @@ const ShoppingBag = ({ isOpen, onClose, onViewFavorites }: ShoppingBagProps) => 
 
                 <Button
                   asChild
-                  className="w-full rounded-none"
+                  className="w-full rounded-2xl"
                   size="lg"
                 >
                   <Link to="/checkout" onClick={onClose}>
@@ -174,7 +174,7 @@ const ShoppingBag = ({ isOpen, onClose, onViewFavorites }: ShoppingBagProps) => 
 
                 <Button
                   variant="outline"
-                  className="w-full rounded-none"
+                  className="w-full rounded-2xl"
                   size="lg"
                   onClick={onClose}
                   asChild

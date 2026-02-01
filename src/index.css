@@ -51,98 +51,109 @@ img {
 
 @layer base {
   :root {
-    /* Core feminine palette - Soft Pinks, Lavender, Rose */
-    --background: 330 30% 99%;
-    --foreground: 330 20% 25%;
-    
-    /* Status bar - Soft rose */
-    --status-bar: 340 40% 65%;
-    --status-bar-foreground: 0 0% 100%;
-    
+    /* Core neutral palette - White and Light Lavender */
+    --background: 0 0% 100%;
+    --foreground: 270 25% 35%;
+    /* Soft dark lavender for text */
+
     /* Navigation */
-    --nav-background: 330 30% 99%;
-    --nav-foreground: 330 20% 35%;
-    --nav-hover: 340 50% 55%;
-    
-    /* Interactive elements - Rose pink */
-    --primary: 340 45% 60%;
-    --primary-foreground: 0 0% 100%;
-    --primary-hover: 340 50% 50%;
-    
-    /* Subtle elements - Blush tones */
-    --secondary: 330 30% 96%;
-    --secondary-foreground: 330 25% 35%;
-    
-    --muted: 330 20% 96%;
-    --muted-foreground: 330 15% 50%;
-    
-    --accent: 280 30% 95%;
-    --accent-foreground: 280 40% 45%;
-    
-    --border: 330 25% 90%;
-    --input: 330 20% 94%;
-    --ring: 340 45% 60%;
-    
+    --nav-background: 0 0% 100%;
+    --nav-foreground: 270 20% 45%;
+    /* Medium lavender */
+    --nav-hover: 270 50% 60%;
+    /* Vibrant lavender */
+
+    /* Interactive elements */
+    --primary: 270 40% 92%;
+    /* Light lavender for buttons and accents */
+    --primary-foreground: 270 30% 30%;
+    /* Deep lavender for button text */
+    --primary-hover: 270 45% 85%;
+    /* Slightly darker lavender */
+
+    /* Subtle elements */
+    --secondary: 270 60% 98%;
+    /* Very faint lavender */
+    --secondary-foreground: 270 25% 40%;
+
+    --muted: 270 20% 97%;
+    /* Muted lavender white */
+    --muted-foreground: 270 15% 55%;
+    /* Soft muted lavender */
+
+    --accent: 270 50% 95%;
+    /* Soft accent lavender */
+    --accent-foreground: 270 40% 50%;
+
+    --border: 270 30% 94%;
+    /* Gentle lavender border */
+    --input: 270 20% 96%;
+    --ring: 270 40% 80%;
+
     /* Cards and surfaces */
     --card: 0 0% 100%;
-    --card-foreground: 330 20% 25%;
-    
-    --popover: 0 0% 100%;
-    --popover-foreground: 330 20% 25%;
-    
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-    
-    --radius: 0.5rem;
-    
-    /* Transitions */
-    --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --card-foreground: 270 25% 35%;
 
-    --sidebar-background: 330 25% 98%;
-    --sidebar-foreground: 330 20% 30%;
-    --sidebar-primary: 340 45% 55%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 280 25% 95%;
-    --sidebar-accent-foreground: 340 40% 45%;
-    --sidebar-border: 330 25% 88%;
-    --sidebar-ring: 340 45% 60%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 270 25% 35%;
+
+    --destructive: 0 70% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --radius: 1rem;
+    /* More rounded corners for girly aesthetic */
+
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    --sidebar-background: 270 40% 99%;
+    --sidebar-foreground: 270 25% 40%;
+    --sidebar-primary: 270 45% 90%;
+    --sidebar-primary-foreground: 270 30% 30%;
+    --sidebar-accent: 270 50% 96%;
+    --sidebar-accent-foreground: 270 45% 50%;
+    --sidebar-border: 270 30% 95%;
+    --sidebar-ring: 270 40% 85%;
+
   }
+
+
 
   .dark {
     --background: 0 0% 9%;
     --foreground: 0 0% 98%;
-    
+
     --status-bar: 0 0% 0%;
     --status-bar-foreground: 0 0% 100%;
-    
+
     --nav-background: 0 0% 9%;
     --nav-foreground: 0 0% 80%;
     --nav-hover: 0 0% 95%;
-    
+
     --primary: 0 0% 98%;
     --primary-foreground: 0 0% 9%;
     --primary-hover: 0 0% 90%;
-    
+
     --secondary: 0 0% 15%;
     --secondary-foreground: 0 0% 80%;
-    
+
     --muted: 0 0% 15%;
     --muted-foreground: 0 0% 60%;
-    
+
     --accent: 0 0% 15%;
     --accent-foreground: 0 0% 98%;
-    
+
     --border: 0 0% 20%;
     --input: 0 0% 20%;
     --ring: 0 0% 98%;
-    
+
     --card: 0 0% 9%;
     --card-foreground: 0 0% 98%;
-    
+
     --popover: 0 0% 9%;
     --popover-foreground: 0 0% 98%;
-    
+
     --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 98%;
   }

@@ -13,7 +13,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main className="pt-6">
         <FiftyFiftySection />
         <CategoryGrid />
@@ -24,7 +24,7 @@ const Index = () => {
         <ThreeColumnSection />
         <EditorialSection />
       </main>
-      
+
       <Footer />
     </div>
   );

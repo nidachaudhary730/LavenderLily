@@ -5,16 +5,16 @@ interface WhatsAppButtonProps {
   message?: string;
 }
 
-const WhatsAppButton = ({ 
+const WhatsAppButton = ({
   phoneNumber = '971588366059', // Default phone number - update this with your actual WhatsApp number
   message = 'Hello! I would like to know more about your products.'
 }: WhatsAppButtonProps) => {
   // Format phone number: remove any non-digit characters
   const formattedPhone = phoneNumber.replace(/\D/g, '');
-  
+
   // Encode the message for URL
   const encodedMessage = encodeURIComponent(message);
-  
+
   // Create WhatsApp URL
   const whatsappUrl = `https://wa.me/${formattedPhone}?text=${encodedMessage}`;
 
@@ -30,10 +30,10 @@ const WhatsAppButton = ({
       title="Chat with us on WhatsApp"
     >
       <MessageCircle className="w-6 h-6 md:w-7 md:h-7" />
-      
+
       {/* Pulse animation ring */}
       <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-75"></span>
-      
+
       {/* Tooltip on hover */}
       <span className="absolute right-full mr-4 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
         Chat with us on WhatsApp

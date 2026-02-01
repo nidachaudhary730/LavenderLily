@@ -9,12 +9,14 @@ const EditorialSection = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
       <div className="space-y-4 max-w-[630px]">
         <AnimatedText animation="fadeUp" delay={0}>
-          <h2 className="text-2xl font-normal text-foreground leading-tight md:text-xl">
-            Beautiful Girls Clothing for Every Occasion
+          <h3 className="text-sm font-normal text-foreground uppercase tracking-wider mb-4">Our Heritage</h3>
+          <h2 className="text-3xl md:text-4xl font-light text-foreground mb-6 leading-tight">
+            A Story of Grace and Elegance
           </h2>
-        </AnimatedText>
-        <AnimatedText animation="fadeUp" delay={0}>
-          <p className="text-sm font-light text-foreground leading-relaxed">LavenderLily was founded by Nida Mohammed Chaudhari with a passion for creating beautiful, elegant clothing that celebrates femininity and style. We believe that every girl deserves to feel confident and beautiful in clothes that are both timeless and contemporary.</p>
+          <p className="text-sm font-light text-foreground/70 leading-relaxed mb-8">
+            Founded with a passion for timeless style, Lavender Lily brings together modern design and classic elegance. Every piece in our collection is carefully curated to offer the perfect blend of comfort and sophistication for the modern girl.
+          </p>
+          <p className="text-sm font-light text-foreground leading-relaxed">We believe that every girl deserves to feel confident and beautiful in clothes that are both timeless and contemporary.</p>
         </AnimatedText>
         <AnimatedText animation="fadeUp" delay={0}>
           <Link to="/about/our-story" className="inline-flex items-center gap-1 text-sm font-light text-foreground hover:text-foreground/80 transition-colors duration-200">
