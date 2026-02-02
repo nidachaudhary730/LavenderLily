@@ -28,6 +28,7 @@ interface Product {
   is_new: boolean;
   is_active: boolean;
   stock_quantity: number;
+  material: string | null;
   categories?: {
     id: string;
     name: string;
@@ -107,6 +108,11 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
               </p>
             )}
             <h1 className="text-2xl md:text-3xl font-light text-foreground">{product.name}</h1>
+            {product.material && (
+              <p className="text-sm font-light text-muted-foreground mt-1">
+                Material: {product.material}
+              </p>
+            )}
             {product.is_new && (
               <span className="inline-block mt-2 text-xs bg-primary text-primary-foreground px-2 py-1">
                 NEW
@@ -137,8 +143,8 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
                 key={size}
                 onClick={() => setSelectedSize(size)}
                 className={`px-4 py-2 border text-sm font-light transition-colors ${selectedSize === size
-                    ? 'border-foreground bg-foreground text-background'
-                    : 'border-border hover:border-foreground'
+                  ? 'border-foreground bg-foreground text-background'
+                  : 'border-border hover:border-foreground'
                   }`}
               >
                 {size}
@@ -158,8 +164,8 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
                 key={color}
                 onClick={() => setSelectedColor(color)}
                 className={`px-4 py-2 border text-sm font-light transition-colors ${selectedColor === color
-                    ? 'border-foreground bg-foreground text-background'
-                    : 'border-border hover:border-foreground'
+                  ? 'border-foreground bg-foreground text-background'
+                  : 'border-border hover:border-foreground'
                   }`}
               >
                 {color}

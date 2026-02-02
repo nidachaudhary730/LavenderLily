@@ -19,6 +19,7 @@ interface Product {
   images?: string[];
   is_new?: boolean;
   slug: string;
+  material?: string | null;
 }
 
 const ProductCarousel = () => {
@@ -51,7 +52,8 @@ const ProductCarousel = () => {
             second_image_url: product.second_image_url || null,
             images: product.images || (product.image_url ? [product.image_url] : []),
             is_new: product.is_new || false,
-            slug: product.slug
+            slug: product.slug,
+            material: product.material || null
           }));
           setProducts(transformedProducts);
         }

@@ -22,30 +22,31 @@ interface Review {
 interface ProductDescriptionProps {
   productId: string;
   description: string | null;
+  material: string | null;
 }
 
 const CustomStar = ({ filled, className }: { filled: boolean; className?: string }) => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    viewBox="0 0 20 20" 
-    fill="currentColor" 
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 20 20"
+    fill="currentColor"
     className={`w-3 h-3 ${filled ? 'text-foreground' : 'text-muted-foreground/30'} ${className}`}
   >
-    <path 
-      fillRule="evenodd" 
-      d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401Z" 
-      clipRule="evenodd" 
+    <path
+      fillRule="evenodd"
+      d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401Z"
+      clipRule="evenodd"
     />
   </svg>
 );
 
-const ProductDescription = ({ productId, description }: ProductDescriptionProps) => {
+const ProductDescription = ({ productId, description, material }: ProductDescriptionProps) => {
   const { user } = useAuth();
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isCareOpen, setIsCareOpen] = useState(false);
   const [isReviewsOpen, setIsReviewsOpen] = useState(false);
-  
+
   // Review state
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(false);
@@ -106,7 +107,7 @@ const ProductDescription = ({ productId, description }: ProductDescriptionProps)
 
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!user) {
       toast({
         title: 'Please sign in',
@@ -228,6 +229,12 @@ const ProductDescription = ({ productId, description }: ProductDescriptionProps)
               <span className="text-sm font-light text-muted-foreground">Quality</span>
               <span className="text-sm font-light text-foreground">Premium</span>
             </div>
+            {material && (
+              <div className="flex justify-between">
+                <span className="text-sm font-light text-muted-foreground">Material</span>
+                <span className="text-sm font-light text-foreground">{material}</span>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -304,7 +311,7 @@ const ProductDescription = ({ productId, description }: ProductDescriptionProps)
             {showReviewForm && (
               <form onSubmit={handleSubmitReview} className="border border-border p-4 space-y-4">
                 <h4 className="text-sm font-medium text-foreground">Write Your Review</h4>
-                
+
                 <div className="space-y-2">
                   <label className="text-sm text-muted-foreground">Rating</label>
                   <div className="flex gap-1">
@@ -316,11 +323,10 @@ const ProductDescription = ({ productId, description }: ProductDescriptionProps)
                         className="cursor-pointer"
                       >
                         <Star
-                          className={`h-5 w-5 ${
-                            star <= rating
+                          className={`h-5 w-5 ${star <= rating
                               ? 'fill-yellow-400 text-yellow-400'
                               : 'text-muted-foreground'
-                          }`}
+                            }`}
                         />
                       </button>
                     ))}

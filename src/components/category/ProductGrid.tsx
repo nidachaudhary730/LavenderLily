@@ -17,6 +17,7 @@ interface Product {
   is_pre_order?: boolean;
   is_limited_edition?: boolean;
   slug: string;
+  material?: string | null;
 }
 
 import { FilterState } from "./FilterSortBar";
@@ -111,7 +112,8 @@ const ProductGrid = ({ category, sortBy = "featured", onCountChange, filters }: 
             is_new: product.is_new || false,
             is_pre_order: product.is_pre_order || false,
             is_limited_edition: product.is_limited_edition || false,
-            slug: product.slug
+            slug: product.slug,
+            material: product.material || null
           }));
 
           // Apply Client-Side Filtering based on activeFilters

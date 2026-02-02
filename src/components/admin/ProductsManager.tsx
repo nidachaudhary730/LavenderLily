@@ -34,6 +34,7 @@ interface Product {
   is_limited_edition: boolean;
   collection: string | null;
   stock_quantity: number;
+  material: string | null;
   categories?: Category | null;
 }
 
@@ -61,6 +62,7 @@ const ProductsManager = () => {
     is_limited_edition: false,
     collection: '',
     stock_quantity: '0',
+    material: '',
   });
 
   const fetchProducts = async () => {
@@ -107,6 +109,7 @@ const ProductsManager = () => {
       is_limited_edition: false,
       collection: '',
       stock_quantity: '0',
+      material: '',
     });
     setProductImages([]);
     setEditingProduct(null);
@@ -129,6 +132,7 @@ const ProductsManager = () => {
         is_limited_edition: product.is_limited_edition || false,
         collection: product.collection || '',
         stock_quantity: product.stock_quantity.toString(),
+        material: product.material || '',
       });
       // Set images array, fallback to image_url if images array doesn't exist
       setProductImages(product.images || (product.image_url ? [product.image_url] : []));
@@ -175,10 +179,10 @@ const ProductsManager = () => {
         return data.publicUrl;
       } catch (error: any) {
         console.error('Upload error:', error);
-        toast({ 
-          title: 'Error', 
-          description: `Failed to upload ${file.name}: ${error.message}`, 
-          variant: 'destructive' 
+        toast({
+          title: 'Error',
+          description: `Failed to upload ${file.name}: ${error.message}`,
+          variant: 'destructive'
         });
         return null;
       }
@@ -186,14 +190,14 @@ const ProductsManager = () => {
 
     const uploadedUrls = await Promise.all(uploadPromises);
     const validUrls = uploadedUrls.filter((url): url is string => url !== null);
-    
+
     if (validUrls.length > 0) {
       setProductImages([...productImages, ...validUrls]);
       toast({ title: 'Success', description: `Uploaded ${validUrls.length} image(s)` });
     }
 
     setUploading(false);
-    
+
     // Reset file input
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
@@ -203,7 +207,7 @@ const ProductsManager = () => {
   const removeImage = (index: number) => {
     const imageUrl = productImages[index];
     setProductImages(productImages.filter((_, i) => i !== index));
-    
+
     // Optionally delete from storage (you might want to keep this for cleanup)
     // Extract file path from URL and delete from storage
     if (imageUrl.includes('/product-images/')) {
@@ -237,7 +241,7 @@ const ProductsManager = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (productImages.length === 0) {
       toast({ title: 'Error', description: 'Please upload at least one image', variant: 'destructive' });
       return;
@@ -260,8 +264,9 @@ const ProductsManager = () => {
       is_limited_edition: formData.is_limited_edition,
       collection: formData.collection || null,
       stock_quantity: parseInt(formData.stock_quantity) || 0,
+      material: formData.material || null,
     };
-    
+
     if (editingProduct) {
       const { error } = await supabase
         .from('products')
@@ -347,7 +352,7 @@ const ProductsManager = () => {
                   />
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Slug (auto-generated)</Label>
@@ -377,7 +382,7 @@ const ProductsManager = () => {
                   </Select>
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label>Description</Label>
                 <Textarea
@@ -386,15 +391,14 @@ const ProductsManager = () => {
                   className="rounded-none"
                 />
               </div>
-              
+
               <div className="space-y-4">
                 <Label>Product Images *</Label>
                 <div
-                  className={`border-2 border-dashed rounded-none p-6 text-center transition-colors ${
-                    isDragging
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border hover:border-primary/50'
-                  }`}
+                  className={`border-2 border-dashed rounded-none p-6 text-center transition-colors ${isDragging
+                    ? 'border-primary bg-primary/5'
+                    : 'border-border hover:border-primary/50'
+                    }`}
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
@@ -453,7 +457,7 @@ const ProductsManager = () => {
                   </div>
                 )}
               </div>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Sizes (comma separated)</Label>
@@ -474,7 +478,7 @@ const ProductsManager = () => {
                   />
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Stock Quantity</Label>
@@ -516,7 +520,7 @@ const ProductsManager = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label>Collection (optional)</Label>
                 <Input
@@ -526,7 +530,17 @@ const ProductsManager = () => {
                   className="rounded-none"
                 />
               </div>
-              
+
+              <div className="space-y-2">
+                <Label>Material (optional)</Label>
+                <Input
+                  value={formData.material}
+                  onChange={(e) => setFormData({ ...formData, material: e.target.value })}
+                  placeholder="e.g., 100% Cotton, Linen Blend"
+                  className="rounded-none"
+                />
+              </div>
+
               <Button type="submit" className="w-full rounded-none">
                 {editingProduct ? 'Update Product' : 'Create Product'}
               </Button>
