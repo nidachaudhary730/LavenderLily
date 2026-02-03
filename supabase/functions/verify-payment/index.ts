@@ -1,0 +1,204 @@
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import Stripe from "https://esm.sh/stripe@18.5.0";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+};
+
+const logStep = (step: string, details?: any) => {
+  const detailsStr = details ? ` - ${JSON.stringify(details)}` : '';
+  console.log(`[VERIFY-PAYMENT] ${step}${detailsStr}`);
+};
+
+serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  try {
+    logStep("Function started");
+
+    const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
+    if (!stripeKey) throw new Error("STRIPE_SECRET_KEY is not set");
+
+    // Create Supabase client with service role for inserting orders
+    const supabaseAdmin = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      { auth: { persistSession: false } }
+    );
+
+    // Also create anon client for auth
+    const supabaseClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+    );
+
+    // Authenticate user
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) throw new Error("No authorization header provided");
+    
+    const token = authHeader.replace("Bearer ", "");
+    const { data: userData, error: userError } = await supabaseClient.auth.getUser(token);
+    if (userError) throw new Error(`Authentication error: ${userError.message}`);
+    
+    const user = userData.user;
+    if (!user) throw new Error("User not authenticated");
+    logStep("User authenticated", { userId: user.id });
+
+    // Parse request body
+    const { sessionId } = await req.json();
+    if (!sessionId) throw new Error("Session ID is required");
+    logStep("Verifying session", { sessionId });
+
+    // Initialize Stripe and retrieve session
+    const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
+    const session = await stripe.checkout.sessions.retrieve(sessionId, {
+      expand: ["line_items", "line_items.data.price.product"],
+    });
+
+    logStep("Session retrieved", { 
+      paymentStatus: session.payment_status,
+      status: session.status 
+    });
+
+    if (session.payment_status !== "paid") {
+      return new Response(JSON.stringify({ 
+        success: false, 
+        error: "Payment not completed" 
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400,
+      });
+    }
+
+    // Check if order already exists for this session
+    const { data: existingOrder } = await supabaseAdmin
+      .from('orders')
+      .select('id, order_number')
+      .eq('notes', `stripe_session:${sessionId}`)
+      .single();
+
+    if (existingOrder) {
+      logStep("Order already exists", { orderId: existingOrder.id });
+      return new Response(JSON.stringify({ 
+        success: true, 
+        orderNumber: existingOrder.order_number,
+        alreadyProcessed: true 
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      });
+    }
+
+    // Parse metadata
+    const metadata = session.metadata || {};
+    const shippingAddress = metadata.shipping_address ? JSON.parse(metadata.shipping_address) : {};
+    const billingAddress = metadata.billing_address ? JSON.parse(metadata.billing_address) : {};
+    const customerDetails = metadata.customer_details ? JSON.parse(metadata.customer_details) : {};
+    const shippingCost = parseFloat(metadata.shipping_cost || "0");
+
+    // Calculate totals from line items
+    const lineItems = session.line_items?.data || [];
+    let subtotal = 0;
+    const orderItems: any[] = [];
+
+    for (const item of lineItems) {
+      const product = item.price?.product as Stripe.Product;
+      const productMetadata = product?.metadata || {};
+      
+      // Skip shipping line item
+      if (product?.name === "Shipping") continue;
+
+      const unitPrice = (item.price?.unit_amount || 0) / 100;
+      const quantity = item.quantity || 1;
+      subtotal += unitPrice * quantity;
+
+      orderItems.push({
+        product_id: productMetadata.product_id || null,
+        product_name: product?.name || "Unknown Product",
+        product_image: product?.images?.[0] || null,
+        quantity: quantity,
+        size: productMetadata.size || null,
+        color: productMetadata.color || null,
+        unit_price: unitPrice,
+        total_price: unitPrice * quantity,
+      });
+    }
+
+    const totalAmount = subtotal + shippingCost;
+    logStep("Order calculated", { subtotal, shippingCost, totalAmount, itemCount: orderItems.length });
+
+    // Create order - order_number is auto-generated by trigger
+    const { data: order, error: orderError } = await supabaseAdmin
+      .from('orders')
+      .insert({
+        user_id: user.id,
+        status: 'confirmed',
+        subtotal: subtotal,
+        shipping_cost: shippingCost,
+        tax: 0,
+        total_amount: totalAmount,
+        shipping_address: shippingAddress,
+        billing_address: billingAddress,
+        payment_method: 'stripe',
+        payment_status: 'paid',
+        notes: `stripe_session:${sessionId}`,
+      })
+      .select()
+      .single();
+
+    if (orderError) {
+      logStep("Order creation failed", { error: orderError.message });
+      throw new Error(`Failed to create order: ${orderError.message}`);
+    }
+
+    logStep("Order created", { orderId: order.id, orderNumber: order.order_number });
+
+    // Create order items
+    const orderItemsWithOrderId = orderItems.map(item => ({
+      ...item,
+      order_id: order.id,
+    }));
+
+    const { error: itemsError } = await supabaseAdmin
+      .from('order_items')
+      .insert(orderItemsWithOrderId);
+
+    if (itemsError) {
+      logStep("Order items creation failed", { error: itemsError.message });
+      // Don't throw - order is already created
+    }
+
+    // Clear user's cart
+    const { error: cartError } = await supabaseAdmin
+      .from('cart_items')
+      .delete()
+      .eq('user_id', user.id);
+
+    if (cartError) {
+      logStep("Cart clear failed", { error: cartError.message });
+      // Don't throw - order is already created
+    }
+
+    logStep("Payment verified and order created successfully");
+
+    return new Response(JSON.stringify({ 
+      success: true, 
+      orderNumber: order.order_number,
+      orderId: order.id 
+    }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 200,
+    });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logStep("ERROR", { message: errorMessage });
+    return new Response(JSON.stringify({ error: errorMessage }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500,
+    });
+  }
+});
