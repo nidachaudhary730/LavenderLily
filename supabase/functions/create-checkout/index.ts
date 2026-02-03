@@ -34,11 +34,11 @@ serve(async (req) => {
     // Authenticate user
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) throw new Error("No authorization header provided");
-    
+
     const token = authHeader.replace("Bearer ", "");
     const { data: userData, error: userError } = await supabaseClient.auth.getUser(token);
     if (userError) throw new Error(`Authentication error: ${userError.message}`);
-    
+
     const user = userData.user;
     if (!user?.email) throw new Error("User not authenticated or email not available");
     logStep("User authenticated", { userId: user.id, email: user.email });
@@ -52,7 +52,7 @@ serve(async (req) => {
     }
 
     // Initialize Stripe
-    const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
+    const stripe = new Stripe(stripeKey, { apiVersion: "2023-10-16" });
 
     // Check if a Stripe customer already exists for this user
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
@@ -65,7 +65,7 @@ serve(async (req) => {
     // Create line items from cart
     const lineItems = cartItems.map((item: any) => ({
       price_data: {
-        currency: "usd",
+        currency: "aed",
         product_data: {
           name: item.product.name,
           images: item.product.image_url ? [item.product.image_url] : [],
@@ -84,7 +84,7 @@ serve(async (req) => {
     if (shippingCost && shippingCost > 0) {
       lineItems.push({
         price_data: {
-          currency: "usd",
+          currency: "aed",
           product_data: {
             name: "Shipping",
             metadata: {},
@@ -99,13 +99,15 @@ serve(async (req) => {
 
     // Create checkout session
     const origin = req.headers.get("origin") || "https://lavender-lily.lovable.app";
-    
+
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       customer_email: customerId ? undefined : user.email,
       line_items: lineItems,
       mode: "payment",
-      payment_method_types: ["card"],
+      automatic_payment_methods: {
+        enabled: true,
+      },
       success_url: `${origin}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/checkout`,
       metadata: {

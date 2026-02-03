@@ -39,11 +39,11 @@ serve(async (req) => {
     // Authenticate user
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) throw new Error("No authorization header provided");
-    
+
     const token = authHeader.replace("Bearer ", "");
     const { data: userData, error: userError } = await supabaseClient.auth.getUser(token);
     if (userError) throw new Error(`Authentication error: ${userError.message}`);
-    
+
     const user = userData.user;
     if (!user) throw new Error("User not authenticated");
     logStep("User authenticated", { userId: user.id });
@@ -54,20 +54,20 @@ serve(async (req) => {
     logStep("Verifying session", { sessionId });
 
     // Initialize Stripe and retrieve session
-    const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
+    const stripe = new Stripe(stripeKey, { apiVersion: "2023-10-16" });
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
       expand: ["line_items", "line_items.data.price.product"],
     });
 
-    logStep("Session retrieved", { 
+    logStep("Session retrieved", {
       paymentStatus: session.payment_status,
-      status: session.status 
+      status: session.status
     });
 
     if (session.payment_status !== "paid") {
-      return new Response(JSON.stringify({ 
-        success: false, 
-        error: "Payment not completed" 
+      return new Response(JSON.stringify({
+        success: false,
+        error: "Payment not completed"
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 400,
@@ -83,10 +83,10 @@ serve(async (req) => {
 
     if (existingOrder) {
       logStep("Order already exists", { orderId: existingOrder.id });
-      return new Response(JSON.stringify({ 
-        success: true, 
+      return new Response(JSON.stringify({
+        success: true,
         orderNumber: existingOrder.order_number,
-        alreadyProcessed: true 
+        alreadyProcessed: true
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200,
@@ -108,7 +108,7 @@ serve(async (req) => {
     for (const item of lineItems) {
       const product = item.price?.product as Stripe.Product;
       const productMetadata = product?.metadata || {};
-      
+
       // Skip shipping line item
       if (product?.name === "Shipping") continue;
 
@@ -185,10 +185,10 @@ serve(async (req) => {
 
     logStep("Payment verified and order created successfully");
 
-    return new Response(JSON.stringify({ 
-      success: true, 
+    return new Response(JSON.stringify({
+      success: true,
       orderNumber: order.order_number,
-      orderId: order.id 
+      orderId: order.id
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,

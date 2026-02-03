@@ -534,7 +534,7 @@ const Checkout = () => {
                             <p className="font-light text-foreground">Express Shipping</p>
                             <p className="text-sm text-muted-foreground">2-3 business days</p>
                           </div>
-                          <span className="text-foreground">€15.00</span>
+                          <span className="text-foreground">AED 15.00</span>
                         </div>
                       </Label>
                     </div>
@@ -547,7 +547,7 @@ const Checkout = () => {
                             <p className="font-light text-foreground">Overnight Shipping</p>
                             <p className="text-sm text-muted-foreground">Next business day</p>
                           </div>
-                          <span className="text-foreground">€35.00</span>
+                          <span className="text-foreground">AED 35.00</span>
                         </div>
                       </Label>
                     </div>
@@ -564,10 +564,14 @@ const Checkout = () => {
                     You will be redirected to Stripe's secure checkout to complete your payment.
                   </p>
                 </div>
-                <div className="mt-4 flex gap-2">
-                  <img src="https://cdn.brandfolder.io/KGT2DTA4/at/8vbr8k4mr5n7g3qcr5h5chkv/Visa_Brandmark_Blue_RGB_2021.svg" alt="Visa" className="h-8" />
-                  <img src="https://cdn.brandfolder.io/KGT2DTA4/at/gk8kpx3h6mwf97k3mvzg7m/mc_symbol.svg" alt="Mastercard" className="h-8" />
-                  <img src="https://cdn.brandfolder.io/KGT2DTA4/at/pvh8brw5t6tqz7zkksnq8w/Amex_logo_color.svg" alt="Amex" className="h-8" />
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <img src="https://cdn.brandfolder.io/KGT2DTA4/at/8vbr8k4mr5n7g3qcr5h5chkv/Visa_Brandmark_Blue_RGB_2021.svg" alt="Visa" className="h-6" />
+                  <img src="https://cdn.brandfolder.io/KGT2DTA4/at/gk8kpx3h6mwf97k3mvzg7m/mc_symbol.svg" alt="Mastercard" className="h-6" />
+                  <img src="https://cdn.brandfolder.io/KGT2DTA4/at/pvh8brw5t6tqz7zkksnq8w/Amex_logo_color.svg" alt="Amex" className="h-6" />
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" className="h-6" />
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_Pay_logo.svg" alt="Apple Pay" className="h-6" />
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Google_Pay_Logo_%282020%29.svg" alt="Google Pay" className="h-6" />
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo.png" alt="UPI" className="h-6" />
                 </div>
               </div>
 
