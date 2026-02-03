@@ -65,7 +65,7 @@ serve(async (req) => {
     // Create line items from cart
     const lineItems = cartItems.map((item: any) => ({
       price_data: {
-        currency: "aed",
+        currency: "usd",
         product_data: {
           name: item.product.name,
           images: item.product.image_url ? [item.product.image_url] : [],
@@ -75,7 +75,7 @@ serve(async (req) => {
             color: item.color || "",
           },
         },
-        unit_amount: Math.round(item.product.price * 100), // Convert to fils (cents equivalent)
+        unit_amount: Math.round(item.product.price * 100), // Convert to cents
       },
       quantity: item.quantity,
     }));
@@ -84,7 +84,7 @@ serve(async (req) => {
     if (shippingCost && shippingCost > 0) {
       lineItems.push({
         price_data: {
-          currency: "aed",
+          currency: "usd",
           product_data: {
             name: "Shipping",
             metadata: {},
@@ -105,6 +105,7 @@ serve(async (req) => {
       customer_email: customerId ? undefined : user.email,
       line_items: lineItems,
       mode: "payment",
+      payment_method_types: ["card"],
       success_url: `${origin}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/checkout`,
       metadata: {
