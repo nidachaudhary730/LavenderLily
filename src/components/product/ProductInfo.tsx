@@ -135,16 +135,26 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
 
       {/* Size Selection */}
       {product.sizes && product.sizes.length > 0 && (
-        <div className="space-y-3 py-4 border-t border-border">
-          <h3 className="text-sm font-light text-foreground">Size</h3>
-          <div className="flex flex-wrap gap-2">
+        <div className="space-y-4 py-6 border-t border-border">
+          <div className="flex justify-between items-center">
+            <h3 className="text-[11px] uppercase tracking-[0.2em] font-medium text-foreground">
+              Select Size <span className="text-muted-foreground ml-2 font-light">(UK / US)</span>
+            </h3>
+            <Link
+              to="/about/size-guide"
+              className="text-[10px] uppercase tracking-widest underline underline-offset-4 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Size Guide
+            </Link>
+          </div>
+          <div className="flex flex-wrap gap-3">
             {product.sizes.map((size) => (
               <button
                 key={size}
                 onClick={() => setSelectedSize(size)}
-                className={`px-4 py-2 border text-sm font-light transition-colors ${selectedSize === size
-                  ? 'border-foreground bg-foreground text-background'
-                  : 'border-border hover:border-foreground'
+                className={`min-w-[50px] h-12 border text-xs font-light transition-all duration-300 ${selectedSize === size
+                  ? 'border-foreground bg-foreground text-background shadow-lg'
+                  : 'border-border hover:border-muted-foreground'
                   }`}
               >
                 {size}

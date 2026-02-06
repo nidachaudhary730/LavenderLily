@@ -74,15 +74,12 @@ const ProductCard = ({
       </div>
 
       {/* Info */}
-      <div className="space-y-1.5 px-0.5">
-        <p className="text-[11px] tracking-[0.2em] uppercase text-muted-foreground font-light">
-          {category}
-        </p>
-        <h3 className="text-sm font-normal text-foreground leading-snug tracking-wide">
+      <div className="space-y-1 mt-4 px-0.5 text-center">
+        <h3 className="text-[13px] font-normal text-foreground leading-snug tracking-wider hover:underline transition-all duration-300 font-cinzel uppercase">
           {name}
         </h3>
-        <p className="text-sm text-foreground/70 font-light tracking-wide">
-          ${price.toFixed(2)}
+        <p className="text-[12px] text-foreground/80 font-normal tracking-wider">
+          AED {price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
         </p>
       </div>
     </Link>

@@ -114,21 +114,20 @@ const FilterSortBar = ({
 
   return (
     <>
-      <section className="w-full px-6 mb-8 border-b border-border pb-4">
-        <div className="flex justify-between items-center">
-          <p className="text-sm font-light text-muted-foreground">
-            {itemCount} items
-          </p>
-
-          <div className="flex items-center gap-4">
+      <section className="w-full px-6 mb-8 mt-2 pb-4">
+        <div className="flex justify-between items-center max-w-[1600px] mx-auto">
+          <div className="flex items-center gap-2">
             <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
               <SheetTrigger asChild>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="font-light hover:bg-transparent"
+                  className="font-light hover:bg-transparent flex items-center gap-2 text-[11px] tracking-[0.1em] uppercase"
                 >
-                  Filters
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 12h7.5" />
+                  </svg>
+                  Filter
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-80 bg-background border-none shadow-none h-full flex flex-col">
@@ -237,19 +236,28 @@ const FilterSortBar = ({
                 </div>
               </SheetContent>
             </Sheet>
+          </div>
 
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-auto border-none bg-transparent text-sm font-light shadow-none rounded-none pr-2">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="shadow-none border-none rounded-none bg-background">
-                <SelectItem value="featured" className="hover:bg-transparent hover:underline data-[state=checked]:bg-transparent data-[state=checked]:underline pl-2 [&>span:first-child]:hidden">Featured</SelectItem>
-                <SelectItem value="price-low" className="hover:bg-transparent hover:underline data-[state=checked]:bg-transparent data-[state=checked]:underline pl-2 [&>span:first-child]:hidden">Price: Low to High</SelectItem>
-                <SelectItem value="price-high" className="hover:bg-transparent hover:underline data-[state=checked]:bg-transparent data-[state=checked]:underline pl-2 [&>span:first-child]:hidden">Price: High to Low</SelectItem>
-                <SelectItem value="newest" className="hover:bg-transparent hover:underline data-[state=checked]:bg-transparent data-[state=checked]:underline pl-2 [&>span:first-child]:hidden">Newest</SelectItem>
-                <SelectItem value="name" className="hover:bg-transparent hover:underline data-[state=checked]:bg-transparent data-[state=checked]:underline pl-2 [&>span:first-child]:hidden">Name A-Z</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-1">
+              <span className="text-[11px] font-light text-foreground/60 uppercase tracking-widest whitespace-nowrap">Sort by:</span>
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-auto border-none bg-transparent text-[11px] font-light shadow-none rounded-none pr-6 h-auto p-0 uppercase ml-1 tracking-widest">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="shadow-none border border-border/40 rounded-none bg-background">
+                  <SelectItem value="featured" className="text-[10px] uppercase tracking-widest hover:bg-transparent hover:underline data-[state=checked]:bg-transparent data-[state=checked]:underline pl-2 [&>span:first-child]:hidden">Featured</SelectItem>
+                  <SelectItem value="price-low" className="text-[10px] uppercase tracking-widest hover:bg-transparent hover:underline data-[state=checked]:bg-transparent data-[state=checked]:underline pl-2 [&>span:first-child]:hidden">Price: Low to High</SelectItem>
+                  <SelectItem value="price-high" className="text-[10px] uppercase tracking-widest hover:bg-transparent hover:underline data-[state=checked]:bg-transparent data-[state=checked]:underline pl-2 [&>span:first-child]:hidden">Price: High to Low</SelectItem>
+                  <SelectItem value="newest" className="text-[10px] uppercase tracking-widest hover:bg-transparent hover:underline data-[state=checked]:bg-transparent data-[state=checked]:underline pl-2 [&>span:first-child]:hidden">Newest</SelectItem>
+                  <SelectItem value="name" className="text-[10px] uppercase tracking-widest hover:bg-transparent hover:underline data-[state=checked]:bg-transparent data-[state=checked]:underline pl-2 [&>span:first-child]:hidden">Name A-Z</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <p className="text-[11px] font-light text-foreground/60 uppercase tracking-widest whitespace-nowrap ml-4">
+              {itemCount} products
+            </p>
           </div>
         </div>
       </section>

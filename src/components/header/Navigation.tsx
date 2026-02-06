@@ -116,25 +116,76 @@ const Navigation = () => {
         backdropFilter: 'blur(10px)'
       }}
     >
-      <div className="flex items-center justify-between h-16 px-6">
-        {/* Mobile hamburger button */}
-        <button
-          className="lg:hidden p-2 mt-0.5 text-nav-foreground hover:text-nav-hover transition-colors duration-200"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          <div className="w-5 h-5 relative">
-            <span className={`absolute block w-5 h-px bg-current transform transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 top-2.5' : 'top-1.5'
-              }`}></span>
-            <span className={`absolute block w-5 h-px bg-current transform transition-all duration-300 top-2.5 ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
-              }`}></span>
-            <span className={`absolute block w-5 h-px bg-current transform transition-all duration-300 ${isMobileMenuOpen ? '-rotate-45 top-2.5' : 'top-3.5'
-              }`}></span>
+      <div className="border-b border-border/40">
+        <div className="flex items-center justify-between h-16 md:h-20 px-4 md:px-6 max-w-[1700px] mx-auto">
+          {/* Left: Search icon */}
+          <div className="flex-1 flex items-center">
+            <button
+              className="p-2 text-foreground hover:opacity-70 transition-opacity duration-200"
+              aria-label="Search"
+              onClick={() => setIsSearchOpen(!isSearchOpen)}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1" stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+              </svg>
+            </button>
           </div>
-        </button>
 
-        {/* Left navigation - Hidden on tablets and mobile */}
-        <div className="hidden lg:flex space-x-8">
+          {/* Center: Logo & Branding */}
+          <div className="flex-[3] flex justify-center">
+            <Link to="/" className="flex items-center gap-5 group py-1">
+              <div className="w-9 h-9 md:w-12 md:h-12 bg-primary/90 flex items-center justify-center rounded-[2px] shadow-sm shrink-0">
+                <img
+                  src="/favicon.ico"
+                  alt="Lavender Lily Logo"
+                  className="w-6 h-6 md:w-8 md:h-8 object-contain"
+                />
+              </div>
+              <div className="flex flex-col justify-center">
+                <h1 className="text-base md:text-2xl font-cinzel tracking-[0.2em] md:tracking-[0.3em] text-foreground leading-none mb-0 md:mb-2 whitespace-nowrap">
+                  LAVENDER LILY
+                </h1>
+                <p className="hidden md:block text-[9.5px] font-light tracking-[0.25em] text-muted-foreground uppercase opacity-80 whitespace-nowrap">
+                  A Bloom of Elegance in every thread
+                </p>
+              </div>
+            </Link>
+          </div>
+
+          {/* Right: User & Bag icons */}
+          <div className="flex-1 flex items-center justify-end">
+            <div className="hidden md:flex items-center">
+              <UserMenu />
+            </div>
+            <button
+              className="p-2 text-foreground hover:opacity-70 transition-opacity duration-200 relative"
+              aria-label="Shopping bag"
+              onClick={() => setIsShoppingBagOpen(true)}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1" stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+              </svg>
+            </button>
+
+            {/* Mobile hamburger button */}
+            <button
+              className="lg:hidden p-2 text-foreground ml-1"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              <div className="w-5 h-5 relative">
+                <span className={`absolute block w-5 h-px bg-current transform transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 top-2.5' : 'top-1.5'}`}></span>
+                <span className={`absolute block w-5 h-px bg-current transform transition-all duration-300 top-2.5 ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+                <span className={`absolute block w-5 h-px bg-current transform transition-all duration-300 ${isMobileMenuOpen ? '-rotate-45 top-2.5' : 'top-3.5'}`}></span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Row 2: Navigation - Desktop only */}
+      <div className="hidden lg:flex justify-center border-b border-border/40">
+        <div className="flex space-x-12 py-3">
           {navItems.map((item) => (
             <div
               key={item.name}
@@ -144,78 +195,19 @@ const Navigation = () => {
             >
               <Link
                 to={item.href}
-                className="text-nav-foreground hover:text-nav-hover transition-colors duration-200 text-sm font-light py-6 block"
+                className="text-[10px] tracking-[0.25em] font-light text-foreground/80 hover:text-foreground transition-colors duration-200 uppercase"
               >
                 {item.name}
               </Link>
             </div>
           ))}
-        </div>
-
-        {/* Center logo */}
-        <div className="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center">
-          <Link to="/" className="flex items-center gap-4 group">
-            <img
-              src="/favicon.ico"
-              alt="Lavender Lily Logo"
-              className="w-10 h-10 transition-transform duration-500 group-hover:rotate-[10deg]"
-            />
-            <div className="flex flex-col items-center md:items-start text-center md:text-left">
-              <h1 className="text-xl md:text-2xl font-cinzel tracking-[0.3em] text-foreground leading-none">
-                Lavender Lily
-              </h1>
-              <p className="text-[0.5rem] md:text-[0.6rem] font-light tracking-[0.15em] text-muted-foreground mt-1 uppercase opacity-80">
-                A Blossom of elegance in every thread
-              </p>
-            </div>
+          {/* Add some more direct links to match the image density */}
+          <Link to="/category/new-arrivals" className="text-[11px] tracking-[0.2em] font-light text-foreground/80 hover:text-foreground transition-colors duration-200 uppercase">
+            New Arrivals
           </Link>
-        </div>
-
-        {/* Right icons - Hidden on mobile, shown on desktop */}
-        <div className="hidden lg:flex items-center space-x-2">
-          <button
-            className="p-2 text-nav-foreground hover:text-nav-hover transition-colors duration-200"
-            aria-label="Search"
-            onClick={() => setIsSearchOpen(!isSearchOpen)}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-            </svg>
-          </button>
-          <button
-            className="p-2 text-nav-foreground hover:text-nav-hover transition-colors duration-200"
-            aria-label="Favorites"
-            onClick={() => setOffCanvasType('favorites')}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-            </svg>
-          </button>
-          <div className="p-2 text-nav-foreground">
-            <UserMenu />
-          </div>
-          <button
-            className="p-2 text-nav-foreground hover:text-nav-hover transition-colors duration-200 relative"
-            aria-label="Shopping bag"
-            onClick={() => setIsShoppingBagOpen(true)}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-            </svg>
-          </button>
-        </div>
-
-        {/* Mobile: Shopping bag only */}
-        <div className="lg:hidden flex items-center">
-          <button
-            className="p-2 text-nav-foreground hover:text-nav-hover transition-colors duration-200 relative"
-            aria-label="Shopping bag"
-            onClick={() => setIsShoppingBagOpen(true)}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-            </svg>
-          </button>
+          <Link to="/about/store-locator" className="text-[11px] tracking-[0.2em] font-light text-foreground/80 hover:text-foreground transition-colors duration-200 uppercase">
+            Our Stores
+          </Link>
         </div>
       </div>
 

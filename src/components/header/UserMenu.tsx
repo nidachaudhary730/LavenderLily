@@ -29,18 +29,18 @@ const UserMenu = () => {
     return (
       <Link
         to="/auth"
-        className="hover:opacity-70 transition-opacity"
+        className="p-2 hover:opacity-70 transition-opacity block"
         aria-label="Sign in"
       >
-        <User className="h-5 w-5" />
+        <User className="h-5 w-5" strokeWidth={1} />
       </Link>
     );
   }
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="hover:opacity-70 transition-opacity focus:outline-none">
-        <User className="h-5 w-5" />
+      <DropdownMenuTrigger className="p-2 hover:opacity-70 transition-opacity focus:outline-none flex items-center">
+        <User className="h-5 w-5" strokeWidth={1} />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56 rounded-xl p-2 shadow-lg">
         <div className="px-3 py-2 border-b border-border">

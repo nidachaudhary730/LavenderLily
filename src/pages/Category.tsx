@@ -23,14 +23,8 @@ const Category = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <div className="flex">
-        <CategorySidebar />
-
-        <main className="w-full lg:w-[calc(100%-16rem)] pt-6">
-          <CategoryHeader
-            category={category || 'All Products'}
-          />
-
+      <div className="w-full max-w-[1600px] mx-auto">
+        <main className="w-full pt-6">
           <FilterSortBar
             filtersOpen={filtersOpen}
             setFiltersOpen={setFiltersOpen}

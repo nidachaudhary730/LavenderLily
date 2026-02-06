@@ -51,70 +51,61 @@ img {
 
 @layer base {
   :root {
-    /* Core neutral palette - White and Light Lavender */
+    /* Core palette - Precise White and Lavender */
     --background: 0 0% 100%;
-    --foreground: 270 25% 35%;
-    /* Soft dark lavender for text */
+    --foreground: 262 40% 25%;
+    /* Deep lavender-toned charcoal */
 
     /* Navigation */
     --nav-background: 0 0% 100%;
-    --nav-foreground: 270 20% 45%;
-    /* Medium lavender */
-    --nav-hover: 270 50% 60%;
-    /* Vibrant lavender */
+    --nav-foreground: 262 20% 40%;
+    --nav-hover: 262 60% 65%;
+    /* The specific lavender */
 
     /* Interactive elements */
-    --primary: 270 40% 92%;
-    /* Light lavender for buttons and accents */
-    --primary-foreground: 270 30% 30%;
-    /* Deep lavender for button text */
-    --primary-hover: 270 45% 85%;
-    /* Slightly darker lavender */
+    --primary: 262 60% 82%;
+    /* Precise lavender from image */
+    --primary-foreground: 262 40% 30%;
+    --primary-hover: 262 60% 75%;
 
     /* Subtle elements */
-    --secondary: 270 60% 98%;
-    /* Very faint lavender */
-    --secondary-foreground: 270 25% 40%;
+    --secondary: 262 60% 97%;
+    --secondary-foreground: 262 30% 40%;
 
-    --muted: 270 20% 97%;
-    /* Muted lavender white */
-    --muted-foreground: 270 15% 55%;
-    /* Soft muted lavender */
+    --muted: 262 20% 98%;
+    --muted-foreground: 262 15% 50%;
 
-    --accent: 270 50% 95%;
-    /* Soft accent lavender */
-    --accent-foreground: 270 40% 50%;
+    --accent: 262 60% 92%;
+    --accent-foreground: 262 50% 45%;
 
-    --border: 270 30% 94%;
-    /* Gentle lavender border */
-    --input: 270 20% 96%;
-    --ring: 270 40% 80%;
+    --border: 262 30% 92%;
+    --input: 262 30% 95%;
+    --ring: 262 60% 82%;
 
     /* Cards and surfaces */
     --card: 0 0% 100%;
-    --card-foreground: 270 25% 35%;
+    --card-foreground: 262 30% 30%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 270 25% 35%;
+    --popover-foreground: 262 30% 30%;
 
-    --destructive: 0 70% 60%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --radius: 1rem;
-    /* More rounded corners for girly aesthetic */
+    --radius: 0.75rem;
 
     /* Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
-    --sidebar-background: 270 40% 99%;
-    --sidebar-foreground: 270 25% 40%;
-    --sidebar-primary: 270 45% 90%;
-    --sidebar-primary-foreground: 270 30% 30%;
-    --sidebar-accent: 270 50% 96%;
-    --sidebar-accent-foreground: 270 45% 50%;
-    --sidebar-border: 270 30% 95%;
-    --sidebar-ring: 270 40% 85%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 262 25% 40%;
+    --sidebar-primary: 262 60% 90%;
+    --sidebar-primary-foreground: 262 40% 30%;
+    --sidebar-accent: 262 60% 96%;
+    --sidebar-accent-foreground: 262 45% 50%;
+    --sidebar-border: 262 30% 94%;
+    --sidebar-ring: 262 60% 82%;
 
   }
 
