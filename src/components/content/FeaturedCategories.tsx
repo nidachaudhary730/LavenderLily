@@ -6,29 +6,29 @@ const featuredCategories = [
   {
     name: "New Arrivals",
     slug: "new-in",
-    image: "/Lavender-Lily( Images )/IMG_3926.PNG",
-    hoverImage: "/Lavender-Lily( Images )/IMG_4159.PNG",
+    image: "/dropdown-images/IMG_3926.PNG",
+    hoverImage: "/dropdown-images/IMG_4159.PNG",
     description: "Discover our latest collection"
   },
   {
     name: "Best Sellers",
     slug: "shop",
-    image: "/Lavender-Lily( Images )/IMG_3927.PNG",
-    hoverImage: "/Lavender-Lily( Images )/IMG_4161.PNG",
+    image: "/dropdown-images/IMG_3927.PNG",
+    hoverImage: "/dropdown-images/IMG_4161.PNG",
     description: "Shop our most loved pieces"
   },
   {
     name: "Ethnic Collection",
     slug: "ethnic",
-    image: "/Lavender-Lily( Images )/IMG_4060.PNG",
-    hoverImage: "/Lavender-Lily( Images )/IMG_4164.PNG",
+    image: "/dropdown-images/IMG_4060.PNG",
+    hoverImage: "/dropdown-images/IMG_4164.PNG",
     description: "Traditional elegance reimagined"
   },
   {
     name: "Casual Wear",
     slug: "shop",
-    image: "/Lavender-Lily( Images )/IMG_4158.PNG",
-    hoverImage: "/Lavender-Lily( Images )/IMG_4165.PNG",
+    image: "/dropdown-images/IMG_4158.PNG",
+    hoverImage: "/dropdown-images/IMG_4165.PNG",
     description: "Comfort meets style"
   }
 ];

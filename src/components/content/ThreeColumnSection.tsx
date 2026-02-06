@@ -11,13 +11,13 @@ const ThreeColumnSection = () => {
             <div className="w-full aspect-[3/4] mb-3 overflow-hidden relative">
               {/* Primary image */}
               <img
-                src="/Lavender-Lily( Images )/IMG_4162.PNG"
+                src="/dropdown-images/IMG_4162.PNG"
                 alt="Skirts collection"
                 className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0 absolute inset-0"
               />
               {/* Secondary image on hover */}
               <img
-                src="/Lavender-Lily( Images )/IMG_3829.PNG"
+                src="/dropdown-images/IMG_3829.PNG"
                 alt="Skirts collection - alternate view"
                 className="w-full h-full object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
               />
@@ -42,13 +42,13 @@ const ThreeColumnSection = () => {
             <div className="w-full aspect-[3/4] mb-3 overflow-hidden relative">
               {/* Primary image */}
               <img
-                src="/Lavender-Lily( Images )/IMG_4164.PNG"
+                src="/dropdown-images/IMG_4164.PNG"
                 alt="Ethnic collection"
                 className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0 absolute inset-0"
               />
               {/* Secondary image on hover */}
               <img
-                src="/Lavender-Lily( Images )/IMG_3832.PNG"
+                src="/dropdown-images/IMG_3832.PNG"
                 alt="Ethnic collection - alternate view"
                 className="w-full h-full object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
               />
@@ -73,13 +73,13 @@ const ThreeColumnSection = () => {
             <div className="w-full aspect-[3/4] mb-3 overflow-hidden relative">
               {/* Primary image */}
               <img
-                src="/Lavender-Lily( Images )/IMG_4165.PNG"
+                src="/dropdown-images/IMG_4165.PNG"
                 alt="Shop all collection"
                 className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0 absolute inset-0"
               />
               {/* Secondary image on hover */}
               <img
-                src="/Lavender-Lily( Images )/IMG_4172.PNG"
+                src="/dropdown-images/IMG_4172.PNG"
                 alt="Shop all collection - alternate view"
                 className="w-full h-full object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
               />

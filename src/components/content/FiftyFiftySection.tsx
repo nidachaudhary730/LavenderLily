@@ -11,13 +11,13 @@ const FiftyFiftySection = () => {
             <div className="w-full aspect-square mb-3 overflow-hidden relative">
               {/* Primary image */}
               <img
-                src="/Lavender-Lily( Images )/IMG_3823.PNG"
+                src="/dropdown-images/IMG_3823.PNG"
                 alt="Dresses collection"
                 className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0 absolute inset-0"
               />
               {/* Secondary image on hover */}
               <img
-                src="/Lavender-Lily( Images )/IMG_3926.PNG"
+                src="/dropdown-images/IMG_3926.PNG"
                 alt="Dresses collection - alternate view"
                 className="w-full h-full object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
               />
@@ -42,13 +42,13 @@ const FiftyFiftySection = () => {
             <div className="w-full aspect-square mb-3 overflow-hidden relative">
               {/* Primary image */}
               <img
-                src="/Lavender-Lily( Images )/IMG_3826.PNG"
+                src="/dropdown-images/IMG_3826.PNG"
                 alt="Tops and shirts collection"
                 className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0 absolute inset-0"
               />
               {/* Secondary image on hover */}
               <img
-                src="/Lavender-Lily( Images )/IMG_3927.PNG"
+                src="/dropdown-images/IMG_3927.PNG"
                 alt="Tops and shirts collection - alternate view"
                 className="w-full h-full object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
               />

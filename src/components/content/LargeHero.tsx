@@ -6,7 +6,7 @@ const LargeHero = () => {
     <section className="w-full mb-16 px-6">
       <div className="w-full aspect-[16/9] mb-3 overflow-hidden">
         <AnimatedImage
-          src="/Lavender-Lily( Images )/IMG_4172.PNG"
+          src="/dropdown-images/IMG_4172.PNG"
           alt="Modern clothing collection"
           className="w-full h-full object-cover"
           animation="fadeIn"
