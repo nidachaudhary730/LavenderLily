@@ -94,7 +94,7 @@ const OrdersManager = () => {
                 .from('user_profiles')
                 .select('email, full_name')
                 .eq('id', order.user_id)
-                .single()
+                .maybeSingle()
             ]);
 
             return {

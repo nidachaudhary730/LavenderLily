@@ -130,8 +130,15 @@ const Checkout = () => {
 
     try {
       // Call Stripe checkout edge function
-      const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: {
+      // Using direct fetch to bypass potential wrapper issues causing FetchError
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-checkout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+          'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({
           cartItems: cartItems.map(item => ({
             product_id: item.product_id,
             quantity: item.quantity,
@@ -147,22 +154,39 @@ const Checkout = () => {
           shippingAddress,
           billingAddress: hasSeparateBilling ? billingDetails : shippingAddress,
           customerDetails,
-        },
+        }),
       });
 
-      if (error) throw error;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to initiate checkout');
+      }
 
       if (data?.url) {
-        // Redirect to Stripe Checkout
         window.location.href = data.url;
       } else {
         throw new Error('No checkout URL received');
       }
     } catch (error: any) {
       console.error('Error creating checkout session:', error);
+
+      // Try to extract detailed error info
+      let errorMessage = error.message || 'Failed to initiate checkout';
+
+      if (error.context) {
+        try {
+          const body = await error.context.json();
+          console.error('Detailed function error:', body);
+          errorMessage = body.error || errorMessage;
+        } catch (e) {
+          console.error('Could not parse error body');
+        }
+      }
+
       toast({
-        title: 'Error',
-        description: error.message || 'Failed to initiate checkout',
+        title: 'Checkout Error',
+        description: errorMessage,
         variant: 'destructive',
       });
       setIsProcessing(false);

@@ -82,7 +82,7 @@ const ProductDescription = ({ productId, description, material }: ProductDescrip
             .from('user_profiles')
             .select('full_name')
             .eq('id', review.user_id)
-            .single();
+            .maybeSingle();
 
           return {
             ...review,
@@ -324,8 +324,8 @@ const ProductDescription = ({ productId, description, material }: ProductDescrip
                       >
                         <Star
                           className={`h-5 w-5 ${star <= rating
-                              ? 'fill-yellow-400 text-yellow-400'
-                              : 'text-muted-foreground'
+                            ? 'fill-yellow-400 text-yellow-400'
+                            : 'text-muted-foreground'
                             }`}
                         />
                       </button>
