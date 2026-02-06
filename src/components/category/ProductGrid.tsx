@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import Pagination from "./Pagination";
+import ProductCard from "./ProductCard";
 import AnimatedSection from "../animations/AnimatedSection";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -159,13 +159,16 @@ const ProductGrid = ({ category, sortBy = "featured", onCountChange, filters }: 
 
   if (loading) {
     return (
-      <section className="w-full px-6 mb-16">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+      <section className="w-full px-6 md:px-10 mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-5 gap-y-10 md:gap-x-7 md:gap-y-12">
           {[...Array(8)].map((_, i) => (
             <div key={i} className="animate-pulse">
-              <div className="aspect-square bg-muted/20 mb-3"></div>
-              <div className="h-4 bg-muted/20 rounded mb-2"></div>
-              <div className="h-4 bg-muted/20 rounded w-2/3"></div>
+              <div className="aspect-[3/4] bg-secondary/30 mb-4"></div>
+              <div className="space-y-2 px-0.5">
+                <div className="h-3 bg-secondary/30 rounded w-1/3"></div>
+                <div className="h-4 bg-secondary/30 rounded w-3/4"></div>
+                <div className="h-3 bg-secondary/30 rounded w-1/4"></div>
+              </div>
             </div>
           ))}
         </div>
@@ -174,73 +177,28 @@ const ProductGrid = ({ category, sortBy = "featured", onCountChange, filters }: 
   }
 
   return (
-    <section className="w-full px-6 mb-16">
-      <AnimatedSection animation="fadeUp" stagger={0.02} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+    <section className="w-full px-6 md:px-10 mb-16">
+      <AnimatedSection animation="fadeUp" stagger={0.04} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-5 gap-y-10 md:gap-x-7 md:gap-y-12">
         {products.length === 0 ? (
-          <div className="col-span-full text-center py-12">
-            <p className="text-muted-foreground text-sm">No products found.</p>
+          <div className="col-span-full text-center py-20">
+            <p className="text-muted-foreground text-sm tracking-wider">No products found.</p>
           </div>
         ) : (
           products.map((product) => (
-            <Link key={product.id} to={`/product/${product.slug}`}>
-              <Card
-                className="border-none shadow-none bg-transparent group cursor-pointer"
-              >
-                <CardContent className="p-0">
-                  <div className="aspect-square mb-3 overflow-hidden bg-muted/10 relative">
-                    {product.image_url ? (
-                      <>
-                        {/* Primary image */}
-                        <img
-                          src={product.image_url}
-                          alt={product.name}
-                          className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0 absolute inset-0"
-                        />
-                        {/* Secondary image on hover - always show, use second image if available, otherwise use same image */}
-                        <img
-                          src={product.second_image_url || product.images?.[1] || product.image_url}
-                          alt={`${product.name} - alternate view`}
-                          className="w-full h-full object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
-                        />
-                      </>
-                    ) : (
-                      <div className="w-full h-full bg-muted/20 flex items-center justify-center">
-                        <p className="text-muted-foreground text-xs">No Image</p>
-                      </div>
-                    )}
-                    <div className="absolute inset-0 bg-primary/5 pointer-events-none"></div>
-                    {product.is_new && (
-                      <div className="absolute top-2 left-2 px-2 py-1 bg-primary/10 text-xs font-medium text-primary z-10 pointer-events-none">
-                        NEW
-                      </div>
-                    )}
-                    {product.is_pre_order && (
-                      <div className="absolute top-2 left-2 px-2 py-1 bg-accent text-xs font-medium text-accent-foreground z-10 pointer-events-none">
-                        PRE-ORDER
-                      </div>
-                    )}
-                    {product.is_limited_edition && (
-                      <div className="absolute top-2 left-2 px-2 py-1 bg-destructive/10 text-xs font-medium text-destructive z-10 pointer-events-none">
-                        LIMITED
-                      </div>
-                    )}
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-sm font-light text-foreground">
-                      {product.category}
-                    </p>
-                    <div className="flex justify-between items-center">
-                      <h3 className="text-sm font-medium text-foreground">
-                        {product.name}
-                      </h3>
-                      <p className="text-sm font-light text-foreground">
-                        AED {product.price.toFixed(2)}
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
+            <ProductCard
+              key={product.id}
+              id={product.id}
+              name={product.name}
+              category={product.category}
+              price={product.price}
+              image_url={product.image_url}
+              second_image_url={product.second_image_url}
+              images={product.images}
+              is_new={product.is_new}
+              is_pre_order={product.is_pre_order}
+              is_limited_edition={product.is_limited_edition}
+              slug={product.slug}
+            />
           ))
         )}
       </AnimatedSection>
