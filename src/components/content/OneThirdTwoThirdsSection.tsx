@@ -11,13 +11,13 @@ const OneThirdTwoThirdsSection = () => {
             <div className="w-full h-[500px] lg:h-[800px] mb-3 overflow-hidden relative">
               {/* Primary image */}
               <img
-                src="/Lavender-Lily( Images )/IMG_4159.PNG"
+                src="/dropdown-images/IMG_4159.PNG"
                 alt="Pants collection"
                 className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0 absolute inset-0"
               />
               {/* Secondary image on hover */}
               <img
-                src="/Lavender-Lily( Images )/IMG_3827.PNG"
+                src="/dropdown-images/IMG_3827.PNG"
                 alt="Pants collection - alternate view"
                 className="w-full h-full object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
               />
@@ -42,13 +42,13 @@ const OneThirdTwoThirdsSection = () => {
             <div className="w-full h-[500px] lg:h-[800px] mb-3 overflow-hidden relative">
               {/* Primary image */}
               <img
-                src="/Lavender-Lily( Images )/IMG_4161.PNG"
+                src="/dropdown-images/IMG_4161.PNG"
                 alt="Co-ord set collection"
                 className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0 absolute inset-0"
               />
               {/* Secondary image on hover */}
               <img
-                src="/Lavender-Lily( Images )/IMG_3830.PNG"
+                src="/dropdown-images/IMG_3830.PNG"
                 alt="Co-ord set collection - alternate view"
                 className="w-full h-full object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
               />

@@ -6,43 +6,43 @@ const categories = [
   {
     name: "Dresses",
     slug: "dresses",
-    image: "/Lavender-Lily( Images )/IMG_3823.PNG",
-    hoverImage: "/Lavender-Lily( Images )/IMG_3926.PNG",
+    image: "/dropdown-images/IMG_3823.PNG",
+    hoverImage: "/dropdown-images/IMG_3926.PNG",
     description: "Elegant dresses for every occasion"
   },
   {
     name: "Tops / Shirts",
     slug: "tops-shirts",
-    image: "/Lavender-Lily( Images )/IMG_3826.PNG",
-    hoverImage: "/Lavender-Lily( Images )/IMG_3927.PNG",
+    image: "/dropdown-images/IMG_3826.PNG",
+    hoverImage: "/dropdown-images/IMG_3927.PNG",
     description: "Stylish tops and shirts"
   },
   {
     name: "Pants",
     slug: "pants",
-    image: "/Lavender-Lily( Images )/IMG_3827.PNG",
-    hoverImage: "/Lavender-Lily( Images )/IMG_4159.PNG",
+    image: "/dropdown-images/IMG_3827.PNG",
+    hoverImage: "/dropdown-images/IMG_4159.PNG",
     description: "Comfortable and stylish"
   },
   {
     name: "Skirts",
     slug: "skirts",
-    image: "/Lavender-Lily( Images )/IMG_3829.PNG",
-    hoverImage: "/Lavender-Lily( Images )/IMG_4162.PNG",
+    image: "/dropdown-images/IMG_3829.PNG",
+    hoverImage: "/dropdown-images/IMG_4162.PNG",
     description: "Feminine and versatile"
   },
   {
     name: "Co-ord Set",
     slug: "co-ord-set",
-    image: "/Lavender-Lily( Images )/IMG_3830.PNG",
-    hoverImage: "/Lavender-Lily( Images )/IMG_4161.PNG",
+    image: "/dropdown-images/IMG_3830.PNG",
+    hoverImage: "/dropdown-images/IMG_4161.PNG",
     description: "Perfectly matched sets"
   },
   {
     name: "Ethnic",
     slug: "ethnic",
-    image: "/Lavender-Lily( Images )/IMG_3832.PNG",
-    hoverImage: "/Lavender-Lily( Images )/IMG_4164.PNG",
+    image: "/dropdown-images/IMG_3832.PNG",
+    hoverImage: "/dropdown-images/IMG_4164.PNG",
     description: "Traditional elegance"
   }
 ];
