@@ -65,7 +65,7 @@ serve(async (req) => {
     // Create line items from cart
     const lineItems = cartItems.map((item: any) => ({
       price_data: {
-        currency: "aed",
+        currency: "usd",
         product_data: {
           name: item.product.name,
           images: item.product.image_url ? [item.product.image_url] : [],
@@ -84,7 +84,7 @@ serve(async (req) => {
     if (shippingCost && shippingCost > 0) {
       lineItems.push({
         price_data: {
-          currency: "aed",
+          currency: "usd",
           product_data: {
             name: "Shipping",
             metadata: {},
