@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import Stripe from "https://esm.sh/stripe@14.25.0?target=deno"
+import Stripe from "https://esm.sh/stripe@17.1.0?target=deno"
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -15,7 +15,7 @@ serve(async (req) => {
     const stripeKey = Deno.env.get('STRIPE_SECRET_KEY')
     if (!stripeKey) throw new Error('STRIPE_SECRET_KEY missing')
 
-    // Using the specific stable version that matches your dashboard logs
+    // Using a standard stable version
     const stripe = new Stripe(stripeKey, { apiVersion: '2023-10-16' })
     const body = await req.json()
     const { cartItems, shippingCost, customerDetails } = body
@@ -45,14 +45,11 @@ serve(async (req) => {
 
     const origin = req.headers.get('origin') || 'http://localhost:8080';
 
-    // IMPORTANT: automatic_payment_methods MUST be boolean true, not "true"
     const session = await stripe.checkout.sessions.create({
       line_items,
       mode: 'payment',
       customer_email: customerDetails?.email,
-      automatic_payment_methods: {
-        enabled: true
-      },
+      payment_method_types: ['card'],
       billing_address_collection: 'required',
       phone_number_collection: { enabled: true },
       success_url: `${origin}/payment-success?session_id={CHECKOUT_SESSION_ID}`,

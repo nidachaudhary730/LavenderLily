@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/hooks/use-toast';
@@ -328,6 +328,9 @@ const ProductsManager = () => {
               <DialogTitle className="font-light">
                 {editingProduct ? 'Edit Product' : 'Add Product'}
               </DialogTitle>
+              <DialogDescription className="text-muted-foreground text-xs font-light">
+                Fill in the details below to {editingProduct ? 'update' : 'create'} a product.
+              </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -341,7 +344,7 @@ const ProductsManager = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Price (€) *</Label>
+                  <Label>Price (AED) *</Label>
                   <Input
                     type="number"
                     step="0.01"
@@ -574,7 +577,7 @@ const ProductsManager = () => {
               <TableCell className="text-muted-foreground">
                 {product.categories?.name || '-'}
               </TableCell>
-              <TableCell>€{product.price.toFixed(2)}</TableCell>
+              <TableCell>AED {product.price.toFixed(2)}</TableCell>
               <TableCell>{product.stock_quantity}</TableCell>
               <TableCell>
                 <Badge variant={product.is_active ? 'default' : 'secondary'}>

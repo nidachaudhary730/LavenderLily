@@ -33,6 +33,13 @@ interface ProductGridProps {
 const ProductGrid = ({ category, sortBy = "featured", onCountChange, filters }: ProductGridProps) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
+
+  useEffect(() => {
+    // Reset to first page when category, sort or filters change
+    setCurrentPage(1);
+  }, [category, sortBy, filters]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -137,9 +144,6 @@ const ProductGrid = ({ category, sortBy = "featured", onCountChange, filters }: 
                 });
               });
             }
-
-            // Filter by Material (if applicable in future)
-            // if (filters.materials.length > 0) { ... }
           }
 
           setProducts(transformedProducts);
@@ -156,6 +160,17 @@ const ProductGrid = ({ category, sortBy = "featured", onCountChange, filters }: 
 
     fetchProducts();
   }, [category, sortBy, filters]);
+
+  // Scroll to top when page changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage]);
+
+  // Calculate paginated products
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentProducts = products.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(products.length / itemsPerPage);
 
   if (loading) {
     return (
@@ -179,12 +194,12 @@ const ProductGrid = ({ category, sortBy = "featured", onCountChange, filters }: 
   return (
     <section className="w-full px-6 md:px-10 mb-16">
       <AnimatedSection animation="fadeUp" stagger={0.04} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-5 gap-y-10 md:gap-x-7 md:gap-y-12">
-        {products.length === 0 ? (
+        {currentProducts.length === 0 ? (
           <div className="col-span-full text-center py-20">
             <p className="text-muted-foreground text-sm tracking-wider">No products found.</p>
           </div>
         ) : (
-          products.map((product) => (
+          currentProducts.map((product) => (
             <ProductCard
               key={product.id}
               id={product.id}
@@ -203,7 +218,13 @@ const ProductGrid = ({ category, sortBy = "featured", onCountChange, filters }: 
         )}
       </AnimatedSection>
 
-      <Pagination />
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </section>
   );
 };

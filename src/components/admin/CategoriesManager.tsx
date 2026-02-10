@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { toast } from '@/hooks/use-toast';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
@@ -73,9 +73,9 @@ const CategoriesManager = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const slug = formData.slug || generateSlug(formData.name);
-    
+
     if (editingCategory) {
       const { error } = await supabase
         .from('categories')
@@ -139,6 +139,9 @@ const CategoriesManager = () => {
               <DialogTitle className="font-light">
                 {editingCategory ? 'Edit Category' : 'Add Category'}
               </DialogTitle>
+              <DialogDescription className="text-muted-foreground text-xs font-light">
+                Fill in the details below to {editingCategory ? 'update' : 'create'} a category.
+              </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
