@@ -24,7 +24,7 @@ const Footer = () => {
             <div className="flex flex-col space-y-2">
               <h2 className="text-2xl font-cinzel tracking-[0.2em] text-foreground">Lavender Lily</h2>
               <p className="text-[0.6rem] font-light tracking-[0.1em] text-muted-foreground uppercase">
-                A Blossom of elegance in every thread
+                A Bloom of elegance in every thread
               </p>
             </div>
             <p className="text-sm font-light text-foreground/70 leading-relaxed max-w-md">

@@ -21,7 +21,7 @@ const CustomerCare = () => {
         <main className="w-full lg:w-[70vw] lg:ml-auto px-6">
           <PageHeader
             title="Customer Care"
-            subtitle="We're here to help you with all your jewelry needs"
+            subtitle="We're here to help you with all your clothing needs"
           />
 
           <ContentSection title="Contact Information">
@@ -55,7 +55,7 @@ const CustomerCare = () => {
                   What are your shipping options and timeframes?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
-                  We offer free standard shipping (3-5 business days) on orders over $500. Express shipping (1-2 business days) is available for $25. All orders are fully insured and require signature confirmation.
+                  We offer free standard shipping (3-5 business days) on orders over AED 500. Express shipping (1-2 business days) is available for AED 30. All orders are carefully tracked and signature confirmed.
                 </AccordionContent>
               </AccordionItem>
 
@@ -70,37 +70,37 @@ const CustomerCare = () => {
 
               <AccordionItem value="warranty" className="border border-border rounded-lg px-6">
                 <AccordionTrigger className="text-left hover:no-underline">
-                  What warranty do you offer on your jewelry?
+                  What warranty do you offer on your clothing?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
-                  All LINEA jewelry comes with a lifetime warranty against manufacturing defects. This includes free repairs for normal wear and tear, stone tightening, and professional cleaning.
+                  Every Lavender Lily piece comes with a quality guarantee against manufacturing defects. We take pride in our craftsmanship and will assist with repairs or replacements for any quality-related issues.
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="sizing" className="border border-border rounded-lg px-6">
                 <AccordionTrigger className="text-left hover:no-underline">
-                  Can I resize my jewelry after purchase?
+                  Can I request alterations after purchase?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
-                  Yes, we offer free ring resizing within 60 days of purchase (up to 2 sizes). Additional resizing is available for a service fee. Some designs cannot be resized due to their construction.
+                  Yes, we offer professional alteration services for a perfect fit. Please contact our support team within 14 days of receiving your item to discuss your requirements. Some items may not be suitable for alteration.
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="care" className="border border-border rounded-lg px-6">
                 <AccordionTrigger className="text-left hover:no-underline">
-                  How should I care for my LINEA jewelry?
+                  How should I care for my Lavender Lily clothing?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
-                  Store pieces separately in soft pouches, avoid contact with chemicals and cosmetics, and clean gently with a soft cloth. We recommend professional cleaning every 6-12 months.
+                  Follow the specific care labels on each garment. We generally recommend dry cleaning for our delicate pieces and cold gentle wash for everyday items. Store in a cool, dry place.
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="authentication" className="border border-border rounded-lg px-6">
                 <AccordionTrigger className="text-left hover:no-underline">
-                  How can I verify the authenticity of my jewelry?
+                  How can I verify the authenticity of my clothing?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
-                  Every LINEA piece comes with a certificate of authenticity and is hallmarked. You can verify authenticity on our website using your unique piece number or contact our customer care team.
+                  Every Lavender Lily piece features our signature labels and tags. You can verify authenticity by contacting our customer care team with your order details and photos of the garment tags.
                 </AccordionContent>
               </AccordionItem>
             </Accordion>

@@ -4,13 +4,13 @@ import Footer from "../components/footer/Footer";
 
 const TermsOfService = () => {
   useEffect(() => {
-    document.title = "Terms of Service - Linea Jewelry";
+    document.title = "Terms of Service - Lavender Lily";
   }, []);
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main className="pt-6">
         <div className="max-w-4xl mx-auto px-6 py-12">
           <header className="mb-12 text-center">
@@ -22,14 +22,14 @@ const TermsOfService = () => {
             <section>
               <h2 className="text-2xl font-light text-foreground mb-4">Agreement to Terms</h2>
               <p className="text-muted-foreground leading-relaxed">
-                By accessing and using the Linea Jewelry Inc. website and services, you accept and agree to be bound by the terms and provision of this agreement. These Terms of Service govern your use of our website, products, and services.
+                By accessing and using the Lavender Lily website and services, you accept and agree to be bound by the terms and provision of this agreement. These Terms of Service govern your use of our website, products, and services.
               </p>
             </section>
 
             <section>
               <h2 className="text-2xl font-light text-foreground mb-4">Use License</h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Permission is granted to temporarily download one copy of the materials on Linea Jewelry Inc.'s website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:
+                Permission is granted to temporarily download one copy of the materials on Lavender Lily's website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:
               </p>
               <ul className="list-disc list-inside text-muted-foreground space-y-1">
                 <li>Modify or copy the materials</li>
@@ -55,7 +55,7 @@ const TermsOfService = () => {
                     All orders are subject to acceptance and availability. We reserve the right to refuse or cancel any order for any reason, including but not limited to product availability, errors in product information, or suspected fraud.
                   </p>
                 </div>
-                
+
                 <div>
                   <h3 className="text-xl font-light text-foreground mb-2">Payment Terms</h3>
                   <p className="text-muted-foreground leading-relaxed">
@@ -91,21 +91,21 @@ const TermsOfService = () => {
             <section>
               <h2 className="text-2xl font-light text-foreground mb-4">Warranty and Care</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Our jewelry comes with a limited warranty against manufacturing defects. This warranty does not cover damage from normal wear, improper care, or accidents. Proper care instructions are provided with each purchase and on our website.
+                Our clothing comes with a limited warranty against manufacturing defects. This warranty does not cover damage from normal wear, improper care, or accidents. Proper care instructions are provided with each purchase and on our website.
               </p>
             </section>
 
             <section>
               <h2 className="text-2xl font-light text-foreground mb-4">Intellectual Property</h2>
               <p className="text-muted-foreground leading-relaxed">
-                All content on this website, including but not limited to text, graphics, logos, images, and software, is the property of Linea Jewelry Inc. and is protected by copyright, trademark, and other intellectual property laws. Unauthorized use is prohibited.
+                All content on this website, including but not limited to text, graphics, logos, images, and software, is the property of Lavender Lily and is protected by copyright, trademark, and other intellectual property laws. Unauthorized use is prohibited.
               </p>
             </section>
 
             <section>
               <h2 className="text-2xl font-light text-foreground mb-4">Limitation of Liability</h2>
               <p className="text-muted-foreground leading-relaxed">
-                In no event shall Linea Jewelry Inc. or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on our website or products, even if we have been notified of the possibility of such damage.
+                In no event shall Lavender Lily or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on our website or products, even if we have been notified of the possibility of such damage.
               </p>
             </section>
 
@@ -119,7 +119,7 @@ const TermsOfService = () => {
             <section>
               <h2 className="text-2xl font-light text-foreground mb-4">Governing Law</h2>
               <p className="text-muted-foreground leading-relaxed">
-                These terms and conditions are governed by and construed in accordance with the laws of New York State, and you irrevocably submit to the exclusive jurisdiction of the courts in that state or location.
+                These terms and conditions are governed by and construed in accordance with the laws of the United Arab Emirates, and you irrevocably submit to the exclusive jurisdiction of the courts in that location.
               </p>
             </section>
 
@@ -136,15 +136,15 @@ const TermsOfService = () => {
                 If you have any questions about these Terms of Service, please contact us at:
               </p>
               <div className="mt-4 text-muted-foreground">
-                <p>Email: legal@lineajewelry.com</p>
-                <p>Phone: +1 (212) 555-0123</p>
-                <p>Address: 123 Madison Avenue, New York, NY 10016</p>
+                <p>Email: lavenderlilyuae@gmail.com</p>
+                <p>Phone: +971 58 836 6059</p>
+                <p>Address: Al Nasr Square, Block B, Shop No 11, Oud Maitha, Dubai, UAE</p>
               </div>
             </section>
           </div>
         </div>
       </main>
-      
+
       <Footer />
     </div>
   );

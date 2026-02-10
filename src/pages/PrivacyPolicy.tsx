@@ -4,13 +4,13 @@ import Footer from "../components/footer/Footer";
 
 const PrivacyPolicy = () => {
   useEffect(() => {
-    document.title = "Privacy Policy - Linea Jewelry";
+    document.title = "Privacy Policy - Lavender Lily";
   }, []);
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main className="pt-6">
         <div className="max-w-4xl mx-auto px-6 py-12">
           <header className="mb-12 text-center">
@@ -22,7 +22,7 @@ const PrivacyPolicy = () => {
             <section>
               <h2 className="text-2xl font-light text-foreground mb-4">Introduction</h2>
               <p className="text-muted-foreground leading-relaxed">
-                At Linea Jewelry Inc. ("we," "our," or "us"), we respect your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, make a purchase, or interact with our services.
+                At Lavender Lily ("we," "our," or "us"), we respect your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, make a purchase, or interact with our services.
               </p>
             </section>
 
@@ -41,7 +41,7 @@ const PrivacyPolicy = () => {
                     <li>Account preferences and communication settings</li>
                   </ul>
                 </div>
-                
+
                 <div>
                   <h3 className="text-xl font-light text-foreground mb-2">Usage Information</h3>
                   <p className="text-muted-foreground leading-relaxed">
@@ -121,15 +121,15 @@ const PrivacyPolicy = () => {
                 If you have any questions about this Privacy Policy or our privacy practices, please contact us at:
               </p>
               <div className="mt-4 text-muted-foreground">
-                <p>Email: privacy@lineajewelry.com</p>
-                <p>Phone: +1 (212) 555-0123</p>
-                <p>Address: 123 Madison Avenue, New York, NY 10016</p>
+                <p>Email: lavenderlilyuae@gmail.com</p>
+                <p>Phone: +971 58 836 6059</p>
+                <p>Address: Al Nasr Square, Block B, Shop No 11, Oud Maitha, Dubai, UAE</p>
               </div>
             </section>
           </div>
         </div>
       </main>
-      
+
       <Footer />
     </div>
   );
