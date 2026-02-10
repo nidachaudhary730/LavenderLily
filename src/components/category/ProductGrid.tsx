@@ -47,7 +47,43 @@ const ProductGrid = ({ category, sortBy = "featured", onCountChange, filters }: 
       try {
         let query = supabase
           .from('products')
-          .select('*, categories(name, slug)');
+          .select('*, categories!inner(name, slug)');
+
+        // Handle special "New In" filters
+        if (category === 'new-arrivals' || category === 'new-in') {
+          query = query.eq('is_new', true);
+        } else if (category === 'pre-orders') {
+          query = query.eq('is_pre_order', true);
+        } else if (category === 'limited-edition') {
+          query = query.eq('is_limited_edition', true);
+        } else if (category && category !== 'shop') {
+          const categorySlug = category.toLowerCase().replace(/\s*\/\s*/g, '-').replace(/\s+/g, '-');
+          query = query.eq('categories.slug', categorySlug);
+        }
+
+        // Apply filters from FilterSortBar at DB level
+        if (filters) {
+          if (filters.categories.length > 0) {
+            query = query.in('categories.name', filters.categories);
+          }
+
+          if (filters.priceRanges.length > 0) {
+            // Price filtering logic moved to DB
+            const priceFilters = filters.priceRanges.map(range => {
+              if (range === "Under AED 100") return { min: 0, max: 99.99 };
+              if (range === "AED 100 - AED 200") return { min: 100, max: 200 };
+              if (range === "AED 200 - AED 500") return { min: 200, max: 500 };
+              if (range === "AED 500+") return { min: 500.01, max: 1000000 };
+              return null;
+            }).filter(Boolean);
+
+            if (priceFilters.length > 0) {
+              const minPrice = Math.min(...priceFilters.map(r => r!.min));
+              const maxPrice = Math.max(...priceFilters.map(r => r!.max));
+              query = query.gte('price', minPrice).lte('price', maxPrice);
+            }
+          }
+        }
 
         // Apply sorting
         switch (sortBy) {
@@ -63,41 +99,8 @@ const ProductGrid = ({ category, sortBy = "featured", onCountChange, filters }: 
           case 'name':
             query = query.order('name', { ascending: true });
             break;
-          default: // featured
+          default:
             query = query.order('created_at', { ascending: false });
-        }
-
-        // Handle special "New In" filters
-        if (category === 'new-arrivals' || category === 'new-in') {
-          query = query.eq('is_new', true);
-        } else if (category === 'pre-orders') {
-          query = query.eq('is_pre_order', true);
-        } else if (category === 'limited-edition') {
-          query = query.eq('is_limited_edition', true);
-        } else if (category && category !== 'shop') {
-          // Regular category filter - If category is specified and not "shop" (All)
-          const categorySlug = category.toLowerCase().replace(/\s*\/\s*/g, '-').replace(/\s+/g, '-');
-
-          // First, find the category by slug
-          const { data: categoryData, error: categoryError } = await supabase
-            .from('categories')
-            .select('id')
-            .eq('slug', categorySlug)
-            .maybeSingle();
-
-          if (categoryError) {
-            console.log("Error checking category", categoryError);
-          }
-
-          if (categoryData) {
-            query = query.eq('category_id', categoryData.id);
-          } else {
-            console.log(`Category '${category}' with slug '${categorySlug}' not found in DB.`);
-            setProducts([]);
-            if (onCountChange) onCountChange(0);
-            setLoading(false);
-            return;
-          }
         }
 
         const { data, error } = await query;
@@ -107,8 +110,7 @@ const ProductGrid = ({ category, sortBy = "featured", onCountChange, filters }: 
           setProducts([]);
           if (onCountChange) onCountChange(0);
         } else {
-          // Transform the data to match our Product interface
-          let transformedProducts = (data || []).map((product: any) => ({
+          const transformedProducts = (data || []).map((product: any) => ({
             id: product.id,
             name: product.name,
             category: product.categories?.name || 'Uncategorized',
@@ -122,29 +124,6 @@ const ProductGrid = ({ category, sortBy = "featured", onCountChange, filters }: 
             slug: product.slug,
             material: product.material || null
           }));
-
-          // Apply Client-Side Filtering based on activeFilters
-          if (filters) {
-            // Filter by Category
-            if (filters.categories.length > 0) {
-              transformedProducts = transformedProducts.filter(p =>
-                filters.categories.includes(p.category)
-              );
-            }
-
-            // Filter by Price
-            if (filters.priceRanges.length > 0) {
-              transformedProducts = transformedProducts.filter(p => {
-                return filters.priceRanges.some(range => {
-                  if (range === "Under AED 100") return p.price < 100;
-                  if (range === "AED 100 - AED 200") return p.price >= 100 && p.price <= 200;
-                  if (range === "AED 200 - AED 500") return p.price >= 200 && p.price <= 500;
-                  if (range === "AED 500+") return p.price > 500;
-                  return false;
-                });
-              });
-            }
-          }
 
           setProducts(transformedProducts);
           if (onCountChange) onCountChange(transformedProducts.length);

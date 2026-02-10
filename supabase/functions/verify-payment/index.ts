@@ -157,31 +157,20 @@ serve(async (req) => {
 
     logStep("Order created", { orderId: order.id, orderNumber: order.order_number });
 
-    // Create order items
+    // Create order items and clear cart in parallel
     const orderItemsWithOrderId = orderItems.map(item => ({
       ...item,
       order_id: order.id,
     }));
 
-    const { error: itemsError } = await supabaseAdmin
-      .from('order_items')
-      .insert(orderItemsWithOrderId);
+    logStep("Executing DB updates in parallel");
+    const [itemsResult, cartResult] = await Promise.all([
+      supabaseAdmin.from('order_items').insert(orderItemsWithOrderId),
+      supabaseAdmin.from('cart_items').delete().eq('user_id', user.id)
+    ]);
 
-    if (itemsError) {
-      logStep("Order items creation failed", { error: itemsError.message });
-      // Don't throw - order is already created
-    }
-
-    // Clear user's cart
-    const { error: cartError } = await supabaseAdmin
-      .from('cart_items')
-      .delete()
-      .eq('user_id', user.id);
-
-    if (cartError) {
-      logStep("Cart clear failed", { error: cartError.message });
-      // Don't throw - order is already created
-    }
+    if (itemsResult.error) logStep("Order items creation failed", { error: itemsResult.error.message });
+    if (cartResult.error) logStep("Cart clear failed", { error: cartResult.error.message });
 
     logStep("Payment verified and order created successfully");
 

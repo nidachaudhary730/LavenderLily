@@ -359,10 +359,13 @@ const Checkout = () => {
                 <Button
                   onClick={handleCompleteOrder}
                   disabled={isProcessing || cartItems.length === 0}
-                  className="w-full h-14 mt-6 rounded-none bg-primary-foreground text-background hover:opacity-90 transition-all uppercase tracking-[0.2em] text-xs font-medium"
+                  className="w-full h-14 mt-6 rounded-none bg-primary text-primary-foreground hover:bg-primary-hover transition-all uppercase tracking-[0.2em] text-xs font-medium shadow-sm"
                 >
                   {isProcessing ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <span>Redirecting to secure payment...</span>
+                    </div>
                   ) : (
                     <span>Complete Purchase</span>
                   )}
