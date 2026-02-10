@@ -164,7 +164,7 @@ const ShoppingBag = ({ isOpen, onClose, onViewFavorites }: ShoppingBagProps) => 
 
                 <Button
                   asChild
-                  className="w-full rounded-2xl"
+                  className="w-full rounded-none bg-primary text-primary-foreground hover:bg-primary-hover transition-all shadow-sm"
                   size="lg"
                 >
                   <Link to="/checkout" onClick={onClose}>
@@ -174,7 +174,7 @@ const ShoppingBag = ({ isOpen, onClose, onViewFavorites }: ShoppingBagProps) => 
 
                 <Button
                   variant="outline"
-                  className="w-full rounded-2xl"
+                  className="w-full rounded-none border-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground transition-all"
                   size="lg"
                   onClick={onClose}
                   asChild

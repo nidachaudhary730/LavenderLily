@@ -290,21 +290,21 @@ const Navigation = () => {
                   <Link
                     to="/category/new-arrivals"
                     onClick={() => setIsSearchOpen(false)}
-                    className="text-nav-foreground hover:text-nav-hover text-sm font-light py-2 px-4 border border-border rounded-full transition-colors duration-200 hover:border-nav-hover"
+                    className="text-nav-foreground hover:text-primary-foreground text-sm font-light py-2 px-4 border border-primary rounded-none transition-colors duration-200 hover:bg-primary"
                   >
                     New Arrivals
                   </Link>
                   <Link
                     to="/category/limited-edition"
                     onClick={() => setIsSearchOpen(false)}
-                    className="text-nav-foreground hover:text-nav-hover text-sm font-light py-2 px-4 border border-border rounded-full transition-colors duration-200 hover:border-nav-hover"
+                    className="text-nav-foreground hover:text-primary-foreground text-sm font-light py-2 px-4 border border-primary rounded-none transition-colors duration-200 hover:bg-primary"
                   >
                     Limited Edition
                   </Link>
                   <Link
                     to="/category/pre-orders"
                     onClick={() => setIsSearchOpen(false)}
-                    className="text-nav-foreground hover:text-nav-hover text-sm font-light py-2 px-4 border border-border rounded-full transition-colors duration-200 hover:border-nav-hover"
+                    className="text-nav-foreground hover:text-primary-foreground text-sm font-light py-2 px-4 border border-primary rounded-none transition-colors duration-200 hover:bg-primary"
                   >
                     Pre-Orders
                   </Link>

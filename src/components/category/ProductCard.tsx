@@ -56,21 +56,23 @@ const ProductCard = ({
         )}
 
         {/* Badges */}
-        {is_new && (
-          <span className="absolute top-3 left-3 px-2.5 py-1 bg-foreground/90 text-background text-[10px] tracking-[0.15em] uppercase font-medium z-10">
-            New
-          </span>
-        )}
-        {is_pre_order && (
-          <span className="absolute top-3 left-3 px-2.5 py-1 bg-accent-foreground/90 text-background text-[10px] tracking-[0.15em] uppercase font-medium z-10">
-            Pre-Order
-          </span>
-        )}
-        {is_limited_edition && (
-          <span className="absolute top-3 left-3 px-2.5 py-1 bg-destructive/80 text-destructive-foreground text-[10px] tracking-[0.15em] uppercase font-medium z-10">
-            Limited
-          </span>
-        )}
+        <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
+          {is_new && (
+            <span className="px-2.5 py-1 bg-primary text-primary-foreground text-[9px] tracking-[0.15em] uppercase font-bold shadow-sm">
+              New
+            </span>
+          )}
+          {is_pre_order && (
+            <span className="px-2.5 py-1 bg-white/90 text-primary-foreground border border-primary/20 text-[9px] tracking-[0.15em] uppercase font-bold shadow-sm">
+              Pre-Order
+            </span>
+          )}
+          {is_limited_edition && (
+            <span className="px-2.5 py-1 bg-foreground text-background text-[9px] tracking-[0.15em] uppercase font-bold shadow-sm">
+              Limited
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Info */}

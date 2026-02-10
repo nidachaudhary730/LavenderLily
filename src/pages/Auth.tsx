@@ -17,7 +17,7 @@ const Auth = () => {
   const [fullName, setFullName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
-  
+
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
 
@@ -29,28 +29,28 @@ const Auth = () => {
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {};
-    
+
     const emailResult = emailSchema.safeParse(email);
     if (!emailResult.success) {
       newErrors.email = emailResult.error.errors[0].message;
     }
-    
+
     const passwordResult = passwordSchema.safeParse(password);
     if (!passwordResult.success) {
       newErrors.password = passwordResult.error.errors[0].message;
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
-    
+
     setIsSubmitting(true);
-    
+
     try {
       if (isLogin) {
         const { error } = await signIn(email, password);
@@ -118,8 +118,8 @@ const Auth = () => {
             {isLogin ? 'Sign In' : 'Create Account'}
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            {isLogin 
-              ? 'Welcome back to LavenderLily' 
+            {isLogin
+              ? 'Welcome back to LavenderLily'
               : 'Join LavenderLily for an exclusive experience'}
           </p>
         </div>
@@ -154,9 +154,8 @@ const Auth = () => {
                 setErrors((prev) => ({ ...prev, email: undefined }));
               }}
               placeholder="Enter your email"
-              className={`h-12 rounded-none border-border focus:border-foreground ${
-                errors.email ? 'border-destructive' : ''
-              }`}
+              className={`h-12 rounded-none border-border focus:border-foreground ${errors.email ? 'border-destructive' : ''
+                }`}
             />
             {errors.email && (
               <p className="text-sm text-destructive">{errors.email}</p>
@@ -176,9 +175,8 @@ const Auth = () => {
                 setErrors((prev) => ({ ...prev, password: undefined }));
               }}
               placeholder="Enter your password"
-              className={`h-12 rounded-none border-border focus:border-foreground ${
-                errors.password ? 'border-destructive' : ''
-              }`}
+              className={`h-12 rounded-none border-border focus:border-foreground ${errors.password ? 'border-destructive' : ''
+                }`}
             />
             {errors.password && (
               <p className="text-sm text-destructive">{errors.password}</p>
@@ -188,12 +186,12 @@ const Auth = () => {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full h-12 bg-foreground text-background hover:bg-foreground/90 font-light rounded-none"
+            className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary-hover font-light rounded-none shadow-sm"
           >
-            {isSubmitting 
-              ? 'Please wait...' 
-              : isLogin 
-                ? 'Sign In' 
+            {isSubmitting
+              ? 'Please wait...'
+              : isLogin
+                ? 'Sign In'
                 : 'Create Account'}
           </Button>
         </form>
@@ -207,8 +205,8 @@ const Auth = () => {
             }}
             className="text-sm text-muted-foreground hover:text-foreground underline underline-offset-4"
           >
-            {isLogin 
-              ? "Don't have an account? Sign up" 
+            {isLogin
+              ? "Don't have an account? Sign up"
               : 'Already have an account? Sign in'}
           </button>
         </div>
