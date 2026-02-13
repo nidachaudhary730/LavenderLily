@@ -33,55 +33,77 @@ const Analytics = () => {
     try {
       setLoading(true);
 
-      // Fetch total users
-      const { count: userCount } = await supabase
-        .from('user_profiles')
-        .select('*', { count: 'exact', head: true });
+      // Try fetching from Edge Function first
+      const { data, error } = await supabase.functions.invoke('get-analytics');
 
-      // Fetch total orders
-      const { count: orderCount } = await supabase
-        .from('orders')
-        .select('*', { count: 'exact', head: true });
+      if (error) throw error;
 
-      // Fetch orders with revenue data
-      const { data: orders } = await supabase
-        .from('orders')
-        .select('total_amount, status')
-        .order('created_at', { ascending: false });
+      if (data) {
+        setAnalytics({
+          totalUsers: data.totalUsers || 0,
+          totalOrders: data.totalOrders || 0,
+          totalRevenue: data.totalRevenue || 0,
+          averageOrderValue: data.averageOrderValue || 0,
+          pendingOrders: data.pendingOrders || 0,
+          completedOrders: data.completedOrders || 0,
+          totalProducts: data.totalProducts || 0,
+        });
+      }
+    } catch (edgeFunctionError) {
+      console.warn('Edge function failed, falling back to client-side fetching:', edgeFunctionError);
 
-      // Fetch total products
-      const { count: productCount } = await supabase
-        .from('products')
-        .select('*', { count: 'exact', head: true });
+      try {
+        // Fallback: Client-side fetching
+        // Fetch total users
+        const { count: userCount } = await supabase
+          .from('user_profiles')
+          .select('*', { count: 'exact', head: true });
 
-      // Calculate metrics
-      const totalRevenue = orders?.reduce((sum, order) => {
-        if (order.status !== 'cancelled') {
-          return sum + parseFloat(order.total_amount?.toString() || '0');
-        }
-        return sum;
-      }, 0) || 0;
+        // Fetch total orders
+        const { count: orderCount } = await supabase
+          .from('orders')
+          .select('*', { count: 'exact', head: true });
 
-      const completedOrders = orders?.filter(o => o.status === 'delivered').length || 0;
-      const pendingOrders = orders?.filter(o =>
-        ['pending', 'processing'].includes(o.status)
-      ).length || 0;
+        // Fetch orders with revenue data
+        const { data: orders } = await supabase
+          .from('orders')
+          .select('total_amount, status')
+          .order('created_at', { ascending: false });
 
-      const averageOrderValue = orderCount && orderCount > 0
-        ? totalRevenue / orderCount
-        : 0;
+        // Fetch total products
+        const { count: productCount } = await supabase
+          .from('products')
+          .select('*', { count: 'exact', head: true });
 
-      setAnalytics({
-        totalUsers: userCount || 0,
-        totalOrders: orderCount || 0,
-        totalRevenue,
-        averageOrderValue,
-        pendingOrders,
-        completedOrders,
-        totalProducts: productCount || 0,
-      });
-    } catch (error) {
-      console.error('Error fetching analytics:', error);
+        // Calculate metrics
+        const totalRevenue = orders?.reduce((sum, order) => {
+          if (order.status !== 'cancelled' && order.status !== 'returned') {
+            return sum + parseFloat(order.total_amount?.toString() || '0');
+          }
+          return sum;
+        }, 0) || 0;
+
+        const completedOrders = orders?.filter(o => o.status === 'delivered').length || 0;
+        const pendingOrders = orders?.filter(o =>
+          ['pending', 'processing'].includes(o.status)
+        ).length || 0;
+
+        const averageOrderValue = orderCount && orderCount > 0
+          ? totalRevenue / orderCount
+          : 0;
+
+        setAnalytics({
+          totalUsers: userCount || 0,
+          totalOrders: orderCount || 0,
+          totalRevenue,
+          averageOrderValue,
+          pendingOrders,
+          completedOrders,
+          totalProducts: productCount || 0,
+        });
+      } catch (clientError) {
+        console.error('Error fetching analytics (fallback):', clientError);
+      }
     } finally {
       setLoading(false);
     }

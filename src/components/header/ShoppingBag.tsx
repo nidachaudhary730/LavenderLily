@@ -64,16 +64,7 @@ const ShoppingBag = ({ isOpen, onClose, onViewFavorites }: ShoppingBagProps) => 
             </div>
           )}
 
-          {!user ? (
-            <div className="flex-1 flex flex-col items-center justify-center">
-              <p className="text-muted-foreground text-sm text-center mb-4">
-                Please sign in to view your cart.
-              </p>
-              <Button asChild className="rounded-2xl">
-                <Link to="/auth" onClick={onClose}>Sign In</Link>
-              </Button>
-            </div>
-          ) : loading ? (
+          {loading ? (
             <div className="flex-1 flex items-center justify-center">
               <p className="text-muted-foreground text-sm">Loading cart...</p>
             </div>
