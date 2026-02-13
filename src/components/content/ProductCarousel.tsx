@@ -102,20 +102,20 @@ const ProductCarousel = () => {
                 <Link to={`/product/${product.slug}`}>
                   <Card className="border-none shadow-none bg-transparent group">
                     <CardContent className="p-0">
-                      <div className="aspect-square mb-3 overflow-hidden bg-muted/10 relative">
+                      <div className="aspect-[3/4] mb-3 overflow-hidden bg-muted/10 relative">
                         {product.image_url ? (
                           <>
                             {/* Primary image */}
                             <img
                               src={product.image_url}
                               alt={product.name}
-                              className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0 absolute inset-0"
+                              className="w-full h-full object-contain mix-blend-multiply transition-opacity duration-300 group-hover:opacity-0 absolute inset-0"
                             />
                             {/* Secondary image on hover - always show, use second image if available, otherwise use same image */}
                             <img
                               src={product.second_image_url || product.images?.[1] || product.image_url}
                               alt={`${product.name} - alternate view`}
-                              className="w-full h-full object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
+                              className="w-full h-full object-contain mix-blend-multiply transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
                             />
                           </>
                         ) : (

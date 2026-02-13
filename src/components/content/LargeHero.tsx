@@ -4,11 +4,11 @@ import AnimatedText from "../animations/AnimatedText";
 const LargeHero = () => {
   return (
     <section className="w-full mb-16 px-6">
-      <div className="w-full aspect-[16/9] mb-3 overflow-hidden">
+      <div className="w-full overflow-hidden">
         <AnimatedImage
           src="/images/categories/party-wear/1.png"
           alt="Modern clothing collection"
-          className="w-full h-full object-cover"
+          className="w-full h-auto"
           animation="fadeIn"
           delay={0}
         />
