@@ -6,43 +6,43 @@ const categories = [
   {
     name: "Dresses",
     slug: "dresses",
-    image: "/dropdown-images/IMG_3823.PNG",
-    hoverImage: "/dropdown-images/IMG_3926.PNG",
+    image: "/images/categories/dresses/1.png",
+    hoverImage: "/images/categories/dresses/2.png",
     description: "Elegant dresses for every occasion"
   },
   {
-    name: "Tops / Shirts",
+    name: "Tops & Shirts",
     slug: "tops-shirts",
-    image: "/dropdown-images/IMG_3826.PNG",
-    hoverImage: "/dropdown-images/IMG_3927.PNG",
+    image: "/images/categories/tops/1.png",
+    hoverImage: "/images/categories/tops/2.png",
     description: "Stylish tops and shirts"
   },
   {
-    name: "Pants",
-    slug: "pants",
-    image: "/dropdown-images/IMG_3827.PNG",
-    hoverImage: "/dropdown-images/IMG_4159.PNG",
-    description: "Comfortable and stylish"
+    name: "Party Collection",
+    slug: "party-collection",
+    image: "/images/categories/party-wear/1.png",
+    hoverImage: "/images/categories/party-wear/2.png",
+    description: "Shine at every event"
   },
   {
     name: "Skirts",
     slug: "skirts",
-    image: "/dropdown-images/IMG_3829.PNG",
-    hoverImage: "/dropdown-images/IMG_4162.PNG",
+    image: "/images/categories/skirts/1.png",
+    hoverImage: "/images/categories/skirts/2.png",
     description: "Feminine and versatile"
   },
   {
-    name: "Co-ord Set",
-    slug: "co-ord-set",
-    image: "/dropdown-images/IMG_3830.PNG",
-    hoverImage: "/dropdown-images/IMG_4161.PNG",
+    name: "Co-ord Sets",
+    slug: "co-ord-sets",
+    image: "/images/categories/co-ords/1.png",
+    hoverImage: "/images/categories/co-ords/2.png",
     description: "Perfectly matched sets"
   },
   {
-    name: "Ethnic",
-    slug: "ethnic",
-    image: "/dropdown-images/IMG_3832.PNG",
-    hoverImage: "/dropdown-images/IMG_4164.PNG",
+    name: "Ethnic Wear",
+    slug: "ethnic-wear",
+    image: "/images/categories/ethnic-wear/1.png",
+    hoverImage: "/images/categories/ethnic-wear/2.png",
     description: "Traditional elegance"
   }
 ];

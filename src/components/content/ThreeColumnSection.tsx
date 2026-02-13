@@ -11,13 +11,13 @@ const ThreeColumnSection = () => {
             <div className="w-full aspect-[3/4] mb-3 overflow-hidden relative">
               {/* Primary image */}
               <img
-                src="/dropdown-images/IMG_4162.PNG"
+                src="/images/categories/skirts/1.png"
                 alt="Skirts collection"
                 className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0 absolute inset-0"
               />
               {/* Secondary image on hover */}
               <img
-                src="/dropdown-images/IMG_3829.PNG"
+                src="/images/categories/skirts/2.png"
                 alt="Skirts collection - alternate view"
                 className="w-full h-full object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
               />
@@ -42,13 +42,13 @@ const ThreeColumnSection = () => {
             <div className="w-full aspect-[3/4] mb-3 overflow-hidden relative">
               {/* Primary image */}
               <img
-                src="/dropdown-images/IMG_4164.PNG"
+                src="/images/categories/ethnic-wear/1.png"
                 alt="Ethnic collection"
                 className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0 absolute inset-0"
               />
               {/* Secondary image on hover */}
               <img
-                src="/dropdown-images/IMG_3832.PNG"
+                src="/images/categories/ethnic-wear/2.png"
                 alt="Ethnic collection - alternate view"
                 className="w-full h-full object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
               />
@@ -73,13 +73,13 @@ const ThreeColumnSection = () => {
             <div className="w-full aspect-[3/4] mb-3 overflow-hidden relative">
               {/* Primary image */}
               <img
-                src="/dropdown-images/IMG_4165.PNG"
+                src="/images/categories/party-wear/1.png"
                 alt="Shop all collection"
                 className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0 absolute inset-0"
               />
               {/* Secondary image on hover */}
               <img
-                src="/dropdown-images/IMG_4172.PNG"
+                src="/images/categories/party-wear/2.png"
                 alt="Shop all collection - alternate view"
                 className="w-full h-full object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute inset-0"
               />

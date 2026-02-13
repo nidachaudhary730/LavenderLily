@@ -37,11 +37,11 @@ const Navigation = () => {
   // Preload dropdown images for faster display
   useEffect(() => {
     const imagesToPreload = [
-      "/dropdown-images/IMG_3823.PNG",
-      "/dropdown-images/IMG_3826.PNG",
-      "/dropdown-images/IMG_3827.PNG",
-      "/dropdown-images/IMG_3829.PNG",
-      "/dropdown-images/IMG_3830.PNG"
+      "/images/categories/dresses/1.png",
+      "/images/categories/tops/1.png",
+      "/images/categories/party-wear/1.png",
+      "/images/categories/skirts/1.png",
+      "/images/categories/co-ords/1.png"
     ];
 
     imagesToPreload.forEach(src => {
@@ -56,8 +56,8 @@ const Navigation = () => {
       href: "/category/shop",
       submenuItems: categories.map(cat => cat.name),
       images: [
-        { src: "/dropdown-images/IMG_3823.PNG", alt: "Dresses Collection", label: "Dresses", href: "/category/dresses" },
-        { src: "/dropdown-images/IMG_3826.PNG", alt: "Tops Collection", label: "Tops", href: "/category/tops" }
+        { src: "/images/categories/dresses/1.png", alt: "Dresses Collection", label: "Dresses", href: "/category/dresses" },
+        { src: "/images/categories/tops/1.png", alt: "Tops Collection", label: "Tops", href: "/category/tops" }
       ]
     },
     {
@@ -69,8 +69,8 @@ const Navigation = () => {
         { name: "Limited Edition", slug: "limited-edition", filter: "is_limited_edition" }
       ],
       images: [
-        { src: "/dropdown-images/IMG_3827.PNG", alt: "New Arrivals", label: "New Arrivals", href: "/category/new-arrivals" },
-        { src: "/dropdown-images/IMG_3829.PNG", alt: "Limited Edition", label: "Limited", href: "/category/limited-edition" }
+        { src: "/images/categories/party-wear/1.png", alt: "New Arrivals", label: "New Arrivals", href: "/category/new-arrivals" },
+        { src: "/images/categories/skirts/1.png", alt: "Limited Edition", label: "Limited", href: "/category/limited-edition" }
       ]
     },
     {
@@ -84,7 +84,7 @@ const Navigation = () => {
         { name: "Store Locator", slug: "store-locator" }
       ],
       images: [
-        { src: "/dropdown-images/IMG_3830.PNG", alt: "Our Story", label: "Read our story", href: "/about/our-story" }
+        { src: "/images/categories/co-ords/1.png", alt: "Our Story", label: "Read our story", href: "/about/our-story" }
       ]
     }
   ];
